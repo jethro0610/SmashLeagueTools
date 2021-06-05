@@ -1,0 +1,13 @@
+.selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+}
+
+.visualizer {
+    display : flex;
+    justify-content : center;
+    align-items : center;
+    min-height : 100%;
+}
