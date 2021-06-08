@@ -7,14 +7,12 @@ export default class Better extends Component {
     render() {
         return(
             <div class='container-fluid'>
-                <div class ='row'>
-                    <div class='col-lg-4 selectors'>
-                        <div class='container'>
-                            <Selector/>
-                            <Selector/>
-                            <Selector/>
-                            <Selector/>
-                        </div>
+                <div class ='row align-items-center better'>
+                    <div class='col-lg-4'>
+                        <Selector/>
+                        <Selector/>
+                        <Selector/>
+                        <Selector/>
                     </div>
                     <Visualizer/>
                 </div>
