@@ -4,6 +4,8 @@ import triangle from './../triangle.png'
 import smashball from './../smashball.png'
 import './visualizer.css'
 
+import BetBar from './betbar.component.js'
+
 export default class Visualizer extends Component {
 
     render() {
@@ -47,20 +49,7 @@ export default class Visualizer extends Component {
                     </div>
                 </div>
 
-                <div class={'row' + visibility}>
-                    <div class='col amount'>
-                        $1000
-                    </div>
-                </div>
-
-                <div class={'row amounts shadow-sm border border-2 rounded-pill text-light progress' + visibility}>
-                    <div class='progress-bar w-50 bg-light text-dark text-start'>
-                        $700
-                    </div>
-                    <div class='progress-bar w-50 bg-dark text-end'>
-                        $300
-                    </div>
-                </div>
+                <BetBar match={this.props.match}/>
             </div>
         )
     }
