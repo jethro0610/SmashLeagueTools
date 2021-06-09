@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Selector from './selector.component'
 import Visualizer from './visualizer.component'
-import Match from './../match.js'
+import allMatches from './../match.js'
 import './better.css'
 
 export default class Better extends Component {
@@ -9,9 +9,29 @@ export default class Better extends Component {
         super(props);
         this.state = {
             selectedMatch: null,
-            matches: Array(new Match('Player 1', 'Player 2'),
-            new Match('Liar', 'Pizza Steve'))
+            matches: allMatches
         };
+
+        this.onMatchUpdate = this.onMatchUpdate.bind(this);
+    }
+
+    // Force component to update when new matches are sent
+    onMatchUpdate() {
+        // Set the selected match to null if it was deleted
+        if (!this.state.matches.includes(this.state.selectedMatch))
+            this.state.selectedMatch = null;
+            
+        this.forceUpdate();
+    }
+
+    // Bind functions on mount
+    componentDidMount(){
+        window.addEventListener('updateMatches', this.onMatchUpdate);
+    }
+
+    // Unbind on unmount
+    componentWillUnmount() {
+        window.removeEventListener('updateMatches', this.onMatchUpdate);
     }
 
     onSelectorClicked(match) {
