@@ -1,8 +1,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
 
+.smashball {
+    position: absolute;
+    width: 60%;
+    z-index: -1;
+    opacity: 5%;
+    
+    margin: auto;
+    top: 0; left: 0; bottom: 0; right: 0;
+
+    animation-name: pulse;
+    animation-duration: 0s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+}
+
+@keyframes pulse {
+    from{
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.05);
+    }
+}
 
 .portrait {
     width: 90%;
+
+    animation-name: bounce;
+    animation-duration: 0s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes bounce {
+    from{
+        transform: translateX(-2%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
 }
 
 .triangle {
@@ -23,8 +62,9 @@
     font-family: 'Quicksand', sans-serif;
 }
 
-.odds {
+.amount {
     font-family: 'Quicksand', sans-serif;
+    text-shadow: 2px 2px 2px black;
 }
 
 .total {
