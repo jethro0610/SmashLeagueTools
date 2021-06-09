@@ -25,7 +25,8 @@ export default class Better extends Component {
         var selectors = [];
         for (var i = 0; i < this.state.matches.length; i++) {
             selectors.push(<Selector match={this.state.matches[i]} 
-            buttonClick={this.onSelectorClicked.bind(this, this.state.matches[i])}/>); // Bind the click to the match being clicked
+            buttonClick={this.onSelectorClicked.bind(this, this.state.matches[i])}
+            key={i}/>); // Bind the click to the match being clicked
         }
 
         return(
