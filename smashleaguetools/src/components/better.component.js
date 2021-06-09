@@ -8,8 +8,7 @@ export default class Better extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedMatch: null,
-            matches: allMatches
+            selectedMatchKey: null,
         };
 
         this.onMatchUpdate = this.onMatchUpdate.bind(this);
@@ -18,8 +17,8 @@ export default class Better extends Component {
     // Force component to update when new matches are sent
     onMatchUpdate() {
         // Set the selected match to null if it was deleted
-        if (!this.state.matches.includes(this.state.selectedMatch))
-            this.state.selectedMatch = null;
+        if (!allMatches.has(this.state.selectedMatchKey))
+            this.state.selectedMatchKey = null;
             
         this.forceUpdate();
     }
@@ -34,19 +33,19 @@ export default class Better extends Component {
         window.removeEventListener('updateMatches', this.onMatchUpdate);
     }
 
-    onSelectorClicked(match) {
+    onSelectorClicked(matchKey) {
         this.setState({
-            selectedMatch: match
+            selectedMatchKey: matchKey
         });
     };
 
     render() {
         // Create selector HTML objects based on the number of current matches
         var selectors = [];
-        for (var i = 0; i < this.state.matches.length; i++) {
-            selectors.push(<Selector match={this.state.matches[i]} 
-            buttonClick={this.onSelectorClicked.bind(this, this.state.matches[i])}
-            key={i}/>); // Bind the click to the match being clicked
+        for (const k of allMatches.keys()) {
+            selectors.push(<Selector match={allMatches.get(k)} 
+            buttonClick={this.onSelectorClicked.bind(this, k)}
+            key={k}/>); // Bind the click to the match being clicked
         }
 
         return(
@@ -55,7 +54,7 @@ export default class Better extends Component {
                     <div class='col-lg-4 px-5'>
                         {selectors}
                     </div>
-                    <Visualizer match={this.state.selectedMatch}/>
+                    <Visualizer match={allMatches.get(this.state.selectedMatchKey)}/>
                 </div>
             </div>
         )

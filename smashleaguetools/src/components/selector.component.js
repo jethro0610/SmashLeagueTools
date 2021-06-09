@@ -10,8 +10,8 @@ export default class Selector extends Component {
             player1 = this.props.match.player1;
             player2 = this.props.match.player2;
         }
-        var match = this.props.match;
         var buttonClick = this.props.buttonClick;
+        
         return(
             <button class='row px-0 mx-0 bg-light shadow-sm selector rounded-pill border overflow-hidden w-100' onClick={buttonClick}>
                 <img src={circle} class='circle'/> 
