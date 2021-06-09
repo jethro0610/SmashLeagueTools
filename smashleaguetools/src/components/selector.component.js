@@ -4,13 +4,13 @@ import circle from './../circle.png'
 
 export default class Selector extends Component {
     render() {
-        var name1 = this.props.name1;
-        var name2 = this.props.name2;
+        var match = this.props.match;
+        var buttonClick = this.props.buttonClick;
         return(
-            <div class='row bg-light shadow-sm selector rounded-pill border overflow-hidden'>
+            <button class='row px-0 mx-0 bg-light shadow-sm selector rounded-pill border overflow-hidden w-100' onClick={buttonClick}>
                 <img src={circle} class='circle'/> 
-                <div class ='col px-0 align-middle text-start border-bottom border-5 rounded'>{name1} vs. {name2}</div>
-            </div>
+                <div class ='col px-0 align-middle text-start border-bottom border-5 rounded'>{match.player1} vs. {match.player2}</div>
+            </button>
         )
     }
 }
