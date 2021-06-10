@@ -1,3 +1,5 @@
+import io from 'socket.io-client'
+
 class Match {
     constructor(player1, player2){
         this.player1 = player1;
@@ -30,8 +32,16 @@ function printMatches() {
     console.log(allMatches);
 }
 
-export default allMatches;
+const socket = io.connect('http://localhost:5000');
+function sendMatch() {
+    socket.emit('send match', 'hello there');
+}
+
+// Console output
 window.addMatch = addMatch;
 window.updateMatch = updateMatch;
 window.deleteMatch = deleteMatch;
 window.printMatches = printMatches;
+window.sendMatch = sendMatch;
+
+export default allMatches;
