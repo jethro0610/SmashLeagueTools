@@ -1,27 +1,15 @@
 import io from 'socket.io-client'
 
 class Match {
-    constructor(player1, player2){
+    constructor(player1, player2, total1 = 0, total2 = 0) {
         this.player1 = player1;
         this.player2 = player2;
-        this.total1 = 0;
-        this.total2 = 0;
+        this.total1 = total1;
+        this.total2 = total2;
     }
 }
-
 var allMatches = new Map();
-const updateMatchEvent = new Event('updateMatches');
-
-function addMatch(player1, player2) {
-    allMatches.set(allMatches.size, new Match(player1, player2));
-    window.dispatchEvent(updateMatchEvent);
-}
-
-function updateMatch(index, total1, total2) {
-    allMatches.get(index).total1 = total1;
-    allMatches.get(index).total2 = total2;
-    window.dispatchEvent(updateMatchEvent);
-}
+const updateMatchEvent = new Event('updateMatches'); // Event to update better component once matches are updated
 
 function deleteMatch(index) {
     allMatches.delete(index, 1);
@@ -32,16 +20,46 @@ function printMatches() {
     console.log(allMatches);
 }
 
+// Create the connection to the Socket.IO server
 const socket = io.connect('http://localhost:5000');
-function sendMatch() {
-    socket.emit('send match', 'hello there');
+
+// Call the server to create a match from admin client
+function adminCreateMatch(player1, player2) {
+    socket.emit('admin-create-match', { player1: player1, player2: player2 });
+}
+// Call the server to update a match from admin client
+function adminUpdateMatch(key, total1, total2) {
+    socket.emit('admin-update-match', { key: key, total1: total1, total2: total2});
 }
 
-// Console output
-window.addMatch = addMatch;
-window.updateMatch = updateMatch;
+// Event when client recieves a match from the server
+socket.on('all-matches', (msg) => {
+    allMatches.clear(); // Remove all matches since a newly update map is sent
+    for(const content of msg)
+        allMatches.set(content.key, content.match);
+    window.dispatchEvent(updateMatchEvent);
+});
+// Event when client recieves a newly created match
+socket.on('match-created', (msg) => {
+    var key = msg.key;
+    allMatches.set(key, new Match(msg.player1, msg.player2));
+    window.dispatchEvent(updateMatchEvent);
+});
+// Event when client recieves a match update
+socket.on('match-updated', (msg) => {
+    var key = msg.key;
+    var matchToUpdate = allMatches.get(key);
+    if (matchToUpdate != null) {
+        matchToUpdate.total1 = msg.total1;
+        matchToUpdate.total2 = msg.total2;
+    }
+    window.dispatchEvent(updateMatchEvent);
+});
+
+// Expose functions to console
 window.deleteMatch = deleteMatch;
 window.printMatches = printMatches;
-window.sendMatch = sendMatch;
+window.adminCreateMatch = adminCreateMatch;
+window.adminUpdateMatch = adminUpdateMatch;
 
 export default allMatches;
