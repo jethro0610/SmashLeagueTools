@@ -8,6 +8,12 @@ const passport = require('passport');
 const SocketManager = require('./socketmanager');
 require('./config/passport')(passport);
 
+// Set CORS options
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true
+}
+
 // Router requires
 const usersRouter = require('./routes/users.js');
 const authRouter = require('./routes/auth.js');
@@ -15,10 +21,6 @@ const authRouter = require('./routes/auth.js');
 // Setup the express app
 const app = express()
 const port = process.env.PORT || 5000;
-const corsOptions = {
-    origin: 'http://localhost:3000',
-    credentials: true
-}
 app.use(cors(corsOptions));
 app.use(express.json());
 
@@ -33,15 +35,12 @@ var sessionMiddleware = session({
 });
 app.use(sessionMiddleware);
 
-// Setup Socket.IO
+// Setup SocketIO
 const http = require('http').createServer(app);
 const io = socketIO(http, { 
     cors: corsOptions
 });
-io.use((socket, next) => {
-    sessionMiddleware(socket.request, {}, next);
-});
-var socketManager = new SocketManager(io); // Create the socket manager with the new io
+var socketManager = new SocketManager(io, sessionMiddleware); // Create the socket manager with the new io
 
 // Setup MongoDB connection
 const uri = process.env.ATLAS_URI;
