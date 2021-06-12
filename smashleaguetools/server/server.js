@@ -12,14 +12,14 @@ require('./config/passport')(passport);
 const corsOptions = {
     origin: 'http://localhost:3000',
     credentials: true
-}
+};
 
 // Router requires
 const usersRouter = require('./routes/users.js');
 const authRouter = require('./routes/auth.js');
 
 // Setup the express app
-const app = express()
+const app = express();
 const port = process.env.PORT || 5000;
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -30,6 +30,7 @@ var sessionMiddleware = session({
     cookie: {
         maxAge: 60000 * 60 * 24
     },
+    resave: false,
     saveUninitialized: false,
     name: 'discord-oauth2'
 });
@@ -53,6 +54,12 @@ connection.once('open', () => {
 // Setup passport
 app.use(passport.initialize());
 app.use(passport.session());
+
+const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+
+io.use(wrap(sessionMiddleware));
+io.use(wrap(passport.initialize()));
+io.use(wrap(passport.session()));
 
 // Output the default server index
 app.get('/', (req, res) => {

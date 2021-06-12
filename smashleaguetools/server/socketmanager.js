@@ -3,44 +3,34 @@ const matchEvents = require('./matches').matchEvents;
 const createMatchFromNames = require('./matches').createMatchFromNames;
 const User = require('./models/user.model');
 
-const getUser = async (socket, next) => {
-    var userId;
-    try {
-        userId = socket.request.session.passport.user;
-    }
-    catch {
-        return next();
-    }
-
-    const user = await User.findById(userId, (err, user) => {
+const updateSocketUser = async (socket) => {
+    if(!socket.request.user)
+        return;
+        
+    const user = await User.findById(socket.request.user.id, (err, user) => {
         if(err) console.log(err);
     }).exec();
 
-    if (user)
-        socket.user = user;
+    if (!user)
+        return;
 
-    return next();
+    socket.request.user = user;
 }
 
 class SocketManager {
     constructor(io, session) {
         this.io = io;
-        
-        io.use((socket, next) => {
-            session(socket.request, {}, next);
-        });
-        io.use((socket, next) => {
-            getUser(socket, next);
-        });
 
         this.io.on('connection', async (socket) => {
             this.sendClientAllMatches(socket); // Send the client all matches upon connection
     
             // Create a new match when given admin command
-            socket.on('admin-create-match', (msg) => {
-                if (!socket.user)
+            socket.on('admin-create-match', async (msg) => {
+                await updateSocketUser(socket);
+                if (!socket.request.user)
                     return;
-                if(!socket.user.admin)
+
+                if(!socket.request.user.admin)
                     return;
                 
                 createMatchFromNames(msg.player1, msg.player2);
