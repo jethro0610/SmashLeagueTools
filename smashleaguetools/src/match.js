@@ -35,24 +35,17 @@ function adminUpdateMatch(key, total1, total2) {
 // Event when client recieves a match from the server
 socket.on('all-matches', (msg) => {
     allMatches.clear(); // Remove all matches since a newly update map is sent
-    for(const content of msg)
-        allMatches.set(content.key, content.match);
+    for(const content of msg) {
+        var newMatch = new Match(content.player1, content.player2, content.amount1, content.amount2);
+        allMatches.set(content.key, newMatch);
+    }
     window.dispatchEvent(updateMatchEvent);
 });
+
 // Event when client recieves a newly created match
 socket.on('match-created', (msg) => {
     var key = msg.key;
     allMatches.set(key, new Match(msg.player1, msg.player2));
-    window.dispatchEvent(updateMatchEvent);
-});
-// Event when client recieves a match update
-socket.on('match-updated', (msg) => {
-    var key = msg.key;
-    var matchToUpdate = allMatches.get(key);
-    if (matchToUpdate != null) {
-        matchToUpdate.total1 = msg.total1;
-        matchToUpdate.total2 = msg.total2;
-    }
     window.dispatchEvent(updateMatchEvent);
 });
 

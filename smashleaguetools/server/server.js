@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const socketIO = require('socket.io');
 const session = require('express-session');
 const passport = require('passport');
+const SocketManager = require('./socketmanager');
 require('./config/passport')(passport);
 
 // Router requires
@@ -14,8 +15,6 @@ const authRouter = require('./routes/auth.js');
 // Setup the express app
 const app = express()
 const port = process.env.PORT || 5000;
-
-
 const corsOptions = {
     origin: 'http://localhost:3000',
     credentials: true
@@ -50,7 +49,7 @@ const io = socketIO(http, {
         origin: "http://localhost:3000"
     }
 });
-require('./socketmanager')(io); // Use the socket manager with the newly create IO connection
+var socketManager = new SocketManager(io); // Create the socket manager with the new io
 
 // Output the default server index
 app.get('/', (req, res) => {
