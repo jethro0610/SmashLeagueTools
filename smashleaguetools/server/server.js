@@ -21,14 +21,27 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(session({
+
+// Setup session middleware
+var sessionMiddleware = session({
     secret: process.env.SECRET_KEY,
     cookie: {
         maxAge: 60000 * 60 * 24
     },
     saveUninitialized: false,
     name: 'discord-oauth2'
-}));
+});
+app.use(sessionMiddleware);
+
+// Setup Socket.IO
+const http = require('http').createServer(app);
+const io = socketIO(http, { 
+    cors: corsOptions
+});
+io.use((socket, next) => {
+    sessionMiddleware(socket.request, {}, next);
+});
+var socketManager = new SocketManager(io); // Create the socket manager with the new io
 
 // Setup MongoDB connection
 const uri = process.env.ATLAS_URI;
@@ -41,15 +54,6 @@ connection.once('open', () => {
 // Setup passport
 app.use(passport.initialize());
 app.use(passport.session());
-
-// Setup Socket.IO
-const http = require('http').createServer(app);
-const io = socketIO(http, { 
-    cors: {
-        origin: "http://localhost:3000"
-    }
-});
-var socketManager = new SocketManager(io); // Create the socket manager with the new io
 
 // Output the default server index
 app.get('/', (req, res) => {

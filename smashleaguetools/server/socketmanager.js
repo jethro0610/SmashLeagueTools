@@ -1,12 +1,31 @@
 const matches = require('./matches').matches;
 const matchEvents = require('./matches').matchEvents;
 const createMatchFromNames = require('./matches').createMatchFromNames;
+const User = require('./models/user.model');
+
+const getUser = async (socket) => {
+    var userId;
+    try {
+        userId = socket.request.session.passport.user;
+    }
+    catch {
+        return undefined;
+    }
+
+    const user = await User.findById(userId, (err, user) => {
+        if(err) console.log(err);
+    }).exec();
+    return user;
+}
 
 class SocketManager {
     constructor(io) {
         this.io = io;
 
-        this.io.on('connection', (socket) => {
+        this.io.on('connection', async (socket) => {
+            const user = await getUser(socket);
+            socket.user = user;
+            
             this.sendClientAllMatches(socket); // Send the client all matches upon connection
     
             // Create a new match when given admin command
@@ -22,7 +41,6 @@ class SocketManager {
 
     // Send a given client all matches
     sendClientAllMatches(socket) {
-        console.log('Sending all matches');
         // Create an array of keys and matches to send.
         // May need to change this later if match objects
         // data differs bewteen client and server.

@@ -21,7 +21,9 @@ function printMatches() {
 }
 
 // Create the connection to the Socket.IO server
-const socket = io.connect('http://localhost:5000');
+const socket = io.connect('http://localhost:5000', {
+    withCredentials: true
+});
 
 // Call the server to create a match from admin client
 function adminCreateMatch(player1, player2) {
