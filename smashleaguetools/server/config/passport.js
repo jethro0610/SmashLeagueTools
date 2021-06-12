@@ -5,10 +5,11 @@ const User = require('../models/user.model')
 
 module.exports = passport => {
     passport.serializeUser(function(user, done) {
-        done(null, user);
+        done(null, user.id);
     });
-    passport.deserializeUser(function(obj, done) {
-        done(null, obj);
+    passport.deserializeUser(async function(id, done) {
+        const user = await User.findById(id);
+        if(user) done(null, user);
     });
 
     passport.use(new DiscordStrategy( {

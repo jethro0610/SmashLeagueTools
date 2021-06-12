@@ -14,7 +14,13 @@ const authRouter = require('./routes/auth.js');
 // Setup the express app
 const app = express()
 const port = process.env.PORT || 5000;
-app.use(cors());
+
+
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true
+}
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(session({
     secret: process.env.SECRET_KEY,
@@ -41,7 +47,7 @@ app.use(passport.session());
 const http = require('http').createServer(app);
 const io = socketIO(http, { 
     cors: {
-        origin: "*"
+        origin: "http://localhost:3000"
     }
 });
 require('./socketmanager')(io); // Use the socket manager with the newly create IO connection
