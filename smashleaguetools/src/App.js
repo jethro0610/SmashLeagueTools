@@ -9,9 +9,11 @@ import BetPopUp from './components/betPopUp.component';
 function App() {
   return (
     <Router>
-      <BetPopUp/>
-      <Navbar/>
-      <Better/>
+      <div className='d-flex flex-column vh-100'>
+        <Navbar/>
+        <BetPopUp/>
+        <Better/>
+      </div>
     </Router>
   );
 }

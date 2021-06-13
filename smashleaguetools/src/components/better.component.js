@@ -7,8 +7,8 @@ export default class Better extends Component {
     render() {
         // Create selector HTML objects based on the number of current matches
         return(
-            <div className='container-fluid'>
-                <div className ='row align-items-center better'>
+            <div className='container-fluid better py-5'>
+                <div className ='row align-items-center h-100'>
                     <SelectorList/>
                     <Visualizer/>
                 </div>
