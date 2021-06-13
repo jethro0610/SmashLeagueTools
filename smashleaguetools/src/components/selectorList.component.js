@@ -9,9 +9,9 @@ const mapStateToProps = state => {
 
 const ConnectedSelectorList = ({matchList}) => {
     return (
-    <div class='col-lg-4 px-5'>
+    <div className='col-lg-4 px-5'>
         {matchList.map(match => (
-            <Selector matchKey={match.key} player1Name={match.player1Name} player2Name={match.player2Name}/>
+            <Selector key={match.key} matchKey={match.key} player1Name={match.player1Name} player2Name={match.player2Name}/>
         ))}
     </div>)
 };

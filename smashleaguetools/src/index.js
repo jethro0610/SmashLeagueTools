@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { Provider } from 'react-redux'; 
 import store from './redux/store/store';
-import socket from './socketmanager'
+import './socketmanager'
 
 //store.subscribe(() => console.log('Look ma, Redux!!'));
 //store.dispatch(createMatch('asdf'));

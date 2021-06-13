@@ -32,7 +32,7 @@ socket.on('match-created', (msg) => {
 socket.on('match-updated', (msg) => {
     store.dispatch(updateMatch(msg.key, msg.amount1, msg.amount2));
     console.log(store.getState().selectedMatch.match.key + ' ' + msg.key);
-    if (store.getState().selectedMatch.match.key == msg.key)
+    if (store.getState().selectedMatch.match.key === msg.key)
         store.dispatch(updateSelectedMatch());
 });
 

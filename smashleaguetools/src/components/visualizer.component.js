@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import portrait from './../portrait.png'
 import triangle from './../triangle.png'
 import smashball from './../smashball.png'
@@ -14,8 +14,8 @@ const ConnectedVisualizer = ({selectedMatch}) => {
     var visibility = ' hide';
     var player1Name = '.';
     var player2Name = '.';
-    var amount1 = 50;
-    var amount2 = 50;
+    var amount1 = 0;
+    var amount2 = 0;
     if (selectedMatch != null) {
         visibility = '';
         player1Name = selectedMatch.player1Name;
@@ -25,28 +25,28 @@ const ConnectedVisualizer = ({selectedMatch}) => {
     }
 
     return(
-        <div class='col overflow-visible text-center align-middle position-relative'>
-            <div class={'row' + visibility}>
-                <div class='col border-bottom title'>Jippi Week 9</div>
+        <div className='col overflow-visible text-center align-middle position-relative'>
+            <div className={'row' + visibility}>
+                <div className='col border-bottom title'>Jippi Week 9</div>
             </div>
 
-            <div class={'row' + visibility}>
-                <div class='col name'>{player1Name}</div>
-                <div class='col name'>{player2Name}</div>
+            <div className={'row' + visibility}>
+                <div className='col name'>{player1Name}</div>
+                <div className='col name'>{player2Name}</div>
             </div>
 
-            <div class={'row' + visibility}>
-                <div class='col'><img src={triangle} class='triangle'/></div>
-                <div class='col'><img src={triangle} class='triangle'/></div>
+            <div className={'row' + visibility}>
+                <div className='col'><img alt='' src={triangle} className='triangle'/></div>
+                <div className='col'><img alt='' src={triangle} className='triangle'/></div>
             </div>
 
-            <div class='row'>
-                <img src={smashball} class='smashball'/>
-                <div class='col'>
-                    <img src={portrait} class={'col portrait' + visibility}/>
+            <div className='row'>
+                <img alt='' src={smashball} className='smashball'/>
+                <div className='col'>
+                    <img alt='' src={portrait} className={'col portrait' + visibility}/>
                 </div>
-                <div class='col flip'>
-                    <img src={portrait} class={'col portrait' + visibility}/>
+                <div className='col flip'>
+                    <img alt='' src={portrait} className={'col portrait' + visibility}/>
                 </div>
             </div>
 

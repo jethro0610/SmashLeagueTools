@@ -28,22 +28,22 @@ class SocketManager {
             // Create a new match when given admin command
             socket.on('admin-create-match', async (msg) => {
                 await updateSocketUser(socket);
-                //if (!socket.request.user)
-                    //return;
+                if (!socket.request.user)
+                    return;
 
-                //if(!socket.request.user.admin)
-                    //return;
+                if(!socket.request.user.admin)
+                    return;
                 
                 createMatchFromNames(msg.player1, msg.player2);
             });
 
             socket.on('admin-update-match', async (msg) => {
-                //await updateSocketUser(socket);
-                //if (!socket.request.user)
-                    //return;
+                await updateSocketUser(socket);
+                if (!socket.request.user)
+                    return;
 
-                //if(!socket.request.user.admin)
-                    //return;
+                if(!socket.request.user.admin)
+                    return;
 
                 updateMatch(msg.key, msg.amount1, msg.amount2);
             });
