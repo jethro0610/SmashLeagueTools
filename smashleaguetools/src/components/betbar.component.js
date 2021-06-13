@@ -11,8 +11,8 @@ export default class BetBar extends Component {
 
     render() {
         const visibility = this.props.visibility;
-        const amount1 = 10;
-        const amount2 = 10;
+        const amount1 = this.props.amount1;
+        const amount2 = this.props.amount2;
         // Set the progress to 50/50 if the amounts are 0
         var progress1 = 50;
         var progress2 = 50;

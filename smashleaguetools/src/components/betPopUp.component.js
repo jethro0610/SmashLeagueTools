@@ -1,7 +1,34 @@
 import React from 'react';
 import './css/betpopup.css'
 
-const BetPopUp = () => {
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => {
+    return { 
+        betPlayerNumber: state.betPlayerNumber.number,
+        selectedMatch: state.selectedMatch.match
+    };
+};
+
+const ConnectBetPopUp = ({betPlayerNumber, selectedMatch}) => {
+    if (betPlayerNumber === 0 || selectedMatch === 0)
+        return (
+            <div/>
+        );
+
+    var playerName = '';
+    var playerAmount = 0;
+    if (betPlayerNumber === 1) {
+        playerName = selectedMatch.player1Name;
+        playerAmount = selectedMatch.amount1;
+    }
+    else if(betPlayerNumber === 2) {
+        playerName = selectedMatch.player2Name
+        playerAmount = selectedMatch.amount2;
+    }
+    var total = selectedMatch.amount1 + selectedMatch.amount2;
+    var percent = (playerAmount / total) * 100.0;
+
     return (
         <div className='container-fluid position-fixed backdrop h-100'>
             <div className='row align-items-center h-100'>
@@ -12,8 +39,8 @@ const BetPopUp = () => {
 
                         <div className='row align-items-center h-100'>
                             <div className='betMenu col'>
-                                <div className='playerName'>Liar</div>
-                                <div className='currentAmount'>with 32% of $1000</div>
+                                <div className='playerName'>{playerName}</div>
+                                <div className='currentAmount'>with {percent}% of ${total}</div>
 
                                 <div className='numberPadding'>
                                     <input type='number' min='0' max='100' className='form-control text-center' id='amount' placeholder='Amount'></input>
@@ -32,4 +59,5 @@ const BetPopUp = () => {
     )
 };
 
+const BetPopUp = connect(mapStateToProps)(ConnectBetPopUp);
 export default BetPopUp;
