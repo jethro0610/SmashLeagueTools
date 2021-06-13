@@ -25,7 +25,9 @@ module.exports = passport => {
             else {
                 const newUser = await User.create({
                     name: profile.username,
-                    discordId: profile.id
+                    discordId: profile.id,
+                    balance: 0,
+                    admin: false
                 });
                 const savedUser = await newUser.save();
                 done(null, savedUser);

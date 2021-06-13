@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     name: { type: String, required: true},
     discordId: { type: String, required: true},
-    admin: {type: Boolean, required: false}
+    balance: { type: Number, required: true},
+    admin: {type: Boolean, required: true}
 }, 
 {
     timestamps: true,
