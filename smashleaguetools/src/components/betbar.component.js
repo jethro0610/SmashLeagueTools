@@ -13,10 +13,15 @@ export default class BetBar extends Component {
         const visibility = this.props.visibility;
         const amount1 = this.props.amount1;
         const amount2 = this.props.amount2;
+        var progress1 = 50;
+        var progress2 = 50;
 
-        // Calculate the widths of the progress bars
-        var progress1 = (amount1 / (amount1 + amount2)) * 100.0;
-        var progress2 = 100.0 - progress1;
+        if(amount1 != 0 || amount2 != 0) {
+            // Calculate the widths of the progress bars
+            progress1 = (amount1 / (amount1 + amount2)) * 100.0;
+            progress1 = (progress1 == NaN ? 0 : progress1);
+            progress2 = 100.0 - progress1;
+        }
 
         // Create the progress bar elements if their widths are > 0
         var barElement1 = null;

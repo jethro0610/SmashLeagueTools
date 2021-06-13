@@ -24,7 +24,7 @@ class Match {
     getBets(playerNumber) {
         var amount = 0;
         for (const bet of this.bets) {
-            if(bet.predictedWinner == playerNumber)
+            if(bet.predictedNumber == playerNumber)
                 amount += bet.amount;
         }
         return amount;
@@ -54,8 +54,21 @@ function createMatchFromNames(player1Name, player2Name) {
     createMatch(new GGPlayer('', player1Name), new GGPlayer('', player2Name));
 }
 
+function updateMatch(key, amount1, amount2) {
+    var matchToUpdate = matches.get(key);
+    if(!matchToUpdate)
+        return;
+
+    matchToUpdate.bets.push(new Bet('', 1, amount1));
+    matchToUpdate.bets.push(new Bet('', 2, amount2));
+
+    console.log(matchToUpdate);
+    matchEvents.emit('match-updated', key);
+}
+
 module.exports = { 
     matches: matches, 
     matchEvents: matchEvents,
-    createMatchFromNames: createMatchFromNames
+    createMatchFromNames: createMatchFromNames,
+    updateMatch: updateMatch
 };

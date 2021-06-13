@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import'./selector.css'
 import store from '../redux/store/store';
-import {setSelectedMatch} from '../redux/reducers/selectedMatchInfo';
+import {setSelectedMatch} from '../redux/reducers/selectedMatch';
 import circle from './../circle.png'
 
 export default class Selector extends Component {

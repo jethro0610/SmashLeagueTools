@@ -1,6 +1,7 @@
 const matches = require('./matches').matches;
 const matchEvents = require('./matches').matchEvents;
 const createMatchFromNames = require('./matches').createMatchFromNames;
+const updateMatch = require('./matches').updateMatch;
 const User = require('./models/user.model');
 
 const updateSocketUser = async (socket) => {
@@ -27,18 +28,33 @@ class SocketManager {
             // Create a new match when given admin command
             socket.on('admin-create-match', async (msg) => {
                 await updateSocketUser(socket);
-                if (!socket.request.user)
-                    return;
+                //if (!socket.request.user)
+                    //return;
 
-                if(!socket.request.user.admin)
-                    return;
+                //if(!socket.request.user.admin)
+                    //return;
                 
                 createMatchFromNames(msg.player1, msg.player2);
             });
+
+            socket.on('admin-update-match', async (msg) => {
+                //await updateSocketUser(socket);
+                //if (!socket.request.user)
+                    //return;
+
+                //if(!socket.request.user.admin)
+                    //return;
+
+                updateMatch(msg.key, msg.amount1, msg.amount2);
+            });
         });
 
-        matchEvents.on('match-created', (key, match) => {
+        matchEvents.on('match-created', key => {
             this.emitMatchCreated(key);
+        })
+
+        matchEvents.on('match-updated', key => {
+            this.emitMatchUpdated(key);
         })
     }
 
@@ -68,6 +84,16 @@ class SocketManager {
             player2: matchToEmit.player2.name});
 
         console.log('Server match created');
+    }
+
+    emitMatchUpdated(matchKey) {
+        var matchToEmit = matches.get(matchKey);
+        if (matchToEmit == null)
+            return;
+
+        this.io.emit('match-updated', {key: matchKey, 
+            amount1: matchToEmit.getBets(1), 
+            amount2: matchToEmit.getBets(2)});
     }
 }
 
