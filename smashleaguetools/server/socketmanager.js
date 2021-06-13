@@ -66,6 +66,8 @@ class SocketManager {
         this.io.emit('match-created', {key: matchKey, 
             player1: matchToEmit.player1.name, 
             player2: matchToEmit.player2.name});
+
+        console.log('Server match created');
     }
 }
 

@@ -1,4 +1,6 @@
 import io from 'socket.io-client'
+import store from './store/store';
+import createMatch from './actions/actions';
 
 class Match {
     constructor(player1, player2, total1 = 0, total2 = 0) {
@@ -8,16 +10,12 @@ class Match {
         this.total2 = total2;
     }
 }
-var allMatches = new Map();
-const updateMatchEvent = new Event('updateMatches'); // Event to update better component once matches are updated
+var matches = new Map();
 
-function deleteMatch(index) {
-    allMatches.delete(index, 1);
-    window.dispatchEvent(updateMatchEvent);
-}
+var createMatchEvent = new Event('match-created');
 
 function printMatches() {
-    console.log(allMatches);
+    console.log(matches);
 }
 
 // Create the connection to the Socket.IO server
@@ -34,27 +32,28 @@ function adminUpdateMatch(key, total1, total2) {
     socket.emit('admin-update-match', { key: key, total1: total1, total2: total2});
 }
 
+/*
 // Event when client recieves a match from the server
 socket.on('all-matches', (msg) => {
-    allMatches.clear(); // Remove all matches since a newly update map is sent
+    matches.clear(); // Remove all matches since a newly update map is sent
     for(const content of msg) {
         var newMatch = new Match(content.player1, content.player2, content.amount1, content.amount2);
-        allMatches.set(content.key, newMatch);
+        matches.set(content.key, newMatch);
     }
     window.dispatchEvent(updateMatchEvent);
 });
+*/
 
 // Event when client recieves a newly created match
 socket.on('match-created', (msg) => {
-    var key = msg.key;
-    allMatches.set(key, new Match(msg.player1, msg.player2));
-    window.dispatchEvent(updateMatchEvent);
+    matches.set(msg.key, new Match(msg.player1, msg.player2));
+    store.dispatch(createMatch(msg.key));
+    //window.dispatchEvent(createMatch(msg.key));
 });
 
 // Expose functions to console
-window.deleteMatch = deleteMatch;
 window.printMatches = printMatches;
 window.adminCreateMatch = adminCreateMatch;
 window.adminUpdateMatch = adminUpdateMatch;
 
-export default allMatches;
+export default matches;
