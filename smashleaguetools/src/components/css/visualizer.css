@@ -29,6 +29,15 @@
     }
 }
 
+.portraitButton {
+    background: transparent;
+    border: none !important;
+    position: absolute;
+    margin: 20%;
+    width: 50%;
+    height: 50%;
+}
+
 .portrait {
     width: 90%;
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import './css/betpopup.css'
-
+import { setBetPlayerNumber } from '../redux/reducers/betPlayerNumber';
+import store from '../redux/store/store';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
@@ -28,6 +29,7 @@ const ConnectBetPopUp = ({betPlayerNumber, selectedMatch}) => {
     }
     var total = selectedMatch.amount1 + selectedMatch.amount2;
     var percent = (playerAmount / total) * 100.0;
+    percent = (isNaN(percent) ? 0 : percent);
 
     return (
         <div className='container-fluid position-fixed backdrop h-100'>
@@ -40,13 +42,13 @@ const ConnectBetPopUp = ({betPlayerNumber, selectedMatch}) => {
                         <div className='row align-items-center h-100'>
                             <div className='betMenu col'>
                                 <div className='playerName'>{playerName}</div>
-                                <div className='currentAmount'>with {percent}% of ${total}</div>
+                                <div className='currentAmount'>with {percent.toFixed(2)}% of ${total}</div>
 
                                 <div className='numberPadding'>
                                     <input type='number' min='0' max='100' className='form-control text-center' id='amount' placeholder='Amount'></input>
                                 </div>
                                 <button type='submit' className='btn btn-dark submitButton'>Submit</button>
-                                <button type='submit' className='btn btn-dark submitButton'>Cancel</button>
+                                <button onClick={() => {store.dispatch(setBetPlayerNumber(0))}} type='submit' className='btn btn-dark submitButton'>Cancel</button>
                             </div>
                         </div>
 

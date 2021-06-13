@@ -5,12 +5,19 @@ import smashball from './../smashball.png'
 import './css/visualizer.css'
 import BetBar from './betbar.component.js'
 
+import { setBetPlayerNumber } from '../redux/reducers/betPlayerNumber';
+import store from '../redux/store/store';
+
 import { connect } from 'react-redux';
 const mapStateToProps = state => {
     return { selectedMatch: state.selectedMatch.match };
 };
 
 const ConnectedVisualizer = ({selectedMatch}) => {
+    function onClickPlayer(playerNumber) {
+        store.dispatch(setBetPlayerNumber(playerNumber));
+    }
+
     var visibility = ' hide';
     var player1Name = '.';
     var player2Name = '.';
@@ -42,10 +49,12 @@ const ConnectedVisualizer = ({selectedMatch}) => {
 
             <div className='row'>
                 <img alt='' src={smashball} className='smashball'/>
-                <div className='col'>
+                <div className='col position-relative'>
+                    <button onClick={() => onClickPlayer(1)} className={'portraitButton' + visibility}/>
                     <img alt='' src={portrait} className={'col portrait' + visibility}/>
                 </div>
-                <div className='col flip'>
+                <div className='col position-relative flip'>
+                    <button onClick={() => onClickPlayer(2)} className={'portraitButton' + visibility}/>
                     <img alt='' src={portrait} className={'col portrait' + visibility}/>
                 </div>
             </div>
