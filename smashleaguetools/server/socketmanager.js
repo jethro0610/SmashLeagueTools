@@ -50,9 +50,9 @@ class SocketManager {
         var msg = [];
         for(const [key, matchToSend] of matches.entries()) {
             msg.push({key: key, 
-                player1: matchToSend.player1.name, 
+                player1Name: matchToSend.player1.name, 
                 amount1: matchToSend.getBets(1),
-                player2: matchToSend.player2.name,
+                player2Name: matchToSend.player2.name,
                 amount2: matchToSend.getBets(2)});
         }
         socket.emit('all-matches', msg);

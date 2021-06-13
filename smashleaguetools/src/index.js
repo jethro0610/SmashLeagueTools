@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-
 import { Provider } from 'react-redux'; 
-import store from './store/store';
+import store from './redux/store/store';
+import socket from './socketmanager'
 
 //store.subscribe(() => console.log('Look ma, Redux!!'));
 //store.dispatch(createMatch('asdf'));
