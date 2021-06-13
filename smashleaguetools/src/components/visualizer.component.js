@@ -2,7 +2,7 @@ import React from 'react';
 import portrait from './../portrait.png'
 import triangle from './../triangle.png'
 import smashball from './../smashball.png'
-import './visualizer.css'
+import './css/visualizer.css'
 import BetBar from './betbar.component.js'
 
 import { connect } from 'react-redux';

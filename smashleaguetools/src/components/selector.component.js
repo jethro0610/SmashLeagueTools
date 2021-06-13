@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import'./selector.css'
+import'./css/selector.css'
 import store from '../redux/store/store';
 import {setSelectedMatch} from '../redux/reducers/selectedMatch';
 import circle from './../circle.png'

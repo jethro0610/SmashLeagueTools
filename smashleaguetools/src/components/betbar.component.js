@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './visualizer.css'
+import './css/visualizer.css'
 
 export default class BetBar extends Component {
     constructor(props) {
