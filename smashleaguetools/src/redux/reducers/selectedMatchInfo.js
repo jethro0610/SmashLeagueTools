@@ -1,22 +1,23 @@
 import { matches } from './matchList';
+
 const initialState = {
-    selectedMatch: undefined
-}
+    match: undefined
+};
 
 export const setSelectedMatch = (key) => {
     return { type: 'SET_MATCH', payload: {key}};
 }
 
-export const updateSelectedMatchInfo = (key) => {
+export const updateSelectedMatch = (key) => {
     return { type: 'UPDATE_MATCH', payload: {key}};
 }
 
-export const selectedMatchInfoReducer = (state = initialState, action) => {
+export const selectedMatchReducer = (state = initialState, action) => {
     switch(action.type) {
         case 'SET_MATCH':
             const selectedMatch = matches.get(action.payload.key);
             return {
-                selectedMatch: selectedMatch
+                match: selectedMatch
             }
 
         default:

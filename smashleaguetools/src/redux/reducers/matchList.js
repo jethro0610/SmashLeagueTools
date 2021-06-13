@@ -11,7 +11,7 @@ export class Match {
 export var matches = new Map();
 
 const initialState = {
-    matchList: []
+    list: []
 }
 
 export const createMatch = (key, player1Name, player2Name) => {
@@ -30,13 +30,14 @@ export const matchListReducer = (state = initialState, action) => {
             const matchesArray = Array.from(matches.values());
 
             return {
-                matchList: matchesArray
+                list: matchesArray
             }
             
         case 'ALL_MATCH':
-            const matchArray = action.payload.allMatches;
+            const allArray = action.payload.allMatches;
+
             matches = new Map();
-            for (const curMatch of matchArray) {
+            for (const curMatch of allArray) {
                 matches.set(curMatch.key, new Match(
                     curMatch.key,
                     curMatch.player1Name,
@@ -46,7 +47,7 @@ export const matchListReducer = (state = initialState, action) => {
             }
 
             return {
-                matchList: matchArray
+                list: allArray
             }
 
         default:
