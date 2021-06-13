@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import './css/betpopup.css'
 
 export default class Navbar extends Component {
     render() {

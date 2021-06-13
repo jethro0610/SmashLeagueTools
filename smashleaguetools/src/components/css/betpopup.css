@@ -1,0 +1,45 @@
+.hide {
+    visibility: hidden;
+}
+
+.backdrop {
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+}
+
+.popup {
+    border-radius: 25px;
+    min-height: 300px;
+    min-width: 300px;
+    height: 60vh;
+    width: 30vw;
+    margin:auto;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+}
+
+.titleBar {
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 30%;
+}
+
+.playerName {
+    font-size: 40px;
+}
+
+.currentAmount {
+    font-size: 16px;
+}
+
+.numberPadding {
+    padding-left: 30%;
+    padding-right: 30%;
+}
+
+.submitButton {
+    margin-top: 16px;
+}
