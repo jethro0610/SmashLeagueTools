@@ -4,23 +4,27 @@ const initialState = {
     match: undefined
 };
 
-export const setSelectedMatch = (key) => {
-    return { type: 'SET_MATCH', payload: {key}};
+export const setSelectedMatch = key => {
+    return { type: 'SET_SELECTED_MATCH', payload: {key}};
 }
 
-export const updateSelectedMatch = (key) => {
+export const updateSelectedMatch = () => {
     return { type: 'UPDATE_SELECTED_MATCH'};
+}
+
+export const clearSelectedMatch = () => {
+    return { type: 'CLEAR_SELECTED_MATCH'};
 }
 
 export const selectedMatchReducer = (state = initialState, action) => {
     switch(action.type) {
-        case 'SET_MATCH':
+        case 'SET_SELECTED_MATCH':
             const setMatch = new Match();
             Object.assign(setMatch, matches.get(action.payload.key));
             return {
                 match: setMatch
             }
-            
+
         case 'UPDATE_SELECTED_MATCH':
             console.log('Updating selected');
             console.log(state.match);
@@ -29,6 +33,11 @@ export const selectedMatchReducer = (state = initialState, action) => {
             console.log(updateMatch);
             return {
                 match: updateMatch
+            }
+
+        case 'CLEAR_SELECTED_MATCH':
+            return {
+                match: undefined
             }
 
         default:

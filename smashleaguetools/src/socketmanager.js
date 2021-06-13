@@ -1,11 +1,15 @@
 import io from 'socket.io-client'
 import store from './redux/store/store';
-import {allMatches, createMatch, updateMatch} from './redux/reducers/matchList';
-import { updateSelectedMatch } from './redux/reducers/selectedMatch';
+import { allMatches, createMatch, updateMatch} from './redux/reducers/matchList';
+import { updateSelectedMatch, clearSelectedMatch } from './redux/reducers/selectedMatch';
 
 // Create the connection to the Socket.IO server
 export const socket = io.connect('http://localhost:5000', {
     withCredentials: true
+});
+
+socket.on('connect', () => {
+    store.dispatch(clearSelectedMatch());
 });
 
 // Call the server to create a match from admin client
@@ -24,7 +28,6 @@ socket.on('all-matches', (msg) => {
 
 // Event when client recieves a newly created match
 socket.on('match-created', (msg) => {
-    console.log(msg.key);
     store.dispatch(createMatch(msg.key, msg.player1, msg.player2));
 });
 
