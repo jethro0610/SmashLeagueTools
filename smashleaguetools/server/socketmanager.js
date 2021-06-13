@@ -22,30 +22,25 @@ class SocketManager {
     constructor(io, session) {
         this.io = io;
 
-        this.io.on('connection', async (socket) => {
+        this.io.on('connection', (socket) => {
             this.sendClientAllMatches(socket); // Send the client all matches upon connection
     
             // Create a new match when given admin command
-            socket.on('admin-create-match', async (msg) => {
-                await updateSocketUser(socket);
-                if (!socket.request.user)
-                    return;
-
-                if(!socket.request.user.admin)
-                    return;
+            socket.on('admin-create-match', (msg) => {
+                if (!socket.request.user) return;
+                if(!socket.request.user.admin) return;
                 
                 createMatchFromNames(msg.player1, msg.player2);
             });
 
-            socket.on('admin-update-match', async (msg) => {
-                await updateSocketUser(socket);
-                if (!socket.request.user)
-                    return;
+            socket.on('bet', (msg) => {
+                if (!socket.request.user) return;
+                if (msg.amount <= 0) return;
+                if (socket.request.user.balance < msg.amount) return;
 
-                if(!socket.request.user.admin)
-                    return;
-
-                updateMatch(msg.key, msg.amount1, msg.amount2);
+                socket.request.user.balance -= msg.amount;
+                User.findByIdAndUpdate(socket.request.user.id, {balance: socket.request.user.balance}, {new: true}, (err, user) => {});
+                socket.emit('balance-updated', { balance: socket.request.user.balance});
             });
         });
 

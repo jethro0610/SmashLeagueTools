@@ -8,6 +8,10 @@ export const setUser = (name, balance, admin = false) => {
     return { type: 'SET_USER', payload: {name, balance, admin}};
 }
 
+export const setBalance = (balance) => {
+    return { type: 'SET_BALANCE', payload: {balance}};
+}
+
 export const userInfoReducer = (state = initialState, action) => {
     switch(action.type) {
         case 'SET_USER':
@@ -15,6 +19,13 @@ export const userInfoReducer = (state = initialState, action) => {
                 name: action.payload.name,
                 balance: action.payload.balance,
                 admin: action.payload.admin
+            }
+
+        case 'SET_BALANCE':
+            return {
+                name: state.name,
+                balance: action.payload.balance,
+                admin: state.admin
             }
 
         default:

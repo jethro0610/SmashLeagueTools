@@ -2,6 +2,7 @@ import io from 'socket.io-client'
 import store from './redux/store/store';
 import { allMatches, createMatch, updateMatch} from './redux/reducers/matchList';
 import { updateSelectedMatch, clearSelectedMatch } from './redux/reducers/selectedMatch';
+import { setBalance } from './redux/reducers/userInfo';
 
 // Create the connection to the Socket.IO server
 export const socket = io.connect('http://localhost:5000', {
@@ -34,11 +35,18 @@ socket.on('match-created', (msg) => {
 // Event when client recieves a newly created match
 socket.on('match-updated', (msg) => {
     store.dispatch(updateMatch(msg.key, msg.amount1, msg.amount2));
-    console.log(store.getState().selectedMatch.match.key + ' ' + msg.key);
     if (store.getState().selectedMatch.match.key === msg.key)
         store.dispatch(updateSelectedMatch());
 });
 
+socket.on('balance-updated', (msg) => {
+    console.log(msg);
+    store.dispatch(setBalance(msg.balance));
+})
+
 // Expose functions to console
 window.adminCreateMatch = adminCreateMatch;
 window.adminUpdateMatch = adminUpdateMatch;
+window.bet = (key, predictionNumber, amount) => {
+    socket.emit('bet', {key, predictionNumber, amount});
+}

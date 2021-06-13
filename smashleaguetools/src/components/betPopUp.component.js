@@ -7,11 +7,12 @@ import { connect } from 'react-redux';
 const mapStateToProps = state => {
     return { 
         betPlayerNumber: state.betPlayerNumber.number,
-        selectedMatch: state.selectedMatch.match
+        selectedMatch: state.selectedMatch.match,
+        balance: state.userInfo.balance
     };
 };
 
-const ConnectBetPopUp = ({betPlayerNumber, selectedMatch}) => {
+const ConnectBetPopUp = ({betPlayerNumber, selectedMatch, balance}) => {
     if (betPlayerNumber === 0 || selectedMatch === 0)
         return (
             <div/>
@@ -52,7 +53,7 @@ const ConnectBetPopUp = ({betPlayerNumber, selectedMatch}) => {
                             </div>
                         </div>
 
-                        <div className='balance'>Your Balance: $100</div>
+                        <div className='balance'>Your Balance: ${balance}</div>
 
                     </div>
                 </div>
