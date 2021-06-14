@@ -73,6 +73,12 @@ function endMatch(key, winnerNumber) {
         if (bet.predictionNumber === winnerNumber)
             matchEvents.emit('payout', mongoId, bet.amount);
     }
+    deleteMatch(key);
+}
+
+function deleteMatch(key) {
+    matches.delete(key);
+    matchEvents.emit('match-deleted', key);
 }
 
 module.exports = { 
@@ -80,5 +86,6 @@ module.exports = {
     matchEvents: matchEvents,
     createMatchFromNames: createMatchFromNames,
     addBet: addBet,
-    endMatch: endMatch
+    endMatch: endMatch,
+    deleteMatch: deleteMatch
 };

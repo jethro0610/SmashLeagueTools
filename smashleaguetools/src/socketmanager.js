@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 import store from './redux/store/store';
-import { allMatches, createMatch, updateMatch} from './redux/reducers/matchList';
+import { allMatches, createMatch, deleteMatch, updateMatch} from './redux/reducers/matchList';
 import { updateSelectedMatch, clearSelectedMatch } from './redux/reducers/selectedMatch';
 import { setBalance } from './redux/reducers/userInfo';
 import { cancelBet } from './redux/reducers/betInfo';
@@ -38,6 +38,15 @@ socket.on('match-updated', (msg) => {
     store.dispatch(updateMatch(msg.key, msg.amount1, msg.amount2));
     if (store.getState().selectedMatch.match.key === msg.key)
         store.dispatch(updateSelectedMatch());
+});
+
+// Event when client recieves a newly created match
+socket.on('match-deleted', (msg) => {
+    store.dispatch(deleteMatch(msg.key));
+    if (store.getState().selectedMatch.match.key === msg.key) {
+        store.dispatch(clearSelectedMatch());
+        store.dispatch(cancelBet());
+    }
 });
 
 socket.on('balance-updated', (msg) => {

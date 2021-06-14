@@ -22,6 +22,10 @@ export const createMatch = (key, player1Name, player2Name) => {
     return { type: 'CREATE_MATCH', payload: {key, player1Name, player2Name} };
 }
 
+export const deleteMatch = (key) => {
+    return { type: 'DELETE_MATCH', payload: {key} };
+}
+
 export const updateMatch = (key, amount1, amount2) => {
     return { type: 'UPDATE_MATCH', payload: {key, amount1, amount2} };
 }
@@ -53,7 +57,15 @@ export const matchListReducer = (state = initialState, action) => {
             return {
                 list: createdArray
             }
-            
+        
+        case 'DELETE_MATCH':
+            matches.delete(action.payload.key);
+            const deletedArray = Array.from(matches.values());
+
+            return {
+                list: deletedArray
+            }
+
         case 'UPDATE_MATCH':
             const matchToUpdate = matches.get(action.payload.key);
             if (!matchToUpdate)

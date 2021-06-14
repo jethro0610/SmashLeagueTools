@@ -61,11 +61,30 @@ class SocketManager {
         });
 
         matchEvents.on('match-created', key => {
-            this.emitMatchCreated(key);
+            const matchToEmit = matches.get(key);
+            if (!matchToEmit) return;
+
+            this.io.emit('match-created', {
+                key: key, 
+                player1: matchToEmit.player1.name, 
+                player2: matchToEmit.player2.name});
         })
 
         matchEvents.on('match-updated', key => {
-            this.emitMatchUpdated(key);
+            const matchToEmit = matches.get(key);
+            if (matchToEmit == null)
+                return;
+
+            this.io.emit('match-updated', {
+                key: key, 
+                amount1: matchToEmit.getBets(1), 
+                amount2: matchToEmit.getBets(2)});
+        })
+
+        matchEvents.on('match-deleted', key => {
+            this.io.emit('match-deleted', {
+                key: key
+            });
         })
 
         matchEvents.on('payout', (mongoId, amount) => {
@@ -102,26 +121,6 @@ class SocketManager {
                 amount2: matchToSend.getBets(2)});
         }
         socket.emit('all-matches', msg);
-    }
-
-    emitMatchCreated(matchKey) {
-        var matchToEmit = matches.get(matchKey);
-        if (matchToEmit == null)
-            return;
-
-        this.io.emit('match-created', {key: matchKey, 
-            player1: matchToEmit.player1.name, 
-            player2: matchToEmit.player2.name});
-    }
-
-    emitMatchUpdated(matchKey) {
-        var matchToEmit = matches.get(matchKey);
-        if (matchToEmit == null)
-            return;
-
-        this.io.emit('match-updated', {key: matchKey, 
-            amount1: matchToEmit.getBets(1), 
-            amount2: matchToEmit.getBets(2)});
     }
 }
 
