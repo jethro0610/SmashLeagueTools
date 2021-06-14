@@ -4,7 +4,7 @@ import triangle from './../triangle.png'
 import smashball from './../smashball.png'
 import BetBar from './betbar.component.js'
 
-import { setBetPlayerNumber } from '../redux/reducers/betPlayerNumber';
+import { setBetPredictionNumber } from '../redux/reducers/betInfo';
 import store from '../redux/store/store';
 
 import { connect } from 'react-redux';
@@ -14,7 +14,7 @@ const mapStateToProps = state => {
 
 const ConnectedVisualizer = ({selectedMatch}) => {
     function onClickPlayer(playerNumber) {
-        store.dispatch(setBetPlayerNumber(playerNumber));
+        store.dispatch(setBetPredictionNumber(playerNumber));
     }
 
     var visibility = ' hide';

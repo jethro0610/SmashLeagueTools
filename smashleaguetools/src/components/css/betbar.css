@@ -1,16 +1,9 @@
-.amount {
+.total {
     font-family: 'Quicksand', sans-serif;
     text-shadow: 2px 2px 2px black;
 }
 
-.total {
-    margin-left: 24vw;
-    margin-right: 24vw;
-    font-size: 16px;
-    font-family: 'Quicksand', sans-serif;
-}
-
-.amounts {
+.betbar {
     font-size: 14px;
     height: 30px;
     overflow: hidden;

@@ -37,7 +37,8 @@ class SocketManager {
             socket.on('bet', (msg) => {
                 if (!socket.request.user) return;
                 if (msg.predictionNumber != 1 && msg.predictionNumber != 2) return;
-                if (msg.amount <= 0) return;
+                msg.amount = parseInt(msg.amount);
+                if (msg.amount <= 0 || isNaN(msg.amount)) return;
                 if (socket.request.user.balance < msg.amount) return;
 
                 if(!addBet(msg.key, socket.request.user.id, msg.predictionNumber, msg.amount))

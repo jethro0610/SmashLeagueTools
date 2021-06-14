@@ -43,13 +43,13 @@ const ConnectedBetBar = ({selectedMatch}) =>  {
     return(
         <div className={visibility}>
             <div className={'row'}>
-                <div className='col amount'>
+                <div className='col total'>
                     {'$' + (amount1 + amount2)}
                 </div>
             </div>
             <div className={'row'}>
                 <div className='col'>
-                    <div className='amounts shadow-sm border border-2 rounded-pill text-light progress overflow-hidden'>
+                    <div className='betbar shadow-sm border border-2 rounded-pill text-light progress overflow-hidden'>
                         {barElement1}
                         {barElement2}
                     </div>

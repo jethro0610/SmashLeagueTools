@@ -46,6 +46,3 @@ socket.on('balance-updated', (msg) => {
 // Expose functions to console
 window.adminCreateMatch = adminCreateMatch;
 window.adminUpdateMatch = adminUpdateMatch;
-window.bet = (key, predictionNumber, amount) => {
-    socket.emit('bet', {key, predictionNumber, amount});
-}
