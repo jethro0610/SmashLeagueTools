@@ -1,9 +1,14 @@
 
 class GGPlayer {
-    constructor(ggId, name) {
+    constructor(ggSetId, ggId, name) {
+        this.ggSetId = ggSetId;
         this.ggId = ggId;
         this.name = name;
     }
+}
+
+function constructGGPlayer (ggSetId, ggId, name) {
+    return { ggSetId, ggId, name};
 }
 
 class Bet {
@@ -42,15 +47,15 @@ const EventEmitter = require('events');
 matches = new Map();
 const matchEvents = new EventEmitter();
 
-function createMatch(player1, player2) {
-    var key = Math.random().toString(36).substr(2, 5);
-    var match = new Match(player1, player2);
+function createMatch(key, player1, player2) {
+    const match = new Match(player1, player2);
     matches.set(key, match);
     matchEvents.emit('match-created', key);
 }
 
 function createMatchFromNames(player1Name, player2Name) {
-    createMatch(new GGPlayer('', player1Name), new GGPlayer('', player2Name));
+    const key = Math.random().toString(36).substr(2, 5);
+    createMatch(key, constructGGPlayer('', '', player1Name), constructGGPlayer('', '', player2Name));
 }
 
 function addBet(key, mongoId, predictionNumber, amount) {
@@ -82,8 +87,11 @@ function deleteMatch(key) {
 }
 
 module.exports = { 
+    constructGGPlayer: constructGGPlayer,
+    Match: Match,
     matches: matches, 
     matchEvents: matchEvents,
+    createMatch: createMatch,
     createMatchFromNames: createMatchFromNames,
     addBet: addBet,
     endMatch: endMatch,

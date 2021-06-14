@@ -8,6 +8,9 @@ const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const SocketManager = require('./socketmanager');
 require('./config/passport')(passport);
+const startTournament = require('./smashgg').startTournament;
+
+startTournament('1502999');
 
 // Set CORS options
 const corsOptions = {
