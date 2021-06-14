@@ -2,7 +2,7 @@ const matches = require('./matches').matches;
 const matchEvents = require('./matches').matchEvents;
 const createMatchFromNames = require('./matches').createMatchFromNames;
 const addBet = require('./matches').addBet;
-const updateMatch = require('./matches').updateMatch;
+const endMatch = require('./matches').endMatch;
 const User = require('./models/user.model');
 
 const updateSocketUser = async (socket) => {
@@ -22,17 +22,27 @@ const updateSocketUser = async (socket) => {
 class SocketManager {
     constructor(io, session) {
         this.io = io;
+        this.mongoToSocketMap = new Map();
 
         this.io.on('connection', (socket) => {
             this.sendClientAllMatches(socket); // Send the client all matches upon connection
-    
+            if (socket.request.user)
+                this.mongoToSocketMap.set(socket.request.user.id, socket);
+                
             // Create a new match when given admin command
             socket.on('admin-create-match', (msg) => {
                 if (!socket.request.user) return;
-                if(!socket.request.user.admin) return;
+                if (!socket.request.user.admin) return;
                 
                 createMatchFromNames(msg.player1, msg.player2);
             });
+
+            socket.on('admin-end-match', (msg) => {
+                if (!socket.request.user) return;
+                if (!socket.request.user.admin) return;
+
+                endMatch(msg.key, msg.winnerNumber);
+            })
 
             socket.on('bet', (msg) => {
                 if (!socket.request.user) return;
@@ -44,9 +54,8 @@ class SocketManager {
                 if(!addBet(msg.key, socket.request.user.id, msg.predictionNumber, msg.amount))
                     return;
 
-                socket.request.user.balance -= msg.amount;
-                User.findByIdAndUpdate(socket.request.user.id, {balance: socket.request.user.balance}, {new: true}, (err, user) => {});
-                socket.emit('balance-updated', { balance: socket.request.user.balance});
+                const newBalance = socket.request.user.balance - msg.amount;
+                this.setSocketBalance(socket, newBalance);
                 socket.emit('bet-confirmed', {});
             });
         });
@@ -58,6 +67,25 @@ class SocketManager {
         matchEvents.on('match-updated', key => {
             this.emitMatchUpdated(key);
         })
+
+        matchEvents.on('payout', (mongoId, amount) => {
+            const socketToPay = this.getSocketFromMongoId(mongoId);
+            if (!socketToPay) return;
+            if (!socketToPay.request.user) return;
+
+            const newBalance = socketToPay.request.user.balance + amount;
+            this.setSocketBalance(socketToPay, newBalance);
+        })
+    }
+
+    getSocketFromMongoId(mongoId) {
+        return this.mongoToSocketMap.get(mongoId);
+    }
+
+    setSocketBalance(socket, balance) {
+        socket.request.user.balance = balance;
+        User.findByIdAndUpdate(socket.request.user.id, {balance: socket.request.user.balance}, {new: true}, (err, user) => {});
+        socket.emit('balance-updated', { balance: socket.request.user.balance});
     }
 
     // Send a given client all matches

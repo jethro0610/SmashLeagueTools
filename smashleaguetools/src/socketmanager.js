@@ -19,8 +19,8 @@ function adminCreateMatch(player1, player2) {
     socket.emit('admin-create-match', { player1: player1, player2: player2 });
 }
 // Call the server to update a match from admin client
-function adminUpdateMatch(key, amount1, amount2) {
-    socket.emit('admin-update-match', { key, amount1, amount2});
+function adminEndMatch(key, winnerNumber) {
+    socket.emit('admin-end-match', { key, winnerNumber });
 }
 
 // Event when client recieves all matches
@@ -50,4 +50,4 @@ socket.on('bet-confirmed', (msg) => {
 
 // Expose functions to console
 window.adminCreateMatch = adminCreateMatch;
-window.adminUpdateMatch = adminUpdateMatch;
+window.adminEndMatch = adminEndMatch;

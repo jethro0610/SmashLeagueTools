@@ -64,9 +64,21 @@ function addBet(key, mongoId, predictionNumber, amount) {
     return true;
 }
 
+function endMatch(key, winnerNumber) {
+    const matchToEnd = matches.get(key);
+    if (!matchToEnd) return;
+
+    const total = matchToEnd.getTotalBets();
+    for (const [mongoId, bet] of matchToEnd.bets.entries()) {
+        if (bet.predictionNumber === winnerNumber)
+            matchEvents.emit('payout', mongoId, bet.amount);
+    }
+}
+
 module.exports = { 
     matches: matches, 
     matchEvents: matchEvents,
     createMatchFromNames: createMatchFromNames,
-    addBet: addBet
+    addBet: addBet,
+    endMatch: endMatch
 };
