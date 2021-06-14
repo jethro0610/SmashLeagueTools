@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import SelectorList from './selectorList.component'
 import Visualizer from './visualizer.component'
-import './css/better.css'
 
 export default class Better extends Component {
     render() {

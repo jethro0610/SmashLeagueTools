@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
 
-.hide {
-    visibility: hidden;
-}
-
 .smashball {
     position: absolute;
     width: 60%;

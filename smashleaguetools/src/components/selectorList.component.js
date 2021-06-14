@@ -1,6 +1,5 @@
 import React from 'react';
 import Selector from './selector.component'
-import './css/better.css'
 
 import { connect } from 'react-redux';
 const mapStateToProps = state => {

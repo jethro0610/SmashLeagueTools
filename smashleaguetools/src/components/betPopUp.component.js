@@ -1,5 +1,4 @@
 import React from 'react';
-import './css/betpopup.css'
 import { setBetPlayerNumber } from '../redux/reducers/betPlayerNumber';
 import store from '../redux/store/store';
 import { connect } from 'react-redux';
@@ -13,7 +12,7 @@ const mapStateToProps = state => {
 };
 
 const ConnectBetPopUp = ({betPlayerNumber, selectedMatch, balance}) => {
-    if (betPlayerNumber === 0 || selectedMatch === 0)
+    if (betPlayerNumber === 0 || selectedMatch === undefined)
         return (
             <div/>
         );

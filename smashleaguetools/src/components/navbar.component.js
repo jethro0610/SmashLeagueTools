@@ -1,5 +1,4 @@
 import React from 'react';
-import './css/betpopup.css'
 
 import { connect } from 'react-redux';
 const mapStateToProps = state => {

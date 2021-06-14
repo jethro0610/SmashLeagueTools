@@ -3,6 +3,13 @@ import { useEffect } from 'react';
 import { BrowserRouter as Router} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import './components/css/hide.css'
+import './components/css/betbar.css'
+import './components/css/betpopup.css'
+import './components/css/better.css'
+import './components/css/selector.css'
+import './components/css/visualizer.css'
+
 import Navbar from './components/navbar.component'
 import Better from './components/better.component'
 import BetPopUp from './components/betPopUp.component';

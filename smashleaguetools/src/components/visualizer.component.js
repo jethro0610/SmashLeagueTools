@@ -2,7 +2,6 @@ import React from 'react';
 import portrait from './../portrait.png'
 import triangle from './../triangle.png'
 import smashball from './../smashball.png'
-import './css/visualizer.css'
 import BetBar from './betbar.component.js'
 
 import { setBetPlayerNumber } from '../redux/reducers/betPlayerNumber';
@@ -23,7 +22,7 @@ const ConnectedVisualizer = ({selectedMatch}) => {
     var player2Name = '.';
     var amount1 = 0;
     var amount2 = 0;
-    if (selectedMatch != null) {
+    if (selectedMatch !== undefined) {
         visibility = '';
         player1Name = selectedMatch.player1Name;
         player2Name = selectedMatch.player2Name;
