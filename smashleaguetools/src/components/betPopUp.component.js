@@ -28,7 +28,7 @@ const ConnectBetPopUp = ({betInfo, selectedMatch, balance}) => {
         playerName = selectedMatch.player2Name
         playerAmount = selectedMatch.amount2;
     }
-    var total = selectedMatch.amount1 + selectedMatch.amount2;
+    const total = selectedMatch.amount1 + selectedMatch.amount2;
     var percent = (playerAmount / total) * 100.0;
     percent = (isNaN(percent) ? 0 : percent);
 

@@ -3,6 +3,7 @@ import store from './redux/store/store';
 import { allMatches, createMatch, updateMatch} from './redux/reducers/matchList';
 import { updateSelectedMatch, clearSelectedMatch } from './redux/reducers/selectedMatch';
 import { setBalance } from './redux/reducers/userInfo';
+import { cancelBet } from './redux/reducers/betInfo';
 
 // Create the connection to the Socket.IO server
 export const socket = io.connect('http://localhost:5000', {
@@ -41,6 +42,10 @@ socket.on('match-updated', (msg) => {
 
 socket.on('balance-updated', (msg) => {
     store.dispatch(setBalance(msg.balance));
+})
+
+socket.on('bet-confirmed', (msg) => {
+    store.dispatch(cancelBet());
 })
 
 // Expose functions to console

@@ -47,6 +47,7 @@ class SocketManager {
                 socket.request.user.balance -= msg.amount;
                 User.findByIdAndUpdate(socket.request.user.id, {balance: socket.request.user.balance}, {new: true}, (err, user) => {});
                 socket.emit('balance-updated', { balance: socket.request.user.balance});
+                socket.emit('bet-confirmed', {});
             });
         });
 
