@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const socketIO = require('socket.io');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const SocketManager = require('./socketmanager');
 require('./config/passport')(passport);
@@ -32,7 +33,10 @@ var sessionMiddleware = session({
     },
     resave: false,
     saveUninitialized: false,
-    name: 'discord-oauth2'
+    name: 'discord-oauth2',
+    store: MongoStore.create({
+        mongoUrl: process.env.ATLAS_URI
+    })
 });
 app.use(sessionMiddleware);
 
@@ -45,7 +49,10 @@ var socketManager = new SocketManager(io, sessionMiddleware); // Create the sock
 
 // Setup MongoDB connection
 const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
+mongoose.connect(uri, { 
+    useNewUrlParser: true, 
+    useCreateIndex: true, 
+    useFindAndModify: false});
 const connection = mongoose.connection;
 connection.once('open', () => {
     console.log('Connected to MongoDB database');
