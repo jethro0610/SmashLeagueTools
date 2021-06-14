@@ -7,8 +7,7 @@ class GGPlayer {
 }
 
 class Bet {
-    constructor(mongoId, predictionNumber, amount) {
-        this.mongoId = mongoId;
+    constructor(predictionNumber, amount) {
         this.predictionNumber = predictionNumber;
         this.amount = amount;
     }
@@ -18,12 +17,12 @@ class Match {
     constructor(player1, player2) {
         this.player1 = player1;
         this.player2 = player2;
-        this.bets = [];
+        this.bets = new Map();
     }
 
     getBets(playerNumber) {
         var amount = 0;
-        for (const bet of this.bets) {
+        for (const bet of this.bets.values()) {
             if(bet.predictionNumber == playerNumber)
                 amount += bet.amount;
         }
@@ -32,7 +31,7 @@ class Match {
 
     getTotalBets() {
         var amount = 0;
-        for (const bet of this.bets)
+        for (const bet of this.bets.values())
             amount += bet.amount;
         return amount;
     }
@@ -55,14 +54,14 @@ function createMatchFromNames(player1Name, player2Name) {
 }
 
 function addBet(key, mongoId, predictionNumber, amount) {
-    var matchToUpdate = matches.get(key);
-    if(!matchToUpdate)
-        return;
+    const matchToUpdate = matches.get(key);
+    if (!matchToUpdate) return false;
+    if (matchToUpdate.bets.has(mongoId)) return false;
 
-    const newBet = new Bet(mongoId, predictionNumber, amount);
-
-    matchToUpdate.bets.push(newBet);
+    const newBet = new Bet(predictionNumber, amount);
+    matchToUpdate.bets.set(mongoId, newBet);
     matchEvents.emit('match-updated', key);
+    return true;
 }
 
 module.exports = { 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './css/visualizer.css'
+import './css/betbar.css'
 
 export default class BetBar extends Component {
     constructor(props) {
@@ -28,19 +28,28 @@ export default class BetBar extends Component {
         // Create the progress bar elements if their widths are > 0
         var barElement1 = null;
         var barElement2 = null;
-        if (progress1 >= 5.0) {
+        //if (progress1 >= 5.0) {
             barElement1 = 
-            <div className={'progress-bar bg-light text-dark text-start overflow-hidden' + visibility} style={{width: progress1 + '%'}}>
-                { progress1 > 10.0 ? '$' + amount1 : '' }
+            <div className={'progress-bar bg-light text-dark text-start overflow-hidden' + visibility}
+            style={{width: progress1 + '%'}}
+            aria-valuenow={progress1}
+            aria-valuemin={0}
+            aria-valuemax={100}>
+                <div className='px-2'> { progress1 > 10.0 ? '$' + amount1 : '' } </div>
             </div>;
-        }
+        //}
 
-        if (progress2 >= 5.0) {
+        //if (progress2 >= 5.0) {
             barElement2 = 
-            <div className={'progress-bar bg-dark text-light text-end overflow-hidden' + visibility} style={{width: progress2 + '%'}}>
-                { progress2 > 10.0 ? '$' + amount2 : '' }
+            <div 
+            className={'progress-bar bg-dark text-light text-end overflow-hidden' + visibility} 
+            style={{width: progress2 + '%'}}
+            aria-valuenow={progress2}
+            aria-valuemin={0}
+            aria-valuemax={100}>
+                <div className='px-2'> { progress2 > 10.0 ? '$' + amount2 : '' } </div>
             </div>;
-        }
+        //}
 
         return(
             <div>
@@ -49,9 +58,13 @@ export default class BetBar extends Component {
                         {'$' + (amount1 + amount2)}
                     </div>
                 </div>
-                <div className={'row amounts shadow-sm border border-2 rounded-pill text-light progress' + visibility}>
-                    {barElement1}
-                    {barElement2}
+                <div className={'row' + visibility}>
+                    <div className='col'>
+                        <div className='amounts shadow-sm border border-2 rounded-pill text-light progress overflow-hidden'>
+                            {barElement1}
+                            {barElement2}
+                        </div>
+                    </div>
                 </div>
             </div>
         )

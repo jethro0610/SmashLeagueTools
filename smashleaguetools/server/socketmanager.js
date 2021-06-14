@@ -1,6 +1,7 @@
 const matches = require('./matches').matches;
 const matchEvents = require('./matches').matchEvents;
 const createMatchFromNames = require('./matches').createMatchFromNames;
+const addBet = require('./matches').addBet;
 const updateMatch = require('./matches').updateMatch;
 const User = require('./models/user.model');
 
@@ -35,8 +36,12 @@ class SocketManager {
 
             socket.on('bet', (msg) => {
                 if (!socket.request.user) return;
+                if (msg.predictionNumber != 1 && msg.predictionNumber != 2) return;
                 if (msg.amount <= 0) return;
                 if (socket.request.user.balance < msg.amount) return;
+
+                if(!addBet(msg.key, socket.request.user.id, msg.predictionNumber, msg.amount))
+                    return;
 
                 socket.request.user.balance -= msg.amount;
                 User.findByIdAndUpdate(socket.request.user.id, {balance: socket.request.user.balance}, {new: true}, (err, user) => {});

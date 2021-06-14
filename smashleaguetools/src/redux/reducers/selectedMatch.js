@@ -26,11 +26,8 @@ export const selectedMatchReducer = (state = initialState, action) => {
             }
 
         case 'UPDATE_SELECTED_MATCH':
-            console.log('Updating selected');
-            console.log(state.match);
             const updateMatch = new Match();
             Object.assign(updateMatch, matches.get(state.match.key));
-            console.log(updateMatch);
             return {
                 match: updateMatch
             }

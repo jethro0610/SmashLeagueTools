@@ -40,7 +40,6 @@ socket.on('match-updated', (msg) => {
 });
 
 socket.on('balance-updated', (msg) => {
-    console.log(msg);
     store.dispatch(setBalance(msg.balance));
 })
 
