@@ -74,3 +74,6 @@ typings/
 
 # FuseBox cache
 .fusebox/
+
+# Profile pictures
+smashleaguetools/server/profiles
