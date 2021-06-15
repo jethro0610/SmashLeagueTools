@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router, Route} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './components/css/hide.css'
@@ -35,7 +35,15 @@ const App = () => {
     <Router>
       <div className='d-flex flex-column vh-100'>
         <Navbar/>
-        <ProfileUpdater/>
+
+        <Route exact path='/'>
+          <BetPopUp/>
+          <Better/>
+        </Route>
+
+        <Route path='/profile'>
+          <ProfileUpdater/>
+        </Route> 
       </div>
     </Router>
   );
