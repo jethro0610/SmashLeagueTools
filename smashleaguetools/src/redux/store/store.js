@@ -1,4 +1,5 @@
-import {combineReducers, createStore} from 'redux';
+import {combineReducers, createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
 import {matchListReducer} from '../reducers/matchList';
 import {selectedMatchReducer} from '../reducers/selectedMatch';
 import { betInfoReducer } from '../reducers/betInfo';
@@ -10,5 +11,5 @@ const combined = combineReducers({
     betInfo: betInfoReducer,
     userInfo: userInfoReducer});
     
-const store = createStore(combined, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = createStore(combined, applyMiddleware(thunk));
 export default store;

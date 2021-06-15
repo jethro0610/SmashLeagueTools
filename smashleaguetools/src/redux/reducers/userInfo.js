@@ -1,3 +1,7 @@
+
+import axios from 'axios';
+import store from '../store/store'
+
 const initialState = {
     name: undefined,
     balance: 0,
@@ -5,7 +9,17 @@ const initialState = {
     admin:false
 };
 
-export const setUser = (id, name, balance, ggSlug, admin = false) => {
+export const refreshUser = async (dispatch, getState) => {
+    try {
+        const res = await axios.get('http://localhost:5000/users/get', {withCredentials: true});
+        store.dispatch(setUser(res.data.id, res.data.name, res.data.balance, res.data.ggSlug, res.data.admin));
+    }
+    catch (err) {
+        console.log('Failed to login/refresh user');
+    }
+}
+
+const setUser = (id, name, balance, ggSlug, admin = false) => {
     return { type: 'SET_USER', payload: {id, name, balance, ggSlug, admin}};
 }
 

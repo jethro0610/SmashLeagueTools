@@ -14,21 +14,14 @@ import './components/css/profileUpdater.css'
 import Navbar from './components/navbar.component'
 import Better from './components/better.component'
 import BetPopUp from './components/betPopUp.component';
-import ProfileUpdater
- from './components/profileUpdater.component';
-import axios from 'axios';
+import ProfileUpdater from './components/profileUpdater.component';
+
 import store from './redux/store/store'
-import { setUser } from './redux/reducers/userInfo';
+import { refreshUser } from './redux/reducers/userInfo';
 
 const App = () => {
   useEffect(() => {
-    axios.get('http://localhost:5000/users/get', {withCredentials: true})
-      .then(res => {
-        store.dispatch(setUser(res.data.id, res.data.name, res.data.balance, res.data.ggSlug, res.data.admin));
-      })
-      .catch(err => {
-        console.log('Failed to login');
-      });
+    store.dispatch(refreshUser);
   })
 
   return (
