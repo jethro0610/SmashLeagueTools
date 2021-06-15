@@ -3,11 +3,8 @@
 }
 
 .profile-pic {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    object-fit:cover;
+    width: 250px;
+    height: 250px;
 }
 
 .nameandslug {
@@ -26,32 +23,6 @@
 .ggsluginput {
     border-bottom-right-radius: 500px;
     border-top-right-radius: 500px;
-}
-
-.profile-pic-outerborder {
-    position: relative;
-    overflow: hidden;
-    display:block;
-    margin: 0;
-    padding: 0;
-
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    background-color: rgb(255, 255, 255);
-}
-
-.profile-pic-container {
-    position: absolute;
-    margin: auto;
-    overflow: hidden;
-    margin: auto;
-    top: 0; left: 0; bottom: 0; right: 0;
-
-    width: 225px;
-    height: 225px;
-    border-radius: 50%;
-    background-color: rgb(223, 223, 223);
 }
 
 .savebutton {

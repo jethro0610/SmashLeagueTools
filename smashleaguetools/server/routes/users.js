@@ -74,9 +74,7 @@ router.route('/updateprofile').post(isUser, upload.single('profile-pic'), (req, 
             }
 
             User.findByIdAndUpdate(req.user.id, updateData, {new: true}, (err, user) => {
-                res.send({
-                    name: user.name,
-                });
+                res.send('Succesfully updated');
             });
         })
         .catch(error => {

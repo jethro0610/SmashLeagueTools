@@ -1,7 +1,6 @@
 import {React, useState} from 'react';
 import axios from 'axios';
-import store from '../redux/store/store'
-import { setName } from '../redux/reducers/userInfo';
+import CirclePicture from './circlePicture.component';
 
 import { connect } from 'react-redux';
 const mapStateToProps = state => {
@@ -30,25 +29,19 @@ const ConnectedProfileUpdater = ({name, id, userggSlug}) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        if((!ggSlug || ggSlug === userggSlug) && profilePic === undefined) return;
         const formData = new FormData();
-        if(ggSlug) formData.append('ggSlug', ggSlug);
+        if(ggSlug && ggSlug !== userggSlug) formData.append('ggSlug', ggSlug);
         formData.append('profile-pic', profilePic);
 
         axios.post('http://localhost:5000/users/updateprofile', formData, {withCredentials : true})
             .then(res => {
-                if (res.data.name)
-                    store.dispatch(setName(res.data.name));
+                window.location.reload(); // Reload the page to update cached image
             })
             .catch(err => {
                 console.log(err.response.data);
             })
     }
-
-    var imageElement; 
-    if (!profilePicPath && !id)
-        imageElement = <div/>
-    else
-        imageElement = <img alt='' src={profilePicPath === undefined ? defaultProfilePath : profilePicPath} className='profile-pic'/>
 
     return(
         <form className='container-fluid h-100 text-center updater-container' encType='multipart/form-data' onSubmit={handleSubmit}>
@@ -64,11 +57,7 @@ const ConnectedProfileUpdater = ({name, id, userggSlug}) => {
                     style={{display: 'none'}}
                     onChange={handlePicChange}
                 />
-                <div className='profile-pic-outerborder shadow' style={{cursor: 'pointer'}}>
-                <div className='profile-pic-container' style={{cursor: 'pointer'}}>
-                    {imageElement}
-                </div>
-                </div>
+                <CirclePicture src={id === undefined ? profilePicPath : defaultProfilePath} className='profile-pic shadow'/>
             </label>
 
             <div className='row nameandslug'>
