@@ -24,7 +24,7 @@ const App = () => {
   useEffect(() => {
     axios.get('http://localhost:5000/users/get', {withCredentials: true})
       .then(res => {
-        store.dispatch(setUser(res.data.name, res.data.balance, res.data.admin));
+        store.dispatch(setUser(res.data.id, res.data.name, res.data.balance, res.data.ggSlug, res.data.admin));
       })
       .catch(err => {
         console.log('Failed to login');
