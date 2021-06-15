@@ -1,5 +1,5 @@
 import React from 'react';
-import portrait from '../portrait.png'
+import portrait from '../Final_Destination_Melee.png'
 import triangle from './../triangle.png'
 import smashball from './../smashball.png'
 import BetBar from './betbar.component.js'

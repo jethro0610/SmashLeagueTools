@@ -9,11 +9,13 @@ import './components/css/betpopup.css'
 import './components/css/better.css'
 import './components/css/selector.css'
 import './components/css/visualizer.css'
+import './components/css/profileUpdater.css'
 
 import Navbar from './components/navbar.component'
 import Better from './components/better.component'
 import BetPopUp from './components/betPopUp.component';
-
+import ProfileUpdater
+ from './components/profileUpdater.component';
 import axios from 'axios';
 import store from './redux/store/store'
 import { setUser } from './redux/reducers/userInfo';
@@ -33,8 +35,7 @@ const App = () => {
     <Router>
       <div className='d-flex flex-column vh-100'>
         <Navbar/>
-        <BetPopUp/>
-        <Better/>
+        <ProfileUpdater/>
       </div>
     </Router>
   );
