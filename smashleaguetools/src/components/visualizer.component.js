@@ -1,5 +1,5 @@
 import React from 'react';
-import portrait from './../portrait.png'
+import portrait from '../portrait.png'
 import triangle from './../triangle.png'
 import smashball from './../smashball.png'
 import BetBar from './betbar.component.js'
@@ -48,13 +48,15 @@ const ConnectedVisualizer = ({selectedMatch}) => {
 
             <div className='row'>
                 <img alt='' src={smashball} className='smashball'/>
-                <div className='col position-relative'>
-                    <button onClick={() => onClickPlayer(1)} className={'portraitButton' + visibility}/>
-                    <img alt='' src={portrait} className={'col portrait' + visibility}/>
+                <div className={'col' + visibility}>
+                    <button onClick={() => onClickPlayer(1)} className='portrait-container shadow'>
+                        <img alt='' src={portrait} className='portrait'/>
+                    </button>
                 </div>
-                <div className='col position-relative flip'>
-                    <button onClick={() => onClickPlayer(2)} className={'portraitButton' + visibility}/>
-                    <img alt='' src={portrait} className={'col portrait' + visibility}/>
+                <div className={'col flip' + visibility}>
+                    <button onClick={() => onClickPlayer(2)} className='portrait-container shadow'>
+                        <img alt='' src={portrait} className='portrait'/>
+                    </button>
                 </div>
             </div>
 
@@ -62,6 +64,6 @@ const ConnectedVisualizer = ({selectedMatch}) => {
         </div>
     )
 }
-
+//<img alt='' src={portrait} className={'col portrait shadow' + visibility}/>
 const SelectorList = connect(mapStateToProps)(ConnectedVisualizer);
 export default SelectorList;
