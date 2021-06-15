@@ -1,4 +1,4 @@
-const PicCircle = (props) => {
+const CirclePicture = (props) => {
     var imageElement;
     if (props.src === undefined || props.src === '')
         imageElement = <div/>
@@ -6,14 +6,16 @@ const PicCircle = (props) => {
         imageElement = <img alt='' src={props.src} className='circle-pic'/>
 
     return(
-        <div>
-        <div className={(props.className === undefined ? '' : props.className) + ' circle-pic-outerborder'}>
+        <div 
+        className={(props.className === undefined ? '' : props.className) + ' circle-pic-outerborder'}
+        style={props.style}
+        onClick={props.onClick}
+        >
             <div className='circle-pic-container'>
                 {imageElement}
             </div>
         </div>
-        </div>
     )
 }
 
-export default PicCircle;
+export default CirclePicture;

@@ -1,4 +1,5 @@
 import React from 'react';
+import CirclePicture from './circlePicture.component';
 import portrait from '../Final_Destination_Melee.png'
 import triangle from './../triangle.png'
 import smashball from './../smashball.png'
@@ -49,14 +50,10 @@ const ConnectedVisualizer = ({selectedMatch}) => {
             <div className='row'>
                 <img alt='' src={smashball} className='smashball'/>
                 <div className={'col' + visibility}>
-                    <button onClick={() => onClickPlayer(1)} className='portrait-container shadow'>
-                        <img alt='' src={portrait} className='portrait'/>
-                    </button>
+                    <CirclePicture onClick={() => onClickPlayer(1)} className='portrait-circle shadow' src={portrait} style={{cursor: 'pointer'}}/>
                 </div>
                 <div className={'col flip' + visibility}>
-                    <button onClick={() => onClickPlayer(2)} className='portrait-container shadow'>
-                        <img alt='' src={portrait} className='portrait'/>
-                    </button>
+                    <CirclePicture onClick={() => onClickPlayer(2)} className='portrait-circle shadow' src={portrait} style={{cursor: 'pointer'}}/>
                 </div>
             </div>
 
