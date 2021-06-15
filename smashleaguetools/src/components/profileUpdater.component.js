@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 }
 
 const ConnectedProfileUpdater = ({name, id, userggSlug}) => {
-    const defaultProfilePath = 'http://localhost:5000/users/' + id + '.png';
+    const defaultProfilePath = id === undefined ? undefined : 'http://localhost:5000/users/' + id + '.png';
     const [profilePic, setProfilePic] = useState(undefined);
     const [profilePicPath, setProfilePicPath] = useState(undefined);
     const [ggSlug, setggSlug] = useState(undefined);
@@ -57,7 +57,10 @@ const ConnectedProfileUpdater = ({name, id, userggSlug}) => {
                     style={{display: 'none'}}
                     onChange={handlePicChange}
                 />
-                <CirclePicture src={id === undefined ? profilePicPath : defaultProfilePath} className='profile-pic shadow'/>
+                <CirclePicture 
+                src={profilePicPath === undefined ? defaultProfilePath : profilePicPath} 
+                className='profile-pic shadow' 
+                style={{cursor: 'pointer'}}/>
             </label>
 
             <div className='row nameandslug'>
