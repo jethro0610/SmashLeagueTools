@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 import { connect } from 'react-redux';
 const mapStateToProps = state => {
@@ -13,12 +14,14 @@ const ConnectedNavbar = ({name, balance}) => {
     if (name === undefined)
         endElement = <li className='nav-item'><a className="nav-link" href="http://localhost:5000/auth">Login</a></li>;
     else
-        endElement = <li className='nav-item'><div className="nav-link">${balance}</div></li>;
+        endElement = <li className='nav-item'><Link to='/profile' className="nav-link">${balance}</Link></li>;
 
     return (
-        <nav className='navbar navbar-expand-lg navbar-light bg-light shadow'>
+        <nav className='navbar navbar-expand-lg navbar-dark bg-dark shadow'>
             <div className='container-fluid'>
-                <div className='navbar-brand'>Jippi Shampionship League</div>
+
+                <Link to='/' className='navbar-brand'>Jippi League</Link>
+
                 <div className='collapse navbar-collapse'>
                     <ul className='navbar-nav me-auto'>
                         <li className='nav-item'><div className="nav-link">Bracket</div></li>
