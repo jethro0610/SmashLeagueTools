@@ -50,10 +50,18 @@ const ConnectedVisualizer = ({selectedMatch}) => {
             <div className='row'>
                 <img alt='' src={smashball} className='smashball'/>
                 <div className={'col' + visibility}>
-                    <CirclePicture onClick={() => onClickPlayer(1)} className='portrait-circle shadow' src={portrait} style={{cursor: 'pointer'}}/>
+                    <CirclePicture 
+                    onClick={() => onClickPlayer(1)} 
+                    className='portrait-circle shadow' 
+                    src={portrait} 
+                    style={{cursor: 'pointer'}}/>
                 </div>
                 <div className={'col flip' + visibility}>
-                    <CirclePicture onClick={() => onClickPlayer(2)} className='portrait-circle shadow' src={portrait} style={{cursor: 'pointer'}}/>
+                    <CirclePicture 
+                    onClick={() => onClickPlayer(2)} 
+                    className='portrait-circle shadow' 
+                    src={portrait} 
+                    style={{cursor: 'pointer'}}/>
                 </div>
             </div>
 
