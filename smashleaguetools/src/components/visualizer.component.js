@@ -1,6 +1,5 @@
 import React from 'react';
 import CirclePicture from './circlePicture.component';
-import portrait from '../Final_Destination_Melee.png'
 import triangle from './../triangle.png'
 import smashball from './../smashball.png'
 import BetBar from './betbar.component.js'
@@ -21,14 +20,22 @@ const ConnectedVisualizer = ({selectedMatch}) => {
     var visibility = ' hide';
     var player1Name = '.';
     var player2Name = '.';
+    var player1Img = 'http://localhost:5000/users/defaultprofilepicture';
+    var player2Img = 'http://localhost:5000/users/defaultprofilepicture';
     var amount1 = 0;
     var amount2 = 0;
     if (selectedMatch !== undefined) {
         visibility = '';
-        player1Name = selectedMatch.player1Name;
-        player2Name = selectedMatch.player2Name;
+        player1Name = selectedMatch.player1.name;
+        player2Name = selectedMatch.player2.name;
         amount1 = selectedMatch.amount1;
         amount2 = selectedMatch.amount2;
+
+        if(selectedMatch.player1.mongoId)
+            player1Img = 'http://localhost:5000/users/' + selectedMatch.player1.mongoId + '/picture';
+
+        if(selectedMatch.player1.mongoId)
+            player1Img = 'http://localhost:5000/users/' + selectedMatch.player1.mongoId + '/picture';
     }
 
     return(
@@ -53,14 +60,14 @@ const ConnectedVisualizer = ({selectedMatch}) => {
                     <CirclePicture 
                     onClick={() => onClickPlayer(1)} 
                     className='portrait-circle shadow' 
-                    src={portrait} 
+                    src={player1Img} 
                     style={{cursor: 'pointer'}}/>
                 </div>
-                <div className={'col flip' + visibility}>
+                <div className={'col' + visibility}>
                     <CirclePicture 
                     onClick={() => onClickPlayer(2)} 
                     className='portrait-circle shadow' 
-                    src={portrait} 
+                    src={player2Img} 
                     style={{cursor: 'pointer'}}/>
                 </div>
             </div>

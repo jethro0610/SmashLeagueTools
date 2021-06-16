@@ -87,7 +87,7 @@ router.route('/updateprofile').post(isUser, upload.single('profile-pic'), (req, 
 });
 
 const profilePicPath = path.join(__dirname + '/../profiles/');
-router.route('/:id.png').get((req,res) => {
+router.route('/:id/picture').get((req,res) => {
     User.findById(req.params.id)
         .then(() => {
             const picPath = profilePicPath + req.params.id + '.png';
@@ -101,6 +101,10 @@ router.route('/:id.png').get((req,res) => {
         .catch((err) => {
             res.status(404).send();
         })
+});
+
+router.route('/defaultprofilepicture').get((req,res) => {
+    res.sendFile(profilePicPath + 'default.png');
 });
 
 module.exports = router;

@@ -1,8 +1,8 @@
 export class Match {
-    constructor(key = '', player1Name = '', player2Name = '', amount1 = 0, amount2 = 0) {
+    constructor(key, player1, player2, amount1 = 0, amount2 = 0) {
         this.key = key;
-        this.player1Name = player1Name;
-        this.player2Name = player2Name;
+        this.player1 = player1;
+        this.player2 = player2;
         this.amount1 = amount1;
         this.amount2 = amount2;
     }
@@ -18,8 +18,8 @@ export const allMatches = (allMatches) => {
     return { type: 'ALL_MATCH', payload: {allMatches} };
 }
 
-export const createMatch = (key, player1Name, player2Name) => {
-    return { type: 'CREATE_MATCH', payload: {key, player1Name, player2Name} };
+export const createMatch = (key, player1, player2) => {
+    return { type: 'CREATE_MATCH', payload: {key, player1, player2} };
 }
 
 export const deleteMatch = (key) => {
@@ -39,21 +39,21 @@ export const matchListReducer = (state = initialState, action) => {
             for (const curMatch of allArray) {
                 matches.set(curMatch.key, new Match(
                     curMatch.key,
-                    curMatch.player1Name,
-                    curMatch.player2Name,
+                    curMatch.player1,
+                    curMatch.player2,
                     curMatch.amount1,
                     curMatch.amount2));
             }
-
+            console.log(allArray);
             return {
                 list: allArray
             }
 
         case 'CREATE_MATCH':
-            const newMatch = new Match(action.payload.key, action.payload.player1Name, action.payload.player2Name);
+            const newMatch = new Match(action.payload.key, action.payload.player1, action.payload.player2);
             matches.set(action.payload.key, newMatch);
             const createdArray = Array.from(matches.values());
-
+            console.log(createdArray);
             return {
                 list: createdArray
             }

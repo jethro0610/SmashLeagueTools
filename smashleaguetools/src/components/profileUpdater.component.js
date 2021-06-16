@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 }
 
 const ConnectedProfileUpdater = ({name, id, userggSlug}) => {
-    const defaultProfilePath = id === undefined ? undefined : 'http://localhost:5000/users/' + id + '.png';
+    const defaultProfilePath = id === undefined ? undefined : 'http://localhost:5000/users/' + id + '/picture';
     const [profilePic, setProfilePic] = useState(undefined);
     const [profilePicPath, setProfilePicPath] = useState(undefined);
     const [ggSlug, setggSlug] = useState(undefined);

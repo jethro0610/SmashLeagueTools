@@ -21,11 +21,11 @@ const ConnectBetPopUp = ({betInfo, selectedMatch, balance}) => {
     var playerName = '';
     var playerAmount = 0;
     if (betInfo.predictionNumber === 1) {
-        playerName = selectedMatch.player1Name;
+        playerName = selectedMatch.player1.name;
         playerAmount = selectedMatch.amount1;
     }
     else if(betInfo.predictionNumber === 2) {
-        playerName = selectedMatch.player2Name
+        playerName = selectedMatch.player2.name
         playerAmount = selectedMatch.amount2;
     }
     const total = selectedMatch.amount1 + selectedMatch.amount2;

@@ -10,7 +10,7 @@ const ConnectedSelectorList = ({matchList}) => {
     return (
     <div className='col-lg-4 px-5'>
         {matchList.map(match => (
-            <Selector key={match.key} matchKey={match.key} player1Name={match.player1Name} player2Name={match.player2Name}/>
+            <Selector key={match.key} matchKey={match.key} player1Name={match.player1.name} player2Name={match.player2.name}/>
         ))}
     </div>)
 };

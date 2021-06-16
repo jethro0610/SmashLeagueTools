@@ -1,14 +1,5 @@
-
-class GGPlayer {
-    constructor(ggSetId, ggId, name) {
-        this.ggSetId = ggSetId;
-        this.ggId = ggId;
-        this.name = name;
-    }
-}
-
-function constructGGPlayer (ggSetId, ggId, name) {
-    return { ggSetId, ggId, name};
+function constructGGPlayer (ggSetId, name, mongoId) {
+    return { ggSetId, name, mongoId};
 }
 
 class Bet {
@@ -55,7 +46,7 @@ function createMatch(key, player1, player2) {
 
 function createMatchFromNames(player1Name, player2Name) {
     const key = Math.random().toString(36).substr(2, 5);
-    createMatch(key, constructGGPlayer('', '', player1Name), constructGGPlayer('', '', player2Name));
+    createMatch(key, constructGGPlayer('', player1Name), constructGGPlayer('', player2Name));
 }
 
 function addBet(key, mongoId, predictionNumber, amount) {

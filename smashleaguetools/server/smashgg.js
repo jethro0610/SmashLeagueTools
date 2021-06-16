@@ -1,3 +1,4 @@
+const User = require('./models/user.model');
 const axios = require('axios');
 const constructGGPlayer = require('./matches').constructGGPlayer;
 const createMatch = require('./matches').createMatch;
@@ -5,7 +6,6 @@ const endMatch = require('./matches').endMatch;
 const matches = require('./matches').matches;
 const endedMatches = new Set();
 
-var testPlayer = constructGGPlayer('','','');
 var currentTournamentId = undefined;
 
 const startTournament = (phaseGroupId) => {
@@ -36,8 +36,10 @@ const queryMatches = (phaseGroupId, callback) => {
                             id
                             participants {
                                 player {
-                                    id
                                     gamerTag
+                                    user {
+                                        slug
+                                    }
                                 }
                             }
                         }
@@ -56,7 +58,7 @@ const queryMatches = (phaseGroupId, callback) => {
 }
 
 const pollMatches = () => {
-    queryMatches(currentTournamentId, ggMatches => {
+    queryMatches(currentTournamentId, async ggMatches => {
         //console.log('Polling ' + currentTournamentId)
         
         for(const ggMatch of ggMatches) {
@@ -65,19 +67,21 @@ const pollMatches = () => {
 
                 if (!ggMatch.winnerId) {
                     if (matches.has(ggMatch.id)) continue; // Skip match if it's already active
+                    
+                    const player1User = await User.findOne({ggSlug: ggMatch.slots[0].entrant.participants[0].player.user.slug}).exec();
                     const player1 = constructGGPlayer(
                         ggMatch.slots[0].entrant.id, 
-                        ggMatch.slots[0].entrant.participants[0].player.id,
-                        ggMatch.slots[0].entrant.participants[0].player.gamerTag
+                        ggMatch.slots[0].entrant.participants[0].player.gamerTag,
+                        player1User === null ? undefined : player1User.id
                     );
                     
+                    const player2User = await User.findOne({ggSlug: ggMatch.slots[1].entrant.participants[0].player.user.slug}).exec();
                     const player2 = constructGGPlayer(
                         ggMatch.slots[1].entrant.id, 
-                        ggMatch.slots[1].entrant.participants[0].player.id,
-                        ggMatch.slots[1].entrant.participants[0].player.gamerTag
+                        ggMatch.slots[1].entrant.participants[0].player.gamerTag,
+                        player2User === null ? undefined : player1User.id
                     );
                     createMatch(ggMatch.id, player1, player2);
-                    console.log('Created match')
                 }
                 else { // End a match
                     const matchToEnd = matches.get(ggMatch.id);
@@ -107,7 +111,7 @@ setInterval(() => {
         return;
 
     pollMatches();
-}, 1000);
+}, 2000);
 
 module.exports = { 
     startTournament: startTournament,

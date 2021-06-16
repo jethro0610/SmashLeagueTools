@@ -19,6 +19,13 @@ const updateSocketUser = async (socket) => {
     socket.request.user = user;
 }
 
+const playerSocketInfo = (player) => {
+    return {
+        name: player.name,
+        mongoId: player.mongoId
+    }
+}
+
 class SocketManager {
     constructor(io, session) {
         this.io = io;
@@ -62,12 +69,14 @@ class SocketManager {
 
         matchEvents.on('match-created', key => {
             const matchToEmit = matches.get(key);
-            if (!matchToEmit) return;
-
+            if (matchToEmit == null)
+                return;
+                
             this.io.emit('match-created', {
-                key: key, 
-                player1: matchToEmit.player1.name, 
-                player2: matchToEmit.player2.name});
+                key,
+                player1: playerSocketInfo(matchToEmit.player1),
+                player2: playerSocketInfo(matchToEmit.player2)
+            });
         })
 
         matchEvents.on('match-updated', key => {
@@ -115,9 +124,9 @@ class SocketManager {
         var msg = [];
         for(const [key, matchToSend] of matches.entries()) {
             msg.push({key: key, 
-                player1Name: matchToSend.player1.name, 
+                player1: playerSocketInfo(matchToSend.player1),
                 amount1: matchToSend.getBets(1),
-                player2Name: matchToSend.player2.name,
+                player2: playerSocketInfo(matchToSend.player2),
                 amount2: matchToSend.getBets(2)});
         }
         socket.emit('all-matches', msg);
