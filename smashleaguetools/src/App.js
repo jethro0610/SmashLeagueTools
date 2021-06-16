@@ -11,6 +11,7 @@ import './components/css/selector.css'
 import './components/css/visualizer.css'
 import './components/css/profileUpdater.css'
 import './components/css/circlePicture.css'
+import './components/css/navbar.css'
 import Navbar from './components/navbar.component'
 import Better from './components/better.component'
 import BetPopUp from './components/betPopUp.component';

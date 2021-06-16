@@ -1,0 +1,18 @@
+
+.navbar-balance {
+    margin-left: 8px;
+    margin-right: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-family: 'Quicksand', sans-serif;
+}
+.navbar-user-area {
+    display: block;
+    width: 50px;
+    height: 100%;
+    background-color: white;
+}
+.navbar-profile-pic {
+    width: 36px;
+    height: 36px;
+}
