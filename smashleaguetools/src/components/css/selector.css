@@ -8,6 +8,12 @@
     align-items: center;
     height: 7vh;
     margin: 2vh;
+
+    transition: transform 250ms;
+}
+
+.selector:hover {
+    transform: translateX(-2%);
 }
 
 .circle {

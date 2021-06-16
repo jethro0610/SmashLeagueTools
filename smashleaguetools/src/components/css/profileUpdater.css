@@ -5,6 +5,11 @@
 .profile-pic {
     width: 250px;
     height: 250px;
+    transition: opacity 250ms;
+}
+
+.profile-pic:hover {
+    opacity: 50%;
 }
 
 .nameandslug {
