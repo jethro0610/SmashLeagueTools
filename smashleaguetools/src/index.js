@@ -4,9 +4,7 @@ import App from './App';
 import { Provider } from 'react-redux'; 
 import store from './redux/store/store';
 import './socketmanager'
-
-//store.subscribe(() => console.log('Look ma, Redux!!'));
-//store.dispatch(createMatch('asdf'));
+require('dotenv').config();
 
 ReactDOM.render(
   <Provider store = {store}>

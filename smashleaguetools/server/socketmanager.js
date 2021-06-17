@@ -76,9 +76,10 @@ class SocketManager {
                 msg.amount = parseInt(msg.amount);
                 if (msg.amount <= 0 || isNaN(msg.amount)) return;
                 if (socket.request.user.balance < msg.amount) return;
-
-                if(!addBet(msg.key, socket.request.user.id, msg.predictionNumber, msg.amount))
-                    return;
+                
+                const {success, error} = addBet(msg.key, socket.request.user.id, msg.predictionNumber, msg.amount);
+                if(!success)
+                    return false;
 
                 const newBalance = socket.request.user.balance - msg.amount;
                 this.setMongoIdBalance(socket.request.user.id, newBalance);

@@ -3,7 +3,6 @@ import {React, useEffect, useState} from 'react';
 const Timer = (props) => {
     const [,setState]= useState();
     useEffect(() => {
-        console.log('effect');
         setTimeout(() => {
             setState({});
         }, 500);

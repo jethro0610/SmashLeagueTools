@@ -52,13 +52,16 @@ function createMatchFromNames(player1Name, player2Name) {
 
 function addBet(key, mongoId, predictionNumber, amount) {
     const matchToUpdate = matches.get(key);
-    if (!matchToUpdate) return false;
-    if (matchToUpdate.bets.has(mongoId)) return false;
+    if (!matchToUpdate) return {success: false, error: 'Invalid match'};
+    if (matchToUpdate.bets.has(mongoId)) return {success: false, error: 'You already place a bet on this match'};
+    if(Date.now() - matchToUpdate.startTime > process.env.MAX_BET_TIME) {
+        return {success: false, error: 'No more time to bet on this match'};
+    }
 
     const newBet = new Bet(predictionNumber, amount);
     matchToUpdate.bets.set(mongoId, newBet);
     matchEvents.emit('match-updated', key);
-    return true;
+    return {success: true};
 }
 
 function endMatch(key, winnerNumber) {

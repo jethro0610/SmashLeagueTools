@@ -76,7 +76,7 @@ const ConnectedVisualizer = ({selectedMatch}) => {
             </div>
 
             <BetBar visibility={visibility} amount1={amount1} amount2={amount2}/>
-            <Timer className={'bet-timer' + visibility} endTime={300000} startTime={startTime} endText='No time left to bet'/>
+            <Timer className={'bet-timer' + visibility} endTime={process.env.REACT_APP_MAX_BET_TIME} startTime={startTime} endText='No time left to bet'/>
         </div>
     )
 }
