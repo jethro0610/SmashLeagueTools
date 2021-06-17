@@ -15,6 +15,9 @@ socket.on('connect', () => {
     store.dispatch(clearSelectedMatch());
 });
 
+function adminBet(key, predictionNumber, amount) {
+    socket.emit('admin-bet', { key, predictionNumber, amount });
+}
 // Call the server to create a match from admin client
 function adminCreateMatch(player1, player2) {
     socket.emit('admin-create-match', { player1: player1, player2: player2 });
@@ -65,5 +68,6 @@ socket.on('notification', notification => {
 })
 
 // Expose functions to console
+window.adminBet = adminBet;
 window.adminCreateMatch = adminCreateMatch;
 window.adminEndMatch = adminEndMatch;

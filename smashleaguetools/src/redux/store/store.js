@@ -1,15 +1,12 @@
-import {combineReducers, createStore, applyMiddleware} from 'redux';
+import {combineReducers, createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
 import {matchListReducer} from '../reducers/matchList';
 import {selectedMatchReducer} from '../reducers/selectedMatch';
 import { betInfoReducer } from '../reducers/betInfo';
 import { userInfoReducer } from '../reducers/userInfo'
-import { notificationReducer, addNotification } from '../reducers/notifications';
+import { notificationReducer } from '../reducers/notifications';
 
-window.sendNotification = (notification) => {
-    store.dispatch(addNotification(notification));
-}
-
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const combined = combineReducers({
     matchList: matchListReducer, 
     selectedMatch: selectedMatchReducer,
@@ -17,5 +14,5 @@ const combined = combineReducers({
     userInfo: userInfoReducer,
     notifications: notificationReducer});
     
-const store = createStore(combined, applyMiddleware(thunk));
+const store = createStore(combined, composeEnhancers(applyMiddleware(thunk)));
 export default store;

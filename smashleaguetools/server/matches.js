@@ -74,13 +74,23 @@ function addBet(key, mongoId, predictionNumber, amount) {
     return {success: true, notification: matchString};
 }
 
+function addUserlessBet(key, predictionNumber, amount) {
+    const matchToUpdate = matches.get(key);
+    if (!matchToUpdate) return {success: false, notification: 'Invalid match'};
+
+    const newBet = new Bet(predictionNumber, amount);
+    matchToUpdate.bets.set('admin'+Math.random().toString(36).substr(2, 5), newBet);
+    matchEvents.emit('match-updated', key);
+    const matchString = 'Confirmed $' + amount + ' bet on ' + matchToUpdate.player1.name + ' vs. ' + matchToUpdate.player2.name;
+    return {success: true, notification: matchString};
+}
+
 function endMatch(key, winnerNumber) {
     const matchToEnd = matches.get(key);
     if (!matchToEnd) return;
     const loserNumber = (1 - (winnerNumber - 1)) + 1;
     const total = matchToEnd.getTotalBets();
-    const winnerTotal = matchToEnd.getTotalBets(winnerNumber);
-
+    const winnerTotal = matchToEnd.getBets(winnerNumber);
     const winnerName = matchToEnd.getPlayerName(winnerNumber);
     const loserName = matchToEnd.getPlayerName(loserNumber);
 
@@ -108,6 +118,7 @@ module.exports = {
     createMatch: createMatch,
     createMatchFromNames: createMatchFromNames,
     addBet: addBet,
+    addUserlessBet: addUserlessBet,
     endMatch: endMatch,
     deleteMatch: deleteMatch
 };

@@ -2,6 +2,7 @@ const matches = require('./matches').matches;
 const matchEvents = require('./matches').matchEvents;
 const createMatchFromNames = require('./matches').createMatchFromNames;
 const addBet = require('./matches').addBet;
+const addUserlessBet = require('./matches').addUserlessBet;
 const endMatch = require('./matches').endMatch;
 const User = require('./models/user.model');
 
@@ -54,6 +55,13 @@ class SocketManager {
                         this.mongoToSocketMap.delete(socket.request.user.id)
                 }
             })
+            
+            socket.on('admin-bet', (msg) => {
+                if (!socket.request.user) return;
+                if (!socket.request.user.admin) return;
+                
+                addUserlessBet(msg.key, msg.predictionNumber, msg.amount);
+            });
 
             // Create a new match when given admin command
             socket.on('admin-create-match', (msg) => {
@@ -126,6 +134,8 @@ class SocketManager {
         })
 
         matchEvents.on('payout', (mongoId, amount, winnerName, loserName) => {
+            if(mongoId.substring(0,5) === 'admin')
+                return;
             User.findById(mongoId).then(user => {
                 const newBalance = user.balance + amount;
                 this.setMongoIdBalance(mongoId, newBalance);

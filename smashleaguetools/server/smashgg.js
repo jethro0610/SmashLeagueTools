@@ -98,7 +98,6 @@ const pollMatches = () => {
                     // Call the match to end
                     endMatch(ggMatch.id, winningNumber);
                     endedMatches.add(ggMatch.id);
-                    console.log('Match ended');
                 }
             }
         }

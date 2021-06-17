@@ -18,7 +18,7 @@ export const notificationReducer = (state = initialState, action) => {
             if(state.length === 0) {
                 setTimeout(() => {
                     store.dispatch(clearNotification());
-                }, 2000);
+                }, process.env.REACT_APP_NOTIFICATION_TIME);
             }
             
             state = state.slice();
@@ -32,7 +32,7 @@ export const notificationReducer = (state = initialState, action) => {
             if(state.length > 0) {
                 setTimeout(() => {
                     store.dispatch(clearNotification());
-                }, 2000);
+                }, process.env.REACT_APP_NOTIFICATION_TIME);
             }
             return state;
 
