@@ -71,19 +71,27 @@ class SocketManager {
             })
 
             socket.on('bet', (msg) => {
-                if (!socket.request.user) return;
+                if (!socket.request.user) {
+                    socket.emit('notification', 'You must be logged in to bet')
+                    return ;
+                }
                 if (msg.predictionNumber != 1 && msg.predictionNumber != 2) return;
                 msg.amount = parseInt(msg.amount);
                 if (msg.amount <= 0 || isNaN(msg.amount)) return;
-                if (socket.request.user.balance < msg.amount) return;
-                
-                const {success, error} = addBet(msg.key, socket.request.user.id, msg.predictionNumber, msg.amount);
-                if(!success)
+                if (socket.request.user.balance < msg.amount) {
+                    socket.emit('notification', 'Your balance is less than ' + msg.amount);
+                    return;
+                }
+                const {success, notification} = addBet(msg.key, socket.request.user.id, msg.predictionNumber, msg.amount);
+                if(!success) {
+                    socket.emit('notification', notification)
                     return false;
+                }
 
                 const newBalance = socket.request.user.balance - msg.amount;
                 this.setMongoIdBalance(socket.request.user.id, newBalance);
                 socket.emit('bet-confirmed', {});
+                socket.emit('notification', notification);
             });
         });
 
