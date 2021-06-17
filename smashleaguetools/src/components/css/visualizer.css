@@ -79,3 +79,7 @@
 .flip {
     transform: scaleX(-1);
 }
+
+.bet-timer {
+    font-family: 'Quicksand', sans-serif;
+}

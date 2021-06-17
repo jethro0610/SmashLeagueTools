@@ -3,6 +3,7 @@ import CirclePicture from './circlePicture.component';
 import triangle from './../triangle.png'
 import smashball from './../smashball.png'
 import BetBar from './betbar.component.js'
+import Timer from './timer.component';
 
 import { setBetPredictionNumber } from '../redux/reducers/betInfo';
 import store from '../redux/store/store';
@@ -24,12 +25,14 @@ const ConnectedVisualizer = ({selectedMatch}) => {
     var player2Img = 'http://localhost:5000/users/defaultprofilepicture';
     var amount1 = 0;
     var amount2 = 0;
+    var startTime = 0;
     if (selectedMatch !== undefined) {
         visibility = '';
         player1Name = selectedMatch.player1.name;
         player2Name = selectedMatch.player2.name;
         amount1 = selectedMatch.amount1;
         amount2 = selectedMatch.amount2;
+        startTime = selectedMatch.startTime;
 
         if(selectedMatch.player1.mongoId)
             player1Img = 'http://localhost:5000/users/' + selectedMatch.player1.mongoId + '/picture';
@@ -73,6 +76,7 @@ const ConnectedVisualizer = ({selectedMatch}) => {
             </div>
 
             <BetBar visibility={visibility} amount1={amount1} amount2={amount2}/>
+            <Timer className={'bet-timer' + visibility} endTime={300000} startTime={startTime} endText='No time left to bet'/>
         </div>
     )
 }
