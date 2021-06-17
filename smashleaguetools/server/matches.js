@@ -17,6 +17,15 @@ class Match {
         this.startTime = Date.now();
     }
 
+    getPlayerName(playerNumber) {
+        if(playerNumber == 1)
+            return this.player1.name;
+        if(playerNumber == 2)
+            return this.player2.name;
+
+        return 'Invalid Player';
+    }
+
     getBets(playerNumber) {
         var amount = 0;
         for (const bet of this.bets.values()) {
@@ -68,11 +77,20 @@ function addBet(key, mongoId, predictionNumber, amount) {
 function endMatch(key, winnerNumber) {
     const matchToEnd = matches.get(key);
     if (!matchToEnd) return;
-
+    const loserNumber = (1 - (winnerNumber - 1)) + 1;
     const total = matchToEnd.getTotalBets();
+    const winnerTotal = matchToEnd.getTotalBets(winnerNumber);
+
+    const winnerName = matchToEnd.getPlayerName(winnerNumber);
+    const loserName = matchToEnd.getPlayerName(loserNumber);
+
     for (const [mongoId, bet] of matchToEnd.bets.entries()) {
-        if (bet.predictionNumber === winnerNumber)
-            matchEvents.emit('payout', mongoId, bet.amount);
+        if (bet.predictionNumber != winnerNumber)
+            continue;
+        
+        const percentOfPot = bet.amount / winnerTotal;
+        const earnings = Math.floor(total * percentOfPot);
+        matchEvents.emit('payout', mongoId, earnings, winnerName, loserName);
     }
     deleteMatch(key);
 }

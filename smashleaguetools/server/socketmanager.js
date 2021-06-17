@@ -79,7 +79,7 @@ class SocketManager {
                 msg.amount = parseInt(msg.amount);
                 if (msg.amount <= 0 || isNaN(msg.amount)) return;
                 if (socket.request.user.balance < msg.amount) {
-                    socket.emit('notification', 'Your balance is less than ' + msg.amount);
+                    socket.emit('notification', 'Your balance is less than $' + msg.amount);
                     return;
                 }
                 const {success, notification} = addBet(msg.key, socket.request.user.id, msg.predictionNumber, msg.amount);
@@ -125,10 +125,11 @@ class SocketManager {
             });
         })
 
-        matchEvents.on('payout', (mongoId, amount) => {
+        matchEvents.on('payout', (mongoId, amount, winnerName, loserName) => {
             User.findById(mongoId).then(user => {
                 const newBalance = user.balance + amount;
                 this.setMongoIdBalance(mongoId, newBalance);
+                this.sendMongoIdNotification(mongoId, 'You won $' + amount + ' for ' + winnerName + '\'s win over ' + loserName);
             })
             .catch(err => {
                 console.log(err);
@@ -148,6 +149,15 @@ class SocketManager {
         for(const socketToPay of socketsToPay) {
             socketToPay.request.user.balance = balance;
             socketToPay.emit('balance-updated', { balance: socketToPay.request.user.balance});
+        }
+    }
+
+    sendMongoIdNotification(mongoId, notification) {
+        const sockets = this.getSocketsFromMongoId(mongoId);
+        if (!sockets) return;
+
+        for(const socket of sockets) {
+            socket.emit('notification', notification);
         }
     }
 
