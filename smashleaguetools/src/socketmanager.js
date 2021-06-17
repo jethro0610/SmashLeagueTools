@@ -30,7 +30,7 @@ socket.on('all-matches', (msg) => {
 
 // Event when client recieves a newly created match
 socket.on('match-created', (msg) => {
-    store.dispatch(createMatch(msg.key, msg.player1, msg.player2));
+    store.dispatch(createMatch(msg.key, msg.player1, msg.player2, msg.startTime));
 });
 
 // Event when client recieves a newly created match

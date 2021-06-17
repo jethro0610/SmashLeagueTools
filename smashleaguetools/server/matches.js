@@ -14,6 +14,7 @@ class Match {
         this.player1 = player1;
         this.player2 = player2;
         this.bets = new Map();
+        this.startTime = Date.now();
     }
 
     getBets(playerNumber) {

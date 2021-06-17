@@ -44,13 +44,11 @@ class SocketManager {
             }
                 
             socket.on('disconnect', () => {
-                console.log('disconnect');
                 if (socket.request.user) {
                     const mongoToSocketSet = this.mongoToSocketMap.get(socket.request.user.id);
                     if (!mongoToSocketSet) return;
                     if (mongoToSocketSet) {
                         mongoToSocketSet.delete(socket);
-                        console.log('deted');
                     }
                     if(mongoToSocketSet.size == 0)
                         this.mongoToSocketMap.delete(socket.request.user.id)
@@ -96,7 +94,8 @@ class SocketManager {
             this.io.emit('match-created', {
                 key,
                 player1: playerSocketInfo(matchToEmit.player1),
-                player2: playerSocketInfo(matchToEmit.player2)
+                player2: playerSocketInfo(matchToEmit.player2),
+                startTime: matchToEmit.startTime
             });
         })
 
@@ -154,7 +153,9 @@ class SocketManager {
                 player1: playerSocketInfo(matchToSend.player1),
                 amount1: matchToSend.getBets(1),
                 player2: playerSocketInfo(matchToSend.player2),
-                amount2: matchToSend.getBets(2)});
+                amount2: matchToSend.getBets(2),
+                startTime: matchToSend.startTime}
+            )
         }
         socket.emit('all-matches', msg);
     }
