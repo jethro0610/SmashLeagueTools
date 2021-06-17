@@ -133,13 +133,40 @@ class SocketManager {
             });
         })
 
-        matchEvents.on('payout', (mongoId, amount, winnerName, loserName) => {
+        matchEvents.on('bet-payout', (mongoId, amount, winnerName, loserName) => {
             if(mongoId.substring(0,5) === 'admin')
                 return;
             User.findById(mongoId).then(user => {
                 const newBalance = user.balance + amount;
                 this.setMongoIdBalance(mongoId, newBalance);
                 this.sendMongoIdNotification(mongoId, 'You won $' + amount + ' for ' + winnerName + '\'s win over ' + loserName);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        })
+
+        matchEvents.on('winner-payout', (mongoId, amount, loserName) => {
+            if(!mongoId)
+                return;
+            console.log(mongoId);
+            User.findById(mongoId).then(user => {
+                const newBalance = user.balance + amount;
+                this.setMongoIdBalance(mongoId, newBalance);
+                this.sendMongoIdNotification(mongoId, 'You won $' + amount + ' for beating ' + loserName);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        })
+
+        matchEvents.on('loser-payout', (mongoId, amount, winnerName) => {
+            if(!mongoId)
+                return;
+            User.findById(mongoId).then(user => {
+                const newBalance = user.balance + amount;
+                this.setMongoIdBalance(mongoId, newBalance);
+                this.sendMongoIdNotification(mongoId, 'You earned $' + amount + ' for trying against ' + winnerName);
             })
             .catch(err => {
                 console.log(err);

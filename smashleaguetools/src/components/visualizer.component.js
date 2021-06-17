@@ -34,12 +34,12 @@ const ConnectedVisualizer = ({selectedMatch}) => {
         amount1 = selectedMatch.amount1;
         amount2 = selectedMatch.amount2;
         startTime = selectedMatch.startTime;
-
+        
         if(selectedMatch.player1.mongoId)
             player1Img = 'http://localhost:5000/users/' + selectedMatch.player1.mongoId + '/picture';
 
-        if(selectedMatch.player1.mongoId)
-            player1Img = 'http://localhost:5000/users/' + selectedMatch.player1.mongoId + '/picture';
+        if(selectedMatch.player2.mongoId)
+            player2Img = 'http://localhost:5000/users/' + selectedMatch.player2.mongoId + '/picture';
     }
 
     return(

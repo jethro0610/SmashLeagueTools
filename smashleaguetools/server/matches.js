@@ -17,6 +17,15 @@ class Match {
         this.startTime = Date.now();
     }
 
+    getPlayer(playerNumber) {
+        if(playerNumber == 1)
+            return this.player1;
+        if(playerNumber == 2)
+            return this.player2;
+
+        return 'Invalid Player';
+    }
+
     getPlayerName(playerNumber) {
         if(playerNumber == 1)
             return this.player1.name;
@@ -100,8 +109,10 @@ function endMatch(key, winnerNumber) {
         
         const percentOfPot = bet.amount / winnerTotal;
         const earnings = Math.floor(total * percentOfPot);
-        matchEvents.emit('payout', mongoId, earnings, winnerName, loserName);
+        matchEvents.emit('bet-payout', mongoId, earnings, winnerName, loserName);
     }
+    matchEvents.emit('winner-payout', matchToEnd.getPlayer(winnerNumber).mongoId, parseInt(process.env.WINNER_EARNINGS), loserName);
+    matchEvents.emit('loser-payout', matchToEnd.getPlayer(loserNumber).mongoId, parseInt(process.env.LOSER_EARNINGS), winnerName);
     deleteMatch(key);
 }
 

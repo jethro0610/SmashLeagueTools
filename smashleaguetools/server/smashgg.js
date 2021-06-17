@@ -67,8 +67,8 @@ const pollMatches = () => {
 
                 if (!ggMatch.winnerId) {
                     if (matches.has(ggMatch.id)) continue; // Skip match if it's already active
-                    
                     const player1User = await User.findOne({ggSlug: ggMatch.slots[0].entrant.participants[0].player.user.slug}).exec();
+
                     const player1 = constructGGPlayer(
                         ggMatch.slots[0].entrant.id, 
                         ggMatch.slots[0].entrant.participants[0].player.gamerTag,
@@ -79,7 +79,7 @@ const pollMatches = () => {
                     const player2 = constructGGPlayer(
                         ggMatch.slots[1].entrant.id, 
                         ggMatch.slots[1].entrant.participants[0].player.gamerTag,
-                        player2User === null ? undefined : player1User.id
+                        player2User === null ? undefined : player2User.id
                     );
                     createMatch(ggMatch.id, player1, player2);
                 }
