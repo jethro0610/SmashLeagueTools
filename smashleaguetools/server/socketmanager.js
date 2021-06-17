@@ -149,7 +149,6 @@ class SocketManager {
         matchEvents.on('winner-payout', (mongoId, amount, loserName) => {
             if(!mongoId)
                 return;
-            console.log(mongoId);
             User.findById(mongoId).then(user => {
                 const newBalance = user.balance + amount;
                 this.setMongoIdBalance(mongoId, newBalance);

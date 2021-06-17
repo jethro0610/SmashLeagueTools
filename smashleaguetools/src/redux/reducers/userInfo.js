@@ -11,7 +11,7 @@ const initialState = {
 
 export const refreshUser = async (dispatch, getState) => {
     try {
-        const res = await axios.get('http://localhost:5000/users/get', {withCredentials: true});
+        const res = await axios.get(process.env.REACT_APP_BACKEND_ORIGIN + '/users/get', {withCredentials: true});
         store.dispatch(setUser(res.data.id, res.data.name, res.data.balance, res.data.ggSlug, res.data.admin));
     }
     catch (err) {

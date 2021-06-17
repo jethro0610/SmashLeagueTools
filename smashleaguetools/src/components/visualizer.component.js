@@ -22,8 +22,7 @@ const ConnectedVisualizer = ({selectedMatch}) => {
     var visibility = ' hide';
     var player1Name = '.';
     var player2Name = '.';
-    var player1Img = 'http://localhost:5000/users/defaultprofilepicture';
-    var player2Img = 'http://localhost:5000/users/defaultprofilepicture';
+    var player1Img, player2Img = process.env.REACT_APP_BACKEND_ORIGIN + '/users/defaultprofilepicture';
     var amount1 = 0;
     var amount2 = 0;
     var startTime = 0;
@@ -36,10 +35,10 @@ const ConnectedVisualizer = ({selectedMatch}) => {
         startTime = selectedMatch.startTime;
         
         if(selectedMatch.player1.mongoId)
-            player1Img = 'http://localhost:5000/users/' + selectedMatch.player1.mongoId + '/picture';
+            player1Img = process.env.REACT_APP_BACKEND_ORIGIN + '/users/' + selectedMatch.player1.mongoId + '/picture';
 
         if(selectedMatch.player2.mongoId)
-            player2Img = 'http://localhost:5000/users/' + selectedMatch.player2.mongoId + '/picture';
+            player2Img = process.env.REACT_APP_BACKEND_ORIGIN + '/users/' + selectedMatch.player2.mongoId + '/picture';
     }
 
     return(

@@ -7,7 +7,7 @@ import { cancelBet } from './redux/reducers/betInfo';
 import { addNotification } from './redux/reducers/notifications';
 
 // Create the connection to the Socket.IO server
-export const socket = io.connect('http://localhost:5000', {
+export const socket = io.connect(process.env.REACT_APP_BACKEND_ORIGIN, {
     withCredentials: true
 });
 

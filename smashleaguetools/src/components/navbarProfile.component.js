@@ -13,11 +13,11 @@ const mapStateToProps = state => {
 const ConnectedNavbarProfile = ({id, balance}) => {
     if (id ===  undefined)
         return (
-            <div className='navbar-nav'><a className="nav-link" href="http://localhost:5000/auth">Login</a></div>
+            <div className='navbar-nav'><a className='nav-link' href={process.env.REACT_APP_BACKEND_ORIGIN+'/auth'}>Login</a></div>
         )
     
 
-    const profilePicPath = 'http://localhost:5000/users/' + id + '/picture';
+    const profilePicPath = process.env.REACT_APP_BACKEND_ORIGIN + '/users/' + id + '/picture';
     return(
         <div className='navbar-nav ms-auto text-light d-flex flex-row align-items-center'>
             <div className='navbar-balance text-dark bg-light rounded-pill'>Balance: ${balance}</div>

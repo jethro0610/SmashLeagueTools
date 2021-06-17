@@ -14,7 +14,7 @@ startTournament('1502999');
 
 // Set CORS options
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: process.env.FRONTEND_ORIGIN,
     credentials: true
 };
 

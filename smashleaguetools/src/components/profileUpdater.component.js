@@ -15,7 +15,7 @@ const mapStateToProps = state => {
 }
 
 const ConnectedProfileUpdater = ({name, id, userggSlug}) => {
-    const defaultProfilePath = id === undefined ? undefined : 'http://localhost:5000/users/' + id + '/picture';
+    const defaultProfilePath = id === undefined ? undefined : process.env.REACT_APP_BACKEND_ORIGIN + '/users/' + id + '/picture';
     const [profilePic, setProfilePic] = useState(undefined);
     const [profilePicPath, setProfilePicPath] = useState(undefined);
     const [ggSlug, setggSlug] = useState(undefined);
@@ -37,7 +37,7 @@ const ConnectedProfileUpdater = ({name, id, userggSlug}) => {
         if(ggSlug && ggSlug !== userggSlug) formData.append('ggSlug', ggSlug);
         formData.append('profile-pic', profilePic);
 
-        axios.post('http://localhost:5000/users/updateprofile', formData, {withCredentials : true})
+        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/users/updateprofile', formData, {withCredentials : true})
             .then(res => {
                 window.location.reload(); // Reload the page to update cached image
             })

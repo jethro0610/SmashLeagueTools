@@ -5,7 +5,7 @@ router.get('/', passport.authenticate('discord'));
 
 router.get('/redirect', passport.authenticate('discord', {
     failureRedirect: '/forbidden',
-    successRedirect: 'http://localhost:3000'
+    successRedirect: process.env.FRONTEND_ORIGIN
 }));
 
 module.exports = router
