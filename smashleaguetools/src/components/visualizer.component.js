@@ -4,6 +4,7 @@ import triangle from './../triangle.png'
 import smashball from './../smashball.png'
 import BetBar from './betbar.component.js'
 import Timer from './timer.component';
+import './css/visualizer.css'
 
 import { setBetPredictionNumber } from '../redux/reducers/betInfo';
 import store from '../redux/store/store';

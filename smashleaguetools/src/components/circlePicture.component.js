@@ -1,3 +1,5 @@
+import './css/circlePicture.css'
+
 const CirclePicture = (props) => {
     var imageElement;
     if (props.src === undefined || props.src === '')

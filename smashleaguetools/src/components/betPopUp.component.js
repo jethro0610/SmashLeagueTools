@@ -3,6 +3,7 @@ import { cancelBet, setBetAmount } from '../redux/reducers/betInfo';
 import store from '../redux/store/store';
 import { connect } from 'react-redux';
 import {socket} from '../socketmanager'
+import './css/betpopup.css'
 
 const mapStateToProps = state => {
     return { 

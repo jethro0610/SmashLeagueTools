@@ -1,4 +1,5 @@
 import React from 'react';
+import './css/betbar.css'
 
 import { connect } from 'react-redux';
 const mapStateToProps = state => {

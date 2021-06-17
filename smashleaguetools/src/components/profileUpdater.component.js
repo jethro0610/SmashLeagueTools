@@ -1,6 +1,7 @@
 import {React, useState} from 'react';
 import axios from 'axios';
 import CirclePicture from './circlePicture.component';
+import './css/profileUpdater.css'
 
 import { connect } from 'react-redux';
 const mapStateToProps = state => {

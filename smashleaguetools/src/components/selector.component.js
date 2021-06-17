@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import store from '../redux/store/store';
 import {setSelectedMatch} from '../redux/reducers/selectedMatch';
 import circle from './../circle.png'
+import './css/selector.css'
 
 export default class Selector extends Component {
     dispatchSelectedMatch = () =>{
