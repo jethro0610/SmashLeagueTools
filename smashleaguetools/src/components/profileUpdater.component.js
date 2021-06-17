@@ -1,4 +1,6 @@
 import {React, useState} from 'react';
+import store from '../redux/store/store'
+import { addNotification } from '../redux/reducers/notifications';
 import axios from 'axios';
 import CirclePicture from './circlePicture.component';
 import './css/profileUpdater.css'
@@ -40,7 +42,7 @@ const ConnectedProfileUpdater = ({name, id, userggSlug}) => {
                 window.location.reload(); // Reload the page to update cached image
             })
             .catch(err => {
-                console.log(err.response.data);
+                store.dispatch(addNotification(err.response.data));
             })
     }
 

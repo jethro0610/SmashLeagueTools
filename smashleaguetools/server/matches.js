@@ -55,7 +55,7 @@ function addBet(key, mongoId, predictionNumber, amount) {
     if (!matchToUpdate) return {success: false, notification: 'Invalid match'};
     if (matchToUpdate.bets.has(mongoId)) return {success: false, notification: 'You already placed a bet on this match'};
     if(Date.now() - matchToUpdate.startTime > process.env.MAX_BET_TIME) {
-        return {success: false, error: 'No more time to bet on this match'};
+        return {success: false, notification: 'No more time to bet on this match'};
     }
 
     const newBet = new Bet(predictionNumber, amount);

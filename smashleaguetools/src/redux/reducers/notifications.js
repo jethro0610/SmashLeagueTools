@@ -12,6 +12,9 @@ export const clearNotification = notification => {
 export const notificationReducer = (state = initialState, action) => {
     switch(action.type) {
         case 'ADD_NOTIFICATION':
+            if (state.includes(action.payload.notification))
+                return state;
+                
             if(state.length === 0) {
                 setTimeout(() => {
                     store.dispatch(clearNotification());
