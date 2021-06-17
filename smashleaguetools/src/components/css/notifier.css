@@ -1,0 +1,34 @@
+.notifier-outer {
+    bottom: 0;
+    position: fixed; 
+    left:50%;
+    bottom: 16px;
+}
+
+.notifier {
+    font-family: 'Montserrat', sans-serif;
+    border: 5px solid white;
+    max-width: 90vw;
+    text-align: center;
+    font-size: 24px;
+    position: relative;
+    left:-50%;
+    width: 800px;
+}
+
+.notif-anim-enter {
+    opacity: 0;
+    transform: translateY(16px);
+}
+.notif-anim-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: transform 300ms, opacity 300ms;
+}
+.notif-anim-exit {
+    opacity: 1;
+}
+.notif-anim-exit-active {
+    opacity: 0;
+    transition: opacity 300ms;
+}
