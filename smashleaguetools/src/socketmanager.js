@@ -36,6 +36,7 @@ socket.on('match-created', (msg) => {
 // Event when client recieves a newly created match
 socket.on('match-updated', (msg) => {
     store.dispatch(updateMatch(msg.key, msg.amount1, msg.amount2));
+    if(!store.getState().selectedMatch.match) return;
     if (store.getState().selectedMatch.match.key === msg.key)
         store.dispatch(updateSelectedMatch());
 });
@@ -43,6 +44,7 @@ socket.on('match-updated', (msg) => {
 // Event when client recieves a newly created match
 socket.on('match-deleted', (msg) => {
     store.dispatch(deleteMatch(msg.key));
+    if(!store.getState().selectedMatch.match) return;
     if (store.getState().selectedMatch.match.key === msg.key) {
         store.dispatch(clearSelectedMatch());
         store.dispatch(cancelBet());
