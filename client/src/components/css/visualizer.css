@@ -5,7 +5,7 @@
     width: 10%;
     min-width: 50px;
     z-index: -1;
-    opacity: 5%;
+    opacity: 0.05;
     
     margin: auto;
     top: 0; left: 0; bottom: 0; right: 0;
