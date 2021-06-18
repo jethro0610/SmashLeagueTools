@@ -75,8 +75,9 @@ typings/
 # FuseBox cache
 .fusebox/
 
+client/build
+
 # Profile pictures
-/profiles
+profiles
 tournament.json
-prereg.json
 prereg.json

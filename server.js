@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -70,15 +71,15 @@ io.use(wrap(sessionMiddleware));
 io.use(wrap(passport.initialize()));
 io.use(wrap(passport.session()));
 
-// Output the default server index
-app.get('/', (req, res) => {
-    return res.send('This is the server.');
-});
-
 // Router middleware
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/tournament', tournamentRouter);
+
+app.use(express.static('client/build'));
+app.get('/*', function(req,res) {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
 
 // Start listening on the given port
 http.listen(port, () => {
