@@ -14,7 +14,6 @@ const initInfoJson = () => {
         if (err) throw err;
         const info = JSON.parse(data);
         preregInfo = info;
-        console.log(preregInfo);
     })
 }
 initInfoJson();

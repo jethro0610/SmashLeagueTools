@@ -146,8 +146,6 @@ const queryMatches = (phaseGroupId, callback) => {
 
 const pollMatches = () => {
     queryMatches(currentTournamentId, async ggMatches => {
-        //console.log('Polling ' + currentTournamentId)
-        
         for(const ggMatch of ggMatches) {
             if(ggMatch.startedAt != null) {
                 if (endedMatches.has(ggMatch.id)) continue; // Skip match if it's already ended
