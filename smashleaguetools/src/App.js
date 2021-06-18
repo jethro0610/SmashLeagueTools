@@ -9,6 +9,7 @@ import BetPopUp from './components/betPopUp.component';
 import ProfileUpdater from './components/profileUpdater.component';
 import Notifier from './components/notifier.component'
 import PreReg from './components/prereg.component';
+import AdminConsole from './components/adminConsole.component';
 
 import store from './redux/store/store'
 import { connect } from 'react-redux';
@@ -38,9 +39,8 @@ const ConnectApp = ({tournamentStarted}) => {
         <Navbar/>
         <Notifier/>
         {indexDiv}
-        <Route path='/profile'>
-          <ProfileUpdater/>
-        </Route> 
+        <Route path='/admin'><AdminConsole/></Route>
+        <Route path='/profile'><ProfileUpdater/></Route> 
       </div>
     </Router>
   );
