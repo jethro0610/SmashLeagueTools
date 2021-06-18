@@ -79,7 +79,9 @@ app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/tournament', tournamentRouter);
 
+console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV !== 'development') {
+    console.log('Creating home');
     app.use(express.static('client/build'));
     app.get('/*', function(req,res) {
         res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
