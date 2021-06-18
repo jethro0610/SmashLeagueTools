@@ -12,25 +12,33 @@ import Notifier from './components/notifier.component'
 import PreReg from './components/prereg.component';
 
 import store from './redux/store/store'
+import { connect } from 'react-redux';
 import { refreshUser } from './redux/reducers/userInfo';
+import { refreshTournament } from './redux/reducers/tournamentInfo';
 import axios from 'axios';
-const App = () => {
-  useEffect(() => {
-    store.dispatch(refreshUser);
-  })
+store.dispatch(refreshUser);
+store.dispatch(refreshTournament);
 
+const mapStateToProps = state => {
+  return { 
+      tournamentStarted: state.tournamentInfo.started
+  };
+};
+
+const ConnectApp = ({tournamentStarted}) => {
+  var indexDiv;
+  if(tournamentStarted === true) {
+    indexDiv = <Route exact path='/'><BetPopUp/><Better/></Route>
+  }
+  else if(tournamentStarted === false) {
+    indexDiv = <Route exact path='/'><PreReg/></Route>
+  }
   return (
     <Router>
       <div className='d-flex flex-column vh-100'>
         <Navbar/>
         <Notifier/>
-        <PreReg/>
-        {/*
-        <Route exact path='/'>
-          <BetPopUp/>
-          <Better/>
-        </Route>
-        */}
+        {indexDiv}
         <Route path='/profile'>
           <ProfileUpdater/>
         </Route> 
@@ -38,8 +46,11 @@ const App = () => {
     </Router>
   );
 }
+const App = connect(mapStateToProps)(ConnectApp);
 
-
+window.logTournament = () => {
+  console.log(store.getState().tournamentInfo);
+}
 
 window.adminSetTournament = (tournamentId) => {
   axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/set', {tournamentId}, {withCredentials : true})

@@ -5,6 +5,7 @@ import {selectedMatchReducer} from '../reducers/selectedMatch';
 import { betInfoReducer } from '../reducers/betInfo';
 import { userInfoReducer } from '../reducers/userInfo'
 import { notificationReducer } from '../reducers/notifications';
+import { tournamentInfoReducer } from '../reducers/tournamentInfo';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const combined = combineReducers({
@@ -12,7 +13,8 @@ const combined = combineReducers({
     selectedMatch: selectedMatchReducer,
     betInfo: betInfoReducer,
     userInfo: userInfoReducer,
-    notifications: notificationReducer});
+    notifications: notificationReducer,
+    tournamentInfo: tournamentInfoReducer});
     
 const store = createStore(combined, composeEnhancers(applyMiddleware(thunk)));
 export default store;
