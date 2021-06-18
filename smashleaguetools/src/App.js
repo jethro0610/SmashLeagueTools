@@ -9,6 +9,7 @@ import Better from './components/better.component'
 import BetPopUp from './components/betPopUp.component';
 import ProfileUpdater from './components/profileUpdater.component';
 import Notifier from './components/notifier.component'
+import PreReg from './components/prereg.component';
 
 import store from './redux/store/store'
 import { refreshUser } from './redux/reducers/userInfo';
@@ -23,11 +24,13 @@ const App = () => {
       <div className='d-flex flex-column vh-100'>
         <Navbar/>
         <Notifier/>
+        <PreReg/>
+        {/*
         <Route exact path='/'>
           <BetPopUp/>
           <Better/>
         </Route>
-
+        */}
         <Route path='/profile'>
           <ProfileUpdater/>
         </Route> 

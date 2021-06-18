@@ -1,0 +1,12 @@
+.prereg {
+    font-size: 48px;
+    font-family: 'Montserrat', sans-serif;
+    flex: 1;
+}
+
+.register {
+    font-size: 16px;
+    padding: 16px;
+    text-decoration: none;
+    margin: auto;
+}

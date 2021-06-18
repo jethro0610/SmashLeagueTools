@@ -14,9 +14,9 @@ const Navbar = () => {
 
                 <div className='collapse navbar-collapse'>
                     <ul className='navbar-nav me-auto'>
-                        <li className='nav-item'><div className="nav-link">Bracket</div></li>
-                        <li className='nav-item'><div className="nav-link">Streaming</div></li>
-                        <li className='nav-item'><div className="nav-link">Admin</div></li>
+                        <li className='nav-item'>
+                            <a rel='noopener noreferrer' target='_blank' href={process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/bracket'} className="nav-link">Bracket</a>
+                        </li>
                     </ul>
                 </div>
 
