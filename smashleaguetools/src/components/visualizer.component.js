@@ -22,7 +22,8 @@ const ConnectedVisualizer = ({selectedMatch}) => {
     var visibility = ' hide';
     var player1Name = '.';
     var player2Name = '.';
-    var player1Img, player2Img = process.env.REACT_APP_BACKEND_ORIGIN + '/users/defaultprofilepicture';
+    var player1Img, player2Img; 
+    player1Img = player2Img = process.env.REACT_APP_BACKEND_ORIGIN + '/users/defaultprofilepicture';
     var amount1 = 0;
     var amount2 = 0;
     var startTime = 0;
