@@ -83,3 +83,4 @@ tournament.json
 prereg.json
 .env.production
 .env.development
+.env.staging
