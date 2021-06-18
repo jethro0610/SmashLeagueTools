@@ -48,7 +48,7 @@ router.route('/settitlecard').post(isAdmin, (req, res) => {
     });
 });
 
-router.route('/setpreregend').post(isAdmin, (req, res) => {
+router.route('/settitlecardend').post(isAdmin, (req, res) => {
     setTitleCard(req.body.titleCard, req.body.subtitleCard, false, (info) => {
         res.send(info);
     });

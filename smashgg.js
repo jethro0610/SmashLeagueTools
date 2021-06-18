@@ -77,18 +77,18 @@ const startTournament = () => {
     Tournament.findOneAndUpdate({}, {started: true}, {new: true}, (err, tournament) => {
         tournamentInfo = tournament;
         queryTournamentId = tournamentInfo.phaseGroupId;
-        console.log('Starting tournament ' + tournamentInfo.tournamentName);
+        console.log('Starting tournament ' + tournamentInfo.name);
         ggEvents.emit('tournament-started');
     });
 }
 
 const endTournament = () => {
-    Tournament.findOneAndUpdate({}, {started: true}, {new: true}, (err, tournament) => {
+    Tournament.findOneAndUpdate({}, {started: false}, {new: true}, (err, tournament) => {
         tournamentInfo = tournament;
         queryTournamentId = undefined;
         clearMatches();
         endedMatches.clear();
-        console.log('Ending tournament ' + tournamentInfo.tournamentName);
+        console.log('Ending tournament ' + tournamentInfo.name);
         ggEvents.emit('tournament-ended');
     });
 }

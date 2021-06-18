@@ -47,7 +47,7 @@ const ConnectAdminConsole = ({titleCard, subtitleCard, phaseGroupId}) => {
         const submitTitle = (inTitleCard === undefined ? titleCard : inTitleCard);
         const submitDate = (inSubtitleCard === undefined ? subtitleCard : inSubtitleCard);
 
-        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/settitlecard', {titleCard: submitTitle, subtitleCard: submitDate, hasRegistration: false}, {withCredentials : true})
+        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/settitlecardend', {titleCard: submitTitle, subtitleCard: submitDate, hasRegistration: false}, {withCredentials : true})
             .then(res => {
                 store.dispatch(addNotification('Updated pre-registration'));
             })
