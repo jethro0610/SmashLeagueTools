@@ -9,4 +9,14 @@
     padding: 16px;
     text-decoration: none;
     margin: auto;
+    background-color: #212529;
+    color: #FBFBFB;
+
+    transition: background-color 250ms, color 250ms;
+}
+
+.register:hover {
+    border: 2px solid gray;
+    background-color: #FBFBFB;
+    color: #212529;
 }
