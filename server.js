@@ -78,7 +78,6 @@ io.use(wrap(passport.session()));
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/tournament', tournamentRouter);
-app.use('/favicon.ico', express.static('./images/favicon.ico'));
 
 if (process.env.NODE_ENV !== 'development') {
     app.use(express.static('client/build'));
@@ -86,7 +85,6 @@ if (process.env.NODE_ENV !== 'development') {
         res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
     });
 }
-app.use('/favicon.ico', express.static('images/favicon.ico'));
 
 // Start listening on the given port
 http.listen(port, () => {
