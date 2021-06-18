@@ -7,34 +7,34 @@ import './css/profileUpdater.css'
 import { connect } from 'react-redux';
 const mapStateToProps = state => {
     return { 
-        preregTitle: state.tournamentInfo.preregTitle,
-        preregDate: state.tournamentInfo.preregDate,
-        tournamentId: state.tournamentInfo.id
+        titleCard: state.tournamentInfo.titleCard,
+        subtitleCard: state.tournamentInfo.subtitleCard,
+        phaseGroupId: state.tournamentInfo.phaseGroupId
     }
 }
 
-const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId, hasReg}) => {
-    const [inPreregTitle, setInPreregTitle] = useState(preregTitle);
-    const [inPreregDate, setInPreregDate] = useState(preregDate);
-    const [inTournamentId, setInTournamentId] = useState(tournamentId);
+const ConnectAdminConsole = ({titleCard, subtitleCard, phaseGroupId}) => {
+    const [inTitleCard, setInTitleCard] = useState(titleCard);
+    const [inSubtitleCard, setInSubtitleCard] = useState(subtitleCard);
+    const [inPhaseGroupId, setInPhaseGroupId] = useState(phaseGroupId);
 
-    const handlePreregTitle = (e) => {
-        setInPreregTitle(e.target.value);
+    const handleTitleCard = (e) => {
+        setInTitleCard(e.target.value);
     }
 
-    const handlePreregDate = (e) => {
-        setInPreregDate(e.target.value);
+    const handleSubtitleCard = (e) => {
+        setInSubtitleCard(e.target.value);
     }
 
-    const handleTouramentId = (e) => {
-        setInTournamentId(e.target.value);
+    const handlePhaseGroupId = (e) => {
+        setInPhaseGroupId(e.target.value);
     }
 
-    const preRegSubmit = () => {
-        const submitTitle = (inPreregTitle === undefined ? preregTitle : inPreregTitle);
-        const submitDate = (inPreregDate === undefined ? preregDate : inPreregDate);
+    const titleCardSubmit = () => {
+        const submitTitle = (inTitleCard === undefined ? titleCard : inTitleCard);
+        const submitDate = (inSubtitleCard === undefined ? subtitleCard : inSubtitleCard);
 
-        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/setprereg', {preregTitle: submitTitle, preregDate: submitDate, hasReg: false}, {withCredentials : true})
+        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/settitlecard', {titleCard: submitTitle, subtitleCard: submitDate, hasRegistration: true}, {withCredentials : true})
             .then(res => {
                 store.dispatch(addNotification('Updated pre-registration'));
             })
@@ -43,13 +43,13 @@ const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId, hasReg}) =>
             })
     }
 
-    const preRegEndSubmit = () => {
-        const submitTitle = (inPreregTitle === undefined ? preregTitle : inPreregTitle);
-        const submitDate = (inPreregDate === undefined ? preregDate : inPreregDate);
+    const titleCardSubmitEnd = () => {
+        const submitTitle = (inTitleCard === undefined ? titleCard : inTitleCard);
+        const submitDate = (inSubtitleCard === undefined ? subtitleCard : inSubtitleCard);
 
-        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/setpreregend', {preregTitle: submitTitle, preregDate: submitDate, hasReg: false}, {withCredentials : true})
+        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/settitlecard', {titleCard: submitTitle, subtitleCard: submitDate, hasRegistration: false}, {withCredentials : true})
             .then(res => {
-                store.dispatch(addNotification('Updated pre-registration end'));
+                store.dispatch(addNotification('Updated pre-registration'));
             })
             .catch(err => {
                 store.dispatch(addNotification(err.response.data));
@@ -57,14 +57,14 @@ const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId, hasReg}) =>
     }
 
     const setTournament = () => {
-        if (inTournamentId === undefined || inTournamentId.toString() === tournamentId.toString()) {
-            store.dispatch(addNotification('Tournament already set'));
-            return;
+        if (inPhaseGroupId === undefined || inPhaseGroupId === phaseGroupId) {
+            //store.dispatch(addNotification('Tournament already set'));
+            //return;
         }
         
-        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/set', {tournamentId: inTournamentId}, {withCredentials : true})
+        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/set', {phaseGroupId: inPhaseGroupId}, {withCredentials : true})
             .then(res => {
-                store.dispatch(addNotification('Tournament set to ' + res.data.tournamentName));
+                store.dispatch(addNotification('Tournament set to ' + res.data.name));
             })
             .catch(err => {
                 store.dispatch(addNotification(err.response.data));
@@ -95,11 +95,11 @@ const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId, hasReg}) =>
         <div className='container-fluid h-100 text-center'>
         <div className='row align-items-center h-100'>
         <div className='col'>
-            <input className='form-control text-center shadow' type='text' defaultValue={preregTitle} onChange={handlePreregTitle}/>
-            <input className='form-control text-center shadow' type='text' defaultValue={preregDate} onChange={handlePreregDate}/>
-            <button type='button' className='btn btn-dark' onClick={preRegSubmit}>Set Pre-registration</button>
-            <button type='button' className='btn btn-dark' onClick={preRegEndSubmit}>Set Pre-registration end</button>
-            <input className='form-control text-center shadow' type='text' defaultValue={tournamentId} onChange={handleTouramentId}/>
+            <input className='form-control text-center shadow' type='text' defaultValue={titleCard} onChange={handleTitleCard}/>
+            <input className='form-control text-center shadow' type='text' defaultValue={subtitleCard} onChange={handleSubtitleCard}/>
+            <button type='button' className='btn btn-dark' onClick={titleCardSubmit}>Set Pre-registration</button>
+            <button type='button' className='btn btn-dark' onClick={titleCardSubmitEnd}>Set Pre-registration end</button>
+            <input className='form-control text-center shadow' type='text' defaultValue={phaseGroupId} onChange={handlePhaseGroupId}/>
             <button type='button' className='btn btn-dark' onClick={setTournament}>Set Tournament</button>
             <button type='button' className='btn btn-dark' onClick={startTournament}>Start Tournament</button>
             <button type='button' className='btn btn-dark' onClick={endTournament}>End Tournament</button>

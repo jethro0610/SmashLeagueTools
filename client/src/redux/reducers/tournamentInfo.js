@@ -9,28 +9,21 @@ const initialState = {
 export const refreshTournament = async (dispatch, getState) => {
     try {
         const res = await axios.get(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/getinfo', {withCredentials: true});
-        store.dispatch(setTournament(res.data.preregTitle, res.data.preregDate, res.data.hasReg, res.data.id, res.data.title, res.data.started));
+        store.dispatch(setTournament(res.data));
     }
     catch (err) {
         console.log('Failed to login/refresh tournament');
     }
 }
 
-const setTournament = (preregTitle, preregDate, hasReg, id, title, started) => {
-    return { type: 'SET_TOURNAMENT', payload: {preregTitle, preregDate, hasReg, id, title, started}};
+const setTournament = (tournamentInfo) => {
+    return { type: 'SET_TOURNAMENT', payload: tournamentInfo};
 }
 
 export const tournamentInfoReducer = (state = initialState, action) => {
     switch(action.type) {
         case 'SET_TOURNAMENT':
-            return {
-                preregTitle: action.payload.preregTitle,
-                preregDate: action.payload.preregDate,
-                hasReg: action.payload.hasReg,
-                id: action.payload.id,
-                title: action.payload.title,
-                started: action.payload.started,
-            }
+            return action.payload;
 
         default:
             return state;

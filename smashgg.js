@@ -1,5 +1,5 @@
-const fs = require('fs');
 const User = require('./models/user.model');
+const Tournament = require('./models/tournament.model');
 const EventEmitter = require('events');
 const axios = require('axios');
 const constructGGPlayer = require('./matches').constructGGPlayer;
@@ -18,77 +18,79 @@ const options = {
     }
 }
 
-const defaultTournamentInfo = {
+var queryTournamentId = undefined;
+var tournamentInfo = {
     phaseGroupId: undefined,
-    tournamentName: undefined,
-    bracketLink: undefined,
-    signupLink: undefined
+    name: undefined,
+    started: undefined,
+    titleCard: undefined,
+    subtitleCard: undefined,
+    hasRegistration:undefined,
+    bracketUrl: undefined,
+    registerUrl: undefined,
 }
-var tournamentInfo = defaultTournamentInfo;
-var currentTournamentId = undefined;
-const getTournamentInfo = () => {return tournamentInfo}
-const isTournamentStarted = () => {return currentTournamentId !== undefined}
 
-const initFromJson = () => {
-    fs.readFile('./tournament.json', (err, data) => {
-        if (err) throw err;
-        const info = JSON.parse(data);
-        if(!info.phaseGroupId || info.phaseGroupId === '') {
-            tournamentInfo = defaultTournamentInfo;
-            return;
-        }
+const getTournamentInfo = () => { return tournamentInfo };
+const isTournamentStarted = () => { return (queryTournamentId !== undefined)};
 
-        tournamentInfoFromId(info.phaseGroupId, () => {
-            if(info.tournamentStarted === true)
-                startTournament();
-        });
+const initFromMongo = () => {
+    Tournament.findOne({}).then(tournament => {
+        tournamentInfo = tournament;
     })
 }
-initFromJson();
 
 const setTournament = (phaseGroupId, callback) => {
-    const info = {
-        phaseGroupId: phaseGroupId, 
-        tournamentStarted: false
-    }
-    tournamentInfoFromId(phaseGroupId, tournament => {
-        tournamentInfo = tournament;
+    tournamentDataFromId(phaseGroupId, tournamentData => {
+        const updateData = {
+            phaseGroupId,
+            started: false,
+            bracketUrl: tournamentData.bracketUrl,
+            registerUrl: tournamentData.registerUrl,
+            name: tournamentData.name
+        }
+        Tournament.findOneAndUpdate({}, updateData, {new: true}, (err, tournament) => {
+            if (err)
+                console.log(err);
 
-        if (callback)
-            callback(tournament);
+            tournamentInfo = tournament;
+            if(callback)
+                callback(tournamentInfo);
+        });
     });
-    fs.writeFile('./tournament.json', JSON.stringify(info, null, 2), (err) => {
-        if (err) throw err;
+}
+
+const setTitleCard = (titleCard, subtitleCard, hasRegistration, callback) => {
+    const updateData = {
+        titleCard,
+        subtitleCard,
+        hasRegistration
+    }
+    Tournament.findOneAndUpdate({}, updateData, {new: true}, (err, tournament) => {
+        tournamentInfo = tournament;
+        if(callback)
+            callback(tournamentInfo);
     });
 }
 
 const startTournament = () => {
     if(!tournamentInfo.phaseGroupId) return;
-    const info = {
-        phaseGroupId: tournamentInfo.phaseGroupId,
-        tournamentStarted: true
-    }
-    fs.writeFile('./tournament.json', JSON.stringify(info, null, 2), (err) => {
-        if (err) throw err;
+    Tournament.findOneAndUpdate({}, {started: true}, {new: true}, (err, tournament) => {
+        tournamentInfo = tournament;
+        queryTournamentId = tournamentInfo.phaseGroupId;
+        console.log('Starting tournament ' + tournamentInfo.tournamentName);
+        ggEvents.emit('tournament-started');
     });
-    currentTournamentId = tournamentInfo.phaseGroupId;
-    console.log('Starting tournament ' + tournamentInfo.tournamentName);
-    ggEvents.emit('tournament-started');
 }
 
 const endTournament = () => {
-    const info = {
-        phaseGroupId: tournamentInfo.phaseGroupId,
-        tournamentStarted: false
-    }
-    fs.writeFile('./tournament.json', JSON.stringify(info, null, 2), (err) => {
-        if (err) throw err;
+    Tournament.findOneAndUpdate({}, {started: true}, {new: true}, (err, tournament) => {
+        tournamentInfo = tournament;
+        queryTournamentId = undefined;
+        clearMatches();
+        endedMatches.clear();
+        console.log('Ending tournament ' + tournamentInfo.tournamentName);
+        ggEvents.emit('tournament-ended');
     });
-    currentTournamentId = undefined;
-    clearMatches();
-    endedMatches.clear();
-    console.log('Ending tournament ' + tournamentInfo.tournamentName);
-    ggEvents.emit('tournament-ended');
 }
 
 const queryTournament = (phaseGroupId, callback) => {
@@ -116,18 +118,17 @@ const queryTournament = (phaseGroupId, callback) => {
     })
 }
 
-const tournamentInfoFromId = (phaseGroupId, callback) => { 
-    queryTournament(phaseGroupId, (tournament) => {
-        const eventSlug = tournament.phaseGroup.phase.event.slug;
-        const urlPhaseId = tournament.phaseGroup.phase.id;
+const tournamentDataFromId = (phaseGroupId, callback) => { 
+    queryTournament(phaseGroupId, (tournamentQuery) => {
+        const eventSlug = tournamentQuery.phaseGroup.phase.event.slug;
+        const urlPhaseId = tournamentQuery.phaseGroup.phase.id;
 
-        tournamentInfo = {
-            phaseGroupId: tournament.phaseGroup.id,
-            tournamentName: tournament.phaseGroup.phase.event.tournament.name,
-            bracketLink: 'https://smash.gg/' + eventSlug + '/brackets/' + urlPhaseId + '/' + tournament.phaseGroup.id,
-            signupLink: tournament.phaseGroup.phase.event.tournament.url
+        const tournamentData = {
+            name: tournamentQuery.phaseGroup.phase.event.tournament.name,
+            bracketUrl: 'https://smash.gg/' + eventSlug + '/brackets/' + urlPhaseId + '/' + phaseGroupId,
+            registerUrl: tournamentQuery.phaseGroup.phase.event.tournament.url + '/register'
         }
-        callback(tournamentInfo);
+        callback(tournamentData);
     });
 }
 
@@ -167,7 +168,7 @@ const queryMatches = (phaseGroupId, callback) => {
 }
 
 const pollMatches = () => {
-    queryMatches(currentTournamentId, async ggMatches => {
+    queryMatches(queryTournamentId, async ggMatches => {
         for(const ggMatch of ggMatches) {
             if(ggMatch.startedAt != null) {
                 if (endedMatches.has(ggMatch.id)) continue; // Skip match if it's already ended
@@ -213,7 +214,7 @@ const pollMatches = () => {
 }
 
 setInterval(() => {
-    if (!currentTournamentId)
+    if (!queryTournamentId)
         return;
 
     pollMatches();
@@ -222,9 +223,10 @@ setInterval(() => {
 module.exports = { 
     startTournament: startTournament,
     endTournament: endTournament,
-    initFromJson: initFromJson,
     setTournament: setTournament,
     getTournamentInfo: getTournamentInfo,
     isTournamentStarted: isTournamentStarted,
-    ggEvents: ggEvents
+    ggEvents: ggEvents,
+    initFromMongo,
+    setTitleCard
 };

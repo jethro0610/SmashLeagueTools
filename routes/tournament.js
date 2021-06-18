@@ -1,13 +1,12 @@
 const router = require('express').Router();
 const axios = require('axios');
 const isAdmin= require('../middleware/isAdmin');
-const isTournamentStarted = require('../smashgg').isTournamentStarted;
-const getPreRegInfo = require('../preregInfo').getPreRegInfo;
-const setPreRegInfo = require('../preregInfo').setPreRegInfo;
 const setTournament = require('../smashgg').setTournament;
 const startTournament = require('../smashgg').startTournament;
 const endTournament = require('../smashgg').endTournament;
+const setTitleCard = require('../smashgg').setTitleCard;
 const getTournamentInfo = require('../smashgg').getTournamentInfo;
+const isTournamentStarted = require('../smashgg').isTournamentStarted;
 
 const endpoint = 'https://api.smash.gg/gql/alpha';
 const options = {
@@ -17,20 +16,20 @@ const options = {
 }
 
 router.route('/set').post(isAdmin, (req, res) => {
-    if (req.body.tournamentId) {
+    if (req.body.phaseGroupId) {
         const query = `{
-            phaseGroup(id: "${req.body.tournamentId}"){
+            phaseGroup(id: "${req.body.phaseGroupId}"){
                 id
             }
         }`
-
+        console.log(req.body.phaseGroupId);
         axios.post(endpoint, {query}, options).then(ggRes => {
             if (!ggRes.data.data.phaseGroup) {
                 res.status(400).send('Invalid ID');
                 return;
             }
             
-            setTournament(ggRes.data.data.phaseGroup.id.toString(), (tournament) => {
+            setTournament(req.body.phaseGroupId, (tournament) => {
                 res.send(tournament);
             });
         })
@@ -43,78 +42,67 @@ router.route('/set').post(isAdmin, (req, res) => {
     }
 });
 
-router.route('/setprereg').post(isAdmin, (req, res) => {
-    setPreRegInfo(req.body.preregTitle, req.body.preregDate, true, (info) => {
+router.route('/settitlecard').post(isAdmin, (req, res) => {
+    setTitleCard(req.body.titleCard, req.body.subtitleCard, true, (info) => {
         res.send(info);
     });
 });
 
 router.route('/setpreregend').post(isAdmin, (req, res) => {
-    setPreRegInfo(req.body.preregTitle, req.body.preregDate, false, (info) => {
+    setTitleCard(req.body.titleCard, req.body.subtitleCard, false, (info) => {
         res.send(info);
     });
 });
 
-
 router.route('/getinfo').get((req, res) => {
     const tournamentInfo = getTournamentInfo();
-    const preregInfo = getPreRegInfo();
     res.send({
-        preregTitle: preregInfo.preregTitle,
-        preregDate: preregInfo.preregDate,
-        hasReg: preregInfo.hasReg,
-        id: tournamentInfo.phaseGroupId,
-        title: tournamentInfo.tournamentName,
-        started: isTournamentStarted()
+        phaseGroupId: tournamentInfo.phaseGroupId,
+        started: tournamentInfo.started,
+        titleCard: tournamentInfo.titleCard,
+        subtitleCard: tournamentInfo.subtitleCard,
+        hasRegistration: tournamentInfo.hasRegistration,
+        bracketUrl: tournamentInfo.bracketUrl,
+        registerUrl: tournamentInfo.registerUrl
     })
 })
 
 router.route('/start').get(isAdmin, (req,res) => {
-    if (getTournamentInfo()) {
-        if (!isTournamentStarted()) {
-            startTournament()
-            res.status(200);
-        }
-        else {
-            res.status(400).send('Tournament already started');
-        }
+    if (!isTournamentStarted()) {
+        startTournament()
+        res.status(200);
     }
     else {
-        res.status(400).send('No tournament is set');
+        res.status(400).send('Tournament already started');
     }
 });
 
 router.route('/end').get(isAdmin, (req,res) => {
-    if (getTournamentInfo()) {
-        if (isTournamentStarted()) {
-            endTournament()
-            res.status(200);
-        }
-        else {
-            res.status(400).send('There\'s no tournament started right now');
-        }
+    if (isTournamentStarted()) {
+        endTournament()
+        res.status(200);
     }
     else {
-        res.status(400).send('No tournament is set');
+        res.status(400).send('There\'s no tournament started right now');
     }
 });
 
-router.route('/signup').get((req,res) => {
-    if (getTournamentInfo().signupLink)
-        res.redirect(getTournamentInfo().signupLink + '/register');
+router.route('/register').get((req,res) => {
+    if (getTournamentInfo().registerUrl)
+        res.redirect(getTournamentInfo().registerUrl);
     else
         res.redirect(process.env.FRONTEND_ORIGIN);
 });
 
 router.route('/bracket').get((req,res) => {
-    if (getTournamentInfo().bracketLink)
-        res.redirect(getTournamentInfo().bracketLink);
+    if (getTournamentInfo().bracketUrl)
+        res.redirect(getTournamentInfo().bracketUrl);
     else
         res.redirect(process.env.FRONTEND_ORIGIN);
 });
 
 router.route('/name').get((req,res) => {
-    res.send(getTournamentInfo().tournamentName);
+    res.send(getTournamentInfo().name);
 });
 
 module.exports = router;
