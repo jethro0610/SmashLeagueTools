@@ -7,7 +7,6 @@ const fs = require('fs');
 const aws = require('aws-sdk');
 const multerS3 = require('multer-s3');
 let User = require('../models/user.model');
-const base64Img = require('base64-image');
 
 const endpoint = 'https://api.smash.gg/gql/alpha';
 const options = {
@@ -106,13 +105,13 @@ router.route('/:id/picture').get((req,res) => {
                     res.sendFile(defaultImagePath);
                     return;
                 }
-                var b64 = Buffer.from(data.Body).toString('base64');
-                var base64Data = b64.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
-                var img = Buffer.from(base64Data, 'base64');
+                var b64 = Buffer.from(data.Body, 'base64');
                 res.writeHead(200, {
-                    'Content-Length': b64.length
+                    'Content-Length': b64.length,
+                    "Cache-Control": "public, max-age=86400000",
+                    "Expires": new Date(Date.now() + 86400000).toUTCString()
                 });
-                res.end(img);
+                res.end(b64);
             })
         })
         .catch((err) => {

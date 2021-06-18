@@ -17,7 +17,7 @@ const ConnectPreReg = ({titleCard, subtitleCard, hasRegistration}) => {
         <div>
             {subtitleCard}<br/>
             <a rel='noopener noreferrer' target='_blank' 
-            href={process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/signup'} 
+            href={process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/register'} 
             className='rounded-pill register'>Register on smash.gg</a>
         </div>
     }
