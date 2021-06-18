@@ -86,6 +86,7 @@ if (process.env.NODE_ENV !== 'development') {
         res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
     });
 }
+app.use('/favicon.ico', express.static('images/favicon.ico'));
 
 // Start listening on the given port
 http.listen(port, () => {
