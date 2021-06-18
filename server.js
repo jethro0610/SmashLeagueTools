@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path:'./.env.' + process.env.NODE_ENV});
 const path = require('path');
 const express = require('express');
 const cors = require('cors');
@@ -9,7 +9,6 @@ const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const SocketManager = require('./socketmanager');
 require('./config/passport')(passport);
-const startTournament = require('./smashgg').startTournament;
 
 // Set CORS options
 const corsOptions = {
