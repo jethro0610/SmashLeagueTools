@@ -21,7 +21,7 @@ const ConnectPreReg = ({preregTitle, preregDate, hasReg}) => {
             className='rounded-pill register'>Register on smash.gg</a>
         </div>
     }
-    console.log(hasReg)
+    
     return (
         <div className='container-fluid prereg'>
             <div className ='row align-items-center h-100'>

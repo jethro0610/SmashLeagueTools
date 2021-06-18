@@ -60,6 +60,7 @@ const matchEvents = new EventEmitter();
 function createMatch(key, player1, player2) {
     const match = new Match(player1, player2);
     matches.set(key, match);
+    console.log('Created match ' + player1.name + ' vs. ' + player2.name);
     matchEvents.emit('match-created', key);
 }
 
@@ -80,6 +81,7 @@ function addBet(key, mongoId, predictionNumber, amount) {
     matchToUpdate.bets.set(mongoId, newBet);
     matchEvents.emit('match-updated', key);
     const matchString = 'Confirmed $' + amount + ' bet on ' + matchToUpdate.player1.name + ' vs. ' + matchToUpdate.player2.name;
+    console.log('Added bet from ' + mongoId + ' with:' + amount);
     return {success: true, notification: matchString};
 }
 
@@ -113,6 +115,7 @@ function endMatch(key, winnerNumber) {
     }
     matchEvents.emit('winner-payout', matchToEnd.getPlayer(winnerNumber).mongoId, parseInt(process.env.WINNER_EARNINGS), loserName);
     matchEvents.emit('loser-payout', matchToEnd.getPlayer(loserNumber).mongoId, parseInt(process.env.LOSER_EARNINGS), winnerName);
+    console.log('Ended match ' + winnerName + ' vs. ' + loserName);
     deleteMatch(key);
 }
 

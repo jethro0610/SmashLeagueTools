@@ -87,6 +87,7 @@ const endTournament = () => {
     currentTournamentId = undefined;
     clearMatches();
     endedMatches.clear();
+    console.log('Ending tournament ' + tournamentInfo.tournamentName);
     ggEvents.emit('tournament-ended');
 }
 
