@@ -76,7 +76,7 @@ typings/
 .fusebox/
 
 # Profile pictures
-smashleaguetools/server/profiles
-smashleaguetools/server/tournament.json
-smashleaguetools/server/prereg.json
-smashleaguetools/server/prereg.json
+backend/profiles
+backend/tournament.json
+backend/prereg.json
+backend/prereg.json
