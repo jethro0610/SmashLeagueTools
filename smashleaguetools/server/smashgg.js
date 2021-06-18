@@ -7,13 +7,27 @@ const endMatch = require('./matches').endMatch;
 const matches = require('./matches').matches;
 const endedMatches = new Set();
 
-var tournamentInfo = undefined;
+const defaultTournamentInfo = {
+    phaseGroupId: undefined,
+    tournamentName: undefined,
+    bracketLink: undefined,
+    signupLink: undefined
+}
+var tournamentInfo = defaultTournamentInfo;
 var currentTournamentId = undefined;
+const getTournamentInfo = () => {
+   return tournamentInfo
+}
 
 const initFromJson = () => {
     fs.readFile('./tournament.json', (err, data) => {
         if (err) throw err;
         const info = JSON.parse(data);
+        if(!info.phaseGroupId || info.phaseGroupId === '') {
+            tournamentInfo = defaultTournamentInfo;
+            return;
+        }
+
         queryTournament(info.phaseGroupId, (tournament) => {
             const eventSlug = tournament.phaseGroup.phase.event.slug;
             const urlPhaseId = tournament.phaseGroup.phase.id;
@@ -24,7 +38,7 @@ const initFromJson = () => {
                 bracketLink: 'https://smash.gg/' + eventSlug + '/brackets/' + urlPhaseId + '/' + tournament.phaseGroup.id,
                 signupLink: tournament.phaseGroup.phase.event.tournament.url
             }
-            
+
             if(info.tournamentStarted)
                 startTournament();
         });
@@ -76,7 +90,7 @@ const queryTournament = (phaseGroupId, callback) => {
         callback(res.data.data);
     })
     .catch(error => {
-        console.log(error);
+        callback.log(error);
     })
 }
 
@@ -181,5 +195,5 @@ module.exports = {
     endTournament: endTournament,
     initFromJson: initFromJson,
     setTournament: setTournament,
-    tournamentInfo: tournamentInfo
+    getTournamentInfo: getTournamentInfo
 };

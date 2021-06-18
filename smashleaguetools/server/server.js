@@ -19,6 +19,7 @@ const corsOptions = {
 // Router requires
 const usersRouter = require('./routes/users.js');
 const authRouter = require('./routes/auth.js');
+const tournamentRouter = require('./routes/tournament');
 
 // Setup the express app
 const app = express();
@@ -77,6 +78,7 @@ app.get('/', (req, res) => {
 // Router middleware
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
+app.use('/tournament', tournamentRouter);
 
 // Start listening on the given port
 http.listen(port, () => {
