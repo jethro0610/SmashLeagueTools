@@ -2,7 +2,8 @@ const fs = require('fs');
 
 var preregInfo = {
     preregTitle: undefined,
-    preregDate: undefined
+    preregDate: undefined,
+    hasReg: undefined
 }
 
 const getPreRegInfo = () => {
@@ -18,10 +19,11 @@ const initInfoJson = () => {
 }
 initInfoJson();
 
-const setPreRegInfo = (preregTitle, preregDate, callback) => {
+const setPreRegInfo = (preregTitle, preregDate, hasReg, callback) => {
     const info = {
         preregTitle, 
-        preregDate
+        preregDate,
+        hasReg
     }
     preregInfo = info;
     fs.writeFile('./prereg.json', JSON.stringify(info, null, 2), (err) => {

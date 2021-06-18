@@ -13,7 +13,7 @@ const mapStateToProps = state => {
     }
 }
 
-const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId}) => {
+const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId, hasReg}) => {
     const [inPreregTitle, setInPreregTitle] = useState(preregTitle);
     const [inPreregDate, setInPreregDate] = useState(preregDate);
     const [inTournamentId, setInTournamentId] = useState(tournamentId);
@@ -34,7 +34,7 @@ const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId}) => {
         const submitTitle = (inPreregTitle === undefined ? preregTitle : inPreregTitle);
         const submitDate = (inPreregDate === undefined ? preregDate : inPreregDate);
 
-        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/setprereg', {preregTitle: submitTitle, preregDate: submitDate}, {withCredentials : true})
+        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/setprereg', {preregTitle: submitTitle, preregDate: submitDate, hasReg: false}, {withCredentials : true})
             .then(res => {
                 store.dispatch(addNotification('Updated pre-registration'));
             })
@@ -43,8 +43,21 @@ const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId}) => {
             })
     }
 
+    const preRegEndSubmit = () => {
+        const submitTitle = (inPreregTitle === undefined ? preregTitle : inPreregTitle);
+        const submitDate = (inPreregDate === undefined ? preregDate : inPreregDate);
+
+        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/setpreregend', {preregTitle: submitTitle, preregDate: submitDate, hasReg: false}, {withCredentials : true})
+            .then(res => {
+                store.dispatch(addNotification('Updated pre-registration end'));
+            })
+            .catch(err => {
+                store.dispatch(addNotification(err.response.data));
+            })
+    }
+
     const setTournament = () => {
-        if (inTournamentId === undefined || inTournamentId.toString() == tournamentId.toString()) {
+        if (inTournamentId === undefined || inTournamentId.toString() === tournamentId.toString()) {
             store.dispatch(addNotification('Tournament already set'));
             return;
         }
@@ -64,7 +77,6 @@ const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId}) => {
                 
             })
             .catch(err => {
-                console.log(err);
                 store.dispatch(addNotification(err.response.data));
             })
     }
@@ -75,7 +87,6 @@ const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId}) => {
                 
             })
             .catch(err => {
-                console.log(err);
                 store.dispatch(addNotification(err.response.data));
             })
     }
@@ -87,6 +98,7 @@ const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId}) => {
             <input className='form-control text-center shadow' type='text' defaultValue={preregTitle} onChange={handlePreregTitle}/>
             <input className='form-control text-center shadow' type='text' defaultValue={preregDate} onChange={handlePreregDate}/>
             <button type='button' className='btn btn-dark' onClick={preRegSubmit}>Set Pre-registration</button>
+            <button type='button' className='btn btn-dark' onClick={preRegEndSubmit}>Set Pre-registration end</button>
             <input className='form-control text-center shadow' type='text' defaultValue={tournamentId} onChange={handleTouramentId}/>
             <button type='button' className='btn btn-dark' onClick={setTournament}>Set Tournament</button>
             <button type='button' className='btn btn-dark' onClick={startTournament}>Start Tournament</button>

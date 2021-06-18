@@ -43,11 +43,18 @@ router.route('/set').post(isAdmin, (req, res) => {
     }
 });
 
-router.route('/setprereg').post((req, res) => {
-    setPreRegInfo(req.body.preregTitle, req.body.preregDate, (info) => {
+router.route('/setprereg').post(isAdmin, (req, res) => {
+    setPreRegInfo(req.body.preregTitle, req.body.preregDate, true, (info) => {
         res.send(info);
     });
 });
+
+router.route('/setpreregend').post(isAdmin, (req, res) => {
+    setPreRegInfo(req.body.preregTitle, req.body.preregDate, false, (info) => {
+        res.send(info);
+    });
+});
+
 
 router.route('/getinfo').get((req, res) => {
     const tournamentInfo = getTournamentInfo();
@@ -55,6 +62,7 @@ router.route('/getinfo').get((req, res) => {
     res.send({
         preregTitle: preregInfo.preregTitle,
         preregDate: preregInfo.preregDate,
+        hasReg: preregInfo.hasReg,
         id: tournamentInfo.phaseGroupId,
         title: tournamentInfo.tournamentName,
         started: isTournamentStarted()
