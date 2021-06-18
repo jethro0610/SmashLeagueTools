@@ -7,6 +7,13 @@ const endMatch = require('./matches').endMatch;
 const matches = require('./matches').matches;
 const endedMatches = new Set();
 
+const endpoint = 'https://api.smash.gg/gql/alpha';
+const options = {
+    headers: {
+        'Authorization' : 'Bearer ' + process.env.SMASHGG_KEY
+    }
+}
+
 const defaultTournamentInfo = {
     phaseGroupId: undefined,
     tournamentName: undefined,
@@ -28,35 +35,35 @@ const initFromJson = () => {
             return;
         }
 
-        queryTournament(info.phaseGroupId, (tournament) => {
-            const eventSlug = tournament.phaseGroup.phase.event.slug;
-            const urlPhaseId = tournament.phaseGroup.phase.id;
-
-            tournamentInfo = {
-                phaseGroupId: tournament.phaseGroup.id,
-                tournamentName: tournament.phaseGroup.phase.event.tournament.name,
-                bracketLink: 'https://smash.gg/' + eventSlug + '/brackets/' + urlPhaseId + '/' + tournament.phaseGroup.id,
-                signupLink: tournament.phaseGroup.phase.event.tournament.url
-            }
-
-            if(info.tournamentStarted)
+        tournamentInfoFromId(info.phaseGroupId, () => {
+            if(info.tournamentStarted === true)
                 startTournament();
         });
     })
 }
 initFromJson();
 
-const setTournament = (phaseGroupId) => {
-    fs.writeFile('./tournament,json', { phaseGroupId }, (err) => {
+const setTournament = (phaseGroupId, callback) => {
+    const info = {
+        phaseGroupId: phaseGroupId, 
+        tournamentStarted: false
+    }
+    tournamentInfoFromId(phaseGroupId, tournament => {
+        tournamentInfo = tournament;
+
+        if (callback)
+            callback(tournament);
+    });
+    fs.writeFile('./tournament.json', JSON.stringify(info, null, 2), (err) => {
         if (err) throw err;
-        initFromJson();
     });
 }
 
 const startTournament = () => {
-    console.log('Starting tournament');
-    if(tournamentInfo)
+    if(tournamentInfo.phaseGroupId) {
         currentTournamentId = tournamentInfo.phaseGroupId;
+        console.log('Starting tournament ' + tournamentInfo.tournamentName);
+    }
 }
 
 const endTournament = () => {
@@ -64,12 +71,6 @@ const endTournament = () => {
 }
 
 const queryTournament = (phaseGroupId, callback) => {
-    const endpoint = 'https://api.smash.gg/gql/alpha';
-    const options = {
-        headers: {
-            'Authorization' : 'Bearer ' + process.env.SMASHGG_KEY
-        }
-    }
     const query = 
     `{
         phaseGroup(id: "${phaseGroupId}"){
@@ -90,17 +91,26 @@ const queryTournament = (phaseGroupId, callback) => {
         callback(res.data.data);
     })
     .catch(error => {
-        callback.log(error);
+        console.log(error);
     })
 }
 
-const queryMatches = (phaseGroupId, callback) => {
-    const endpoint = 'https://api.smash.gg/gql/alpha';
-    const options = {
-        headers: {
-            'Authorization' : 'Bearer ' + process.env.SMASHGG_KEY
+const tournamentInfoFromId = (phaseGroupId, callback) => { 
+    queryTournament(phaseGroupId, (tournament) => {
+        const eventSlug = tournament.phaseGroup.phase.event.slug;
+        const urlPhaseId = tournament.phaseGroup.phase.id;
+
+        tournamentInfo = {
+            phaseGroupId: tournament.phaseGroup.id,
+            tournamentName: tournament.phaseGroup.phase.event.tournament.name,
+            bracketLink: 'https://smash.gg/' + eventSlug + '/brackets/' + urlPhaseId + '/' + tournament.phaseGroup.id,
+            signupLink: tournament.phaseGroup.phase.event.tournament.url
         }
-    }
+        callback(tournamentInfo);
+    });
+}
+
+const queryMatches = (phaseGroupId, callback) => {
     const query = 
     `{
         phaseGroup(id: "${phaseGroupId}"){

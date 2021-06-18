@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const isUser = require('../middleware/isUser');
+const axios = require('axios');
 const isAdmin= require('../middleware/isAdmin');
 const setTournament = require('../smashgg').setTournament;
 const startTournament = require('../smashgg').startTournament;
@@ -13,9 +13,10 @@ const options = {
 }
 
 router.route('/set').post(isAdmin, (req, res) => {
-    if (req.body.phaseGroupId) {
+    
+    if (req.body.tournamentId) {
         const query = `{
-            phaseGroup(id: "${req.body.phaseGroupId}"){
+            phaseGroup(id: "${req.body.tournamentId}"){
                 id
             }
         }`
@@ -25,7 +26,10 @@ router.route('/set').post(isAdmin, (req, res) => {
                 res.status(400).send('Invalid ID');
                 return;
             }
-            setTournament(ggRes.data.data.phaseGroup.id);
+            
+            setTournament(ggRes.data.data.phaseGroup.id.toString(), (tournament) => {
+                res.send(tournament);
+            });
         })
         .catch(error => {
             console.log(error);
@@ -47,11 +51,17 @@ router.route('/start').get(isAdmin, (req,res) => {
 });
 
 router.route('/signup').get((req,res) => {
-    res.send(getTournamentInfo().signupLink);
+    if (getTournamentInfo().signupLink)
+        res.redirect(getTournamentInfo().signupLink);
+    else
+        res.redirect(process.env.FRONTEND_ORIGIN);
 });
 
 router.route('/bracket').get((req,res) => {
-    res.send(getTournamentInfo().bracketLink);
+    if (getTournamentInfo().bracketLink)
+        res.redirect(getTournamentInfo().bracketLink);
+    else
+        res.redirect(process.env.FRONTEND_ORIGIN);
 });
 
 router.route('/name').get((req,res) => {

@@ -12,7 +12,7 @@ import Notifier from './components/notifier.component'
 
 import store from './redux/store/store'
 import { refreshUser } from './redux/reducers/userInfo';
-
+import axios from 'axios';
 const App = () => {
   useEffect(() => {
     store.dispatch(refreshUser);
@@ -34,6 +34,18 @@ const App = () => {
       </div>
     </Router>
   );
+}
+
+
+
+window.adminSetTournament = (tournamentId) => {
+  axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/set', {tournamentId}, {withCredentials : true})
+  .then(res => {
+      console.log(res);
+  })
+  .catch(err => {
+      console.log(err);
+  })
 }
 
 export default App;
