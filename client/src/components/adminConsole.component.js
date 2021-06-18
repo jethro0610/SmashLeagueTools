@@ -39,7 +39,7 @@ const ConnectAdminConsole = ({titleCard, subtitleCard, phaseGroupId}) => {
                 store.dispatch(addNotification('Updated pre-registration'));
             })
             .catch(err => {
-                store.dispatch(addNotification(err.response.data));
+                console.log(err);
             })
     }
 
@@ -52,7 +52,7 @@ const ConnectAdminConsole = ({titleCard, subtitleCard, phaseGroupId}) => {
                 store.dispatch(addNotification('Updated pre-registration'));
             })
             .catch(err => {
-                store.dispatch(addNotification(err.response.data));
+                console.log(err);
             })
     }
 

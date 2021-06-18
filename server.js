@@ -78,6 +78,7 @@ io.use(wrap(passport.session()));
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/tournament', tournamentRouter);
+app.use('/favicon.ico', express.static('./images/favicon.ico'));
 
 if (process.env.NODE_ENV !== 'development') {
     app.use(express.static('client/build'));
