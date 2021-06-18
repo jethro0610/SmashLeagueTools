@@ -1,3 +1,4 @@
+const fs = require('fs');
 const User = require('./models/user.model');
 const axios = require('axios');
 const constructGGPlayer = require('./matches').constructGGPlayer;
@@ -6,14 +7,77 @@ const endMatch = require('./matches').endMatch;
 const matches = require('./matches').matches;
 const endedMatches = new Set();
 
+var tournamentInfo = undefined;
 var currentTournamentId = undefined;
 
-const startTournament = (phaseGroupId) => {
-    currentTournamentId = phaseGroupId.toString();
+const initFromJson = () => {
+    fs.readFile('./tournament.json', (err, data) => {
+        if (err) throw err;
+        const info = JSON.parse(data);
+        queryTournament(info.phaseGroupId, (tournament) => {
+            const eventSlug = tournament.phaseGroup.phase.event.slug;
+            const urlPhaseId = tournament.phaseGroup.phase.id;
+
+            tournamentInfo = {
+                phaseGroupId: tournament.phaseGroup.id,
+                tournamentName: tournament.phaseGroup.phase.event.tournament.name,
+                bracketLink: 'https://smash.gg/' + eventSlug + '/brackets/' + urlPhaseId + '/' + tournament.phaseGroup.id,
+                signupLink: tournament.phaseGroup.phase.event.tournament.url
+            }
+            
+            if(info.tournamentStarted)
+                startTournament();
+        });
+    })
+}
+initFromJson();
+
+const setTournament = (phaseGroupId) => {
+    fs.writeFile('./tournament,json', { phaseGroupId }, (err) => {
+        if (err) throw err;
+        initFromJson();
+    });
+}
+
+const startTournament = () => {
+    console.log('Starting tournament');
+    if(tournamentInfo)
+        currentTournamentId = tournamentInfo.phaseGroupId;
 }
 
 const endTournament = () => {
     currentTournamentId = undefined;
+}
+
+const queryTournament = (phaseGroupId, callback) => {
+    const endpoint = 'https://api.smash.gg/gql/alpha';
+    const options = {
+        headers: {
+            'Authorization' : 'Bearer ' + process.env.SMASHGG_KEY
+        }
+    }
+    const query = 
+    `{
+        phaseGroup(id: "${phaseGroupId}"){
+            id
+            phase {
+                id
+                event {
+                    slug
+                    tournament {
+                        name
+                        url(relative: false)
+                    }
+                }
+            }
+        }
+    }`
+    axios.post(endpoint, {query: query}, options).then(res => {
+        callback(res.data.data);
+    })
+    .catch(error => {
+        console.log(error);
+    })
 }
 
 const queryMatches = (phaseGroupId, callback) => {
@@ -114,5 +178,8 @@ setInterval(() => {
 
 module.exports = { 
     startTournament: startTournament,
-    endTournament: endTournament
+    endTournament: endTournament,
+    initFromJson: initFromJson,
+    setTournament: setTournament,
+    tournamentInfo: tournamentInfo
 };

@@ -10,8 +10,6 @@ const SocketManager = require('./socketmanager');
 require('./config/passport')(passport);
 const startTournament = require('./smashgg').startTournament;
 
-startTournament('1502999');
-
 // Set CORS options
 const corsOptions = {
     origin: process.env.FRONTEND_ORIGIN,
