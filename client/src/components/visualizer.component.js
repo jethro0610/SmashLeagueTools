@@ -1,7 +1,7 @@
 import React from 'react';
 import CirclePicture from './circlePicture.component';
-import triangle from './../triangle.png'
-import smashball from './../smashball.png'
+import triangle from './../images/triangle.png'
+import smashball from './../images/smashball.png'
 import BetBar from './betbar.component.js'
 import Timer from './timer.component';
 import './css/visualizer.css'
