@@ -3,19 +3,19 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
     return { 
-        preregTitle: state.tournamentInfo.preregTitle,
-        preregDate: state.tournamentInfo.preregDate,
-        hasReg: state.tournamentInfo.hasReg
+        titleCard: state.tournamentInfo.titleCard,
+        subtitleCard: state.tournamentInfo.subtitleCard,
+        hasRegistration: state.tournamentInfo.hasRegistration
     };
 };
   
 
-const ConnectPreReg = ({preregTitle, preregDate, hasReg}) => {
+const ConnectPreReg = ({titleCard, subtitleCard, hasRegistration}) => {
     var endElemements = undefined;
-    if (hasReg) {
+    if (hasRegistration) {
         endElemements =    
         <div>
-            {preregDate}<br/>
+            {subtitleCard}<br/>
             <a rel='noopener noreferrer' target='_blank' 
             href={process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/signup'} 
             className='rounded-pill register'>Register on smash.gg</a>
@@ -26,7 +26,7 @@ const ConnectPreReg = ({preregTitle, preregDate, hasReg}) => {
         <div className='container-fluid prereg'>
             <div className ='row align-items-center h-100'>
                 <div className ='col text-center text-dark'>
-                    {preregTitle}<br/>
+                    {titleCard}<br/>
                     {endElemements}
                 </div>
             </div>
