@@ -11,10 +11,13 @@ const mapStateToProps = state => {
 }
 
 const ConnectNavbar = ({admin}) => {
-    const adminSelector = 
-    <li className='nav-item'>
-        <Link to='/admin' className="nav-link">Admin</Link>
-    </li>
+    var adminSelector = <div/>;
+    if(admin) {
+        adminSelector =
+        <li className='nav-item'>
+            <Link to='/admin' className="nav-link">Admin</Link>
+        </li>
+    }
     return (
         <nav className='navbar navbar-expand-lg navbar-dark bg-dark shadow'>
             <div className='container-fluid'>
