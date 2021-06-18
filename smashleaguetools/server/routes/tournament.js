@@ -6,6 +6,7 @@ const getPreRegInfo = require('../preregInfo').getPreRegInfo;
 const setPreRegInfo = require('../preregInfo').setPreRegInfo;
 const setTournament = require('../smashgg').setTournament;
 const startTournament = require('../smashgg').startTournament;
+const endTournament = require('../smashgg').endTournament;
 const getTournamentInfo = require('../smashgg').getTournamentInfo;
 
 const endpoint = 'https://api.smash.gg/gql/alpha';
@@ -54,6 +55,7 @@ router.route('/getinfo').get((req, res) => {
     res.send({
         preregTitle: preregInfo.preregTitle,
         preregDate: preregInfo.preregDate,
+        id: tournamentInfo.phaseGroupId,
         title: tournamentInfo.tournamentName,
         started: isTournamentStarted()
     })
@@ -62,10 +64,20 @@ router.route('/getinfo').get((req, res) => {
 router.route('/start').get(isAdmin, (req,res) => {
     if (getTournamentInfo()) {
         startTournament()
-        res.send(200);
+        res.status(200);
     }
     else {
-        res.send(400);
+        res.status(400).send('No tournament is set');
+    }
+});
+
+router.route('/end').get(isAdmin, (req,res) => {
+    if (getTournamentInfo()) {
+        endTournament()
+        res.status(200);
+    }
+    else {
+        res.status(400).send('No tournament is set');
     }
 });
 

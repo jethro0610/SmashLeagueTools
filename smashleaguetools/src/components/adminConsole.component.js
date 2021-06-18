@@ -44,8 +44,6 @@ const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId}) => {
     }
 
     const setTournament = () => {
-        console.log(inTournamentId);
-        console.log(tournamentId);
         if (inTournamentId === undefined || inTournamentId.toString() == tournamentId.toString()) {
             store.dispatch(addNotification('Tournament already set'));
             return;
@@ -54,6 +52,26 @@ const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId}) => {
         axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/set', {tournamentId: inTournamentId}, {withCredentials : true})
             .then(res => {
                 store.dispatch(addNotification('Tournament set to ' + res.data.tournamentName));
+            })
+            .catch(err => {
+                store.dispatch(addNotification(err.response.data));
+            })
+    }
+
+    const startTournament = () => {
+        axios.get(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/start', {withCredentials : true})
+            .then(res => {
+                
+            })
+            .catch(err => {
+                store.dispatch(addNotification(err.response.data));
+            })
+    }
+
+    const endTournament = () => {
+        axios.get(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/end', {withCredentials : true})
+            .then(res => {
+                
             })
             .catch(err => {
                 store.dispatch(addNotification(err.response.data));
@@ -69,8 +87,8 @@ const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId}) => {
             <button type='button' className='btn btn-dark' onClick={preRegSubmit}>Set Pre-registration</button>
             <input className='form-control text-center shadow' type='text' defaultValue={tournamentId} onChange={handleTouramentId}/>
             <button type='button' className='btn btn-dark' onClick={setTournament}>Set Tournament</button>
-            <button type='button' className='btn btn-dark'>Start Tournament</button>
-            <button type='button' className='btn btn-dark'>End Tournament</button>
+            <button type='button' className='btn btn-dark' onClick={startTournament}>Start Tournament</button>
+            <button type='button' className='btn btn-dark' onClick={endTournament}>End Tournament</button>
         </div>
         </div>
         </div>

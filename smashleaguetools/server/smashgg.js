@@ -60,12 +60,26 @@ const setTournament = (phaseGroupId, callback) => {
 
 const startTournament = () => {
     if(tournamentInfo.phaseGroupId) {
+        const info = {
+            phaseGroupId: tournamentInfo.phaseGroupId,
+            tournamentStarted: true
+        }
+        fs.writeFile('./tournament.json', JSON.stringify(info, null, 2), (err) => {
+            if (err) throw err;
+        });
         currentTournamentId = tournamentInfo.phaseGroupId;
         console.log('Starting tournament ' + tournamentInfo.tournamentName);
     }
 }
 
 const endTournament = () => {
+    const info = {
+        phaseGroupId: tournamentInfo.phaseGroupId,
+        tournamentStarted: false
+    }
+    fs.writeFile('./tournament.json', JSON.stringify(info, null, 2), (err) => {
+        if (err) throw err;
+    });
     currentTournamentId = undefined;
 }
 
