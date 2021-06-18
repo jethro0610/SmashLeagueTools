@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env NODE_ENV=production node server.js"
+    "start": "cross-env NODE_ENV=production node server.js",
+    "heroku-postbuild": "cross-env NODE_ENV=production cd client && npm install --only=dev && npm install && npm run build"
   },
   "author": "Jethro Peralta",
   "license": "ISC",
@@ -28,5 +29,8 @@
       "./tournment.json",
       "./prereg.json"
     ]
+  },
+  "engines": {
+    "node": "14.17.0"
   }
 }
