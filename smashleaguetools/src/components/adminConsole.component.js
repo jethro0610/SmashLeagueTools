@@ -64,6 +64,7 @@ const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId}) => {
                 
             })
             .catch(err => {
+                console.log(err);
                 store.dispatch(addNotification(err.response.data));
             })
     }
@@ -74,6 +75,7 @@ const ConnectAdminConsole = ({preregTitle, preregDate, tournamentId}) => {
                 
             })
             .catch(err => {
+                console.log(err);
                 store.dispatch(addNotification(err.response.data));
             })
     }

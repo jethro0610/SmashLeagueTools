@@ -1,3 +1,5 @@
+const EventEmitter = require('events');
+
 function constructGGPlayer (ggSetId, name, mongoId) {
     return { ggSetId, name, mongoId};
 }
@@ -51,8 +53,6 @@ class Match {
         return amount;
     }
 }
-
-const EventEmitter = require('events');
 
 matches = new Map();
 const matchEvents = new EventEmitter();
@@ -121,6 +121,10 @@ function deleteMatch(key) {
     matchEvents.emit('match-deleted', key);
 }
 
+function clearMatches() {
+    matches.clear();
+}
+
 module.exports = { 
     constructGGPlayer: constructGGPlayer,
     Match: Match,
@@ -131,5 +135,6 @@ module.exports = {
     addBet: addBet,
     addUserlessBet: addUserlessBet,
     endMatch: endMatch,
-    deleteMatch: deleteMatch
+    deleteMatch: deleteMatch,
+    clearMatches
 };

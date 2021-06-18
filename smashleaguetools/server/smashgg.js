@@ -1,11 +1,15 @@
 const fs = require('fs');
 const User = require('./models/user.model');
+const EventEmitter = require('events');
 const axios = require('axios');
 const constructGGPlayer = require('./matches').constructGGPlayer;
 const createMatch = require('./matches').createMatch;
+const clearMatches = require('./matches').clearMatches;
 const endMatch = require('./matches').endMatch;
 const matches = require('./matches').matches;
+
 const endedMatches = new Set();
+const ggEvents = new EventEmitter();
 
 const endpoint = 'https://api.smash.gg/gql/alpha';
 const options = {
@@ -59,17 +63,17 @@ const setTournament = (phaseGroupId, callback) => {
 }
 
 const startTournament = () => {
-    if(tournamentInfo.phaseGroupId) {
-        const info = {
-            phaseGroupId: tournamentInfo.phaseGroupId,
-            tournamentStarted: true
-        }
-        fs.writeFile('./tournament.json', JSON.stringify(info, null, 2), (err) => {
-            if (err) throw err;
-        });
-        currentTournamentId = tournamentInfo.phaseGroupId;
-        console.log('Starting tournament ' + tournamentInfo.tournamentName);
+    if(!tournamentInfo.phaseGroupId) return;
+    const info = {
+        phaseGroupId: tournamentInfo.phaseGroupId,
+        tournamentStarted: true
     }
+    fs.writeFile('./tournament.json', JSON.stringify(info, null, 2), (err) => {
+        if (err) throw err;
+    });
+    currentTournamentId = tournamentInfo.phaseGroupId;
+    console.log('Starting tournament ' + tournamentInfo.tournamentName);
+    ggEvents.emit('tournament-started');
 }
 
 const endTournament = () => {
@@ -81,6 +85,9 @@ const endTournament = () => {
         if (err) throw err;
     });
     currentTournamentId = undefined;
+    clearMatches();
+    endedMatches.clear();
+    ggEvents.emit('tournament-ended');
 }
 
 const queryTournament = (phaseGroupId, callback) => {
@@ -217,5 +224,6 @@ module.exports = {
     initFromJson: initFromJson,
     setTournament: setTournament,
     getTournamentInfo: getTournamentInfo,
-    isTournamentStarted: isTournamentStarted
+    isTournamentStarted: isTournamentStarted,
+    ggEvents: ggEvents
 };

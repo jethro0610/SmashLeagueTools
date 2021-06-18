@@ -5,6 +5,7 @@ import { updateSelectedMatch, clearSelectedMatch } from './redux/reducers/select
 import { setBalance } from './redux/reducers/userInfo';
 import { cancelBet } from './redux/reducers/betInfo';
 import { addNotification } from './redux/reducers/notifications';
+import { refreshTournament } from './redux/reducers/tournamentInfo';
 
 // Create the connection to the Socket.IO server
 export const socket = io.connect(process.env.REACT_APP_BACKEND_ORIGIN, {
@@ -65,6 +66,16 @@ socket.on('bet-confirmed', (msg) => {
 
 socket.on('notification', notification => {
     store.dispatch(addNotification(notification));
+})
+
+socket.on('tournament-started', () => {
+    store.dispatch(refreshTournament);
+    store.dispatch(addNotification('Tournament started!'));
+})
+
+socket.on('tournament-ended', () => {
+    store.dispatch(refreshTournament);
+    store.dispatch(addNotification('Tournament ended'));
 })
 
 // Expose functions to console

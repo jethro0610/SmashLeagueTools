@@ -63,8 +63,13 @@ router.route('/getinfo').get((req, res) => {
 
 router.route('/start').get(isAdmin, (req,res) => {
     if (getTournamentInfo()) {
-        startTournament()
-        res.status(200);
+        if (!isTournamentStarted()) {
+            startTournament()
+            res.status(200);
+        }
+        else {
+            res.status(400).send('Tournament already started');
+        }
     }
     else {
         res.status(400).send('No tournament is set');
@@ -73,8 +78,13 @@ router.route('/start').get(isAdmin, (req,res) => {
 
 router.route('/end').get(isAdmin, (req,res) => {
     if (getTournamentInfo()) {
-        endTournament()
-        res.status(200);
+        if (isTournamentStarted()) {
+            endTournament()
+            res.status(200);
+        }
+        else {
+            res.status(400).send('There\'s no tournament started right now');
+        }
     }
     else {
         res.status(400).send('No tournament is set');

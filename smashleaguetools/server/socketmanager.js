@@ -1,5 +1,6 @@
 const matches = require('./matches').matches;
 const matchEvents = require('./matches').matchEvents;
+const ggEvents = require('./smashgg').ggEvents;
 const createMatchFromNames = require('./matches').createMatchFromNames;
 const addBet = require('./matches').addBet;
 const addUserlessBet = require('./matches').addUserlessBet;
@@ -170,6 +171,14 @@ class SocketManager {
             .catch(err => {
                 console.log(err);
             })
+        })
+
+        ggEvents.on('tournament-started', () => {
+            this.io.emit('tournament-started');
+        })
+
+        ggEvents.on('tournament-ended', () => {
+            this.io.emit('tournament-ended');
         })
     }
 
