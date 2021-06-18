@@ -26,7 +26,7 @@ module.exports = passport => {
                 const newUser = await User.create({
                     name: profile.username,
                     discordId: profile.id,
-                    balance: 0,
+                    balance: process.env.STARTING_BALANCE,
                     admin: false
                 });
                 const savedUser = await newUser.save();
