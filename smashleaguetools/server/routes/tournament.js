@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const axios = require('axios');
 const isAdmin= require('../middleware/isAdmin');
+const isTournamentStarted = require('../smashgg').isTournamentStarted;
+const getPreRegInfo = require('../preregInfo').getPreRegInfo;
+const setPreRegInfo = require('../preregInfo').setPreRegInfo;
 const setTournament = require('../smashgg').setTournament;
 const startTournament = require('../smashgg').startTournament;
 const getTournamentInfo = require('../smashgg').getTournamentInfo;
@@ -13,7 +16,6 @@ const options = {
 }
 
 router.route('/set').post(isAdmin, (req, res) => {
-    
     if (req.body.tournamentId) {
         const query = `{
             phaseGroup(id: "${req.body.tournamentId}"){
@@ -40,6 +42,23 @@ router.route('/set').post(isAdmin, (req, res) => {
     }
 });
 
+router.route('/setprereg').post((req, res) => {
+    setPreRegInfo(req.body.preregTitle, req.body.preregDate, (info) => {
+        res.send(info);
+    });
+});
+
+router.route('/getinfo').get((req, res) => {
+    const tournamentInfo = getTournamentInfo();
+    const preregInfo = getPreRegInfo();
+    res.send({
+        preregTitle: preregInfo.preregTitle,
+        preregDate: preregInfo.preregDate,
+        title: tournamentInfo.tournamentName,
+        started: isTournamentStarted()
+    })
+})
+
 router.route('/start').get(isAdmin, (req,res) => {
     if (getTournamentInfo()) {
         startTournament()
@@ -52,7 +71,7 @@ router.route('/start').get(isAdmin, (req,res) => {
 
 router.route('/signup').get((req,res) => {
     if (getTournamentInfo().signupLink)
-        res.redirect(getTournamentInfo().signupLink);
+        res.redirect(getTournamentInfo().signupLink + '/register');
     else
         res.redirect(process.env.FRONTEND_ORIGIN);
 });

@@ -22,9 +22,8 @@ const defaultTournamentInfo = {
 }
 var tournamentInfo = defaultTournamentInfo;
 var currentTournamentId = undefined;
-const getTournamentInfo = () => {
-   return tournamentInfo
-}
+const getTournamentInfo = () => {return tournamentInfo}
+const isTournamentStarted = () => {return currentTournamentId !== undefined}
 
 const initFromJson = () => {
     fs.readFile('./tournament.json', (err, data) => {
@@ -205,5 +204,6 @@ module.exports = {
     endTournament: endTournament,
     initFromJson: initFromJson,
     setTournament: setTournament,
-    getTournamentInfo: getTournamentInfo
+    getTournamentInfo: getTournamentInfo,
+    isTournamentStarted: isTournamentStarted
 };
