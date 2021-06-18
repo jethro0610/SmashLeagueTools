@@ -4,7 +4,10 @@ const isUser = require('../middleware/isUser');
 const axios = require('axios');
 const path = require('path');
 const fs = require('fs');
+const aws = require('aws-sdk');
+const multerS3 = require('multer-s3');
 let User = require('../models/user.model');
+const base64Img = require('base64-image');
 
 const endpoint = 'https://api.smash.gg/gql/alpha';
 const options = {
@@ -13,13 +16,10 @@ const options = {
     }
 }
 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, './profiles');
-    },
-    filename: function(req, file, cb) {
-        cb(null, req.user.id + '.png');
-    }
+const s3 = new aws.S3({
+    region: process.env.AWS_BUCKET_REGION,
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY
 })
 
 const fileFilter = (req, file, cb) => {
@@ -31,7 +31,16 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
-let upload = multer({ storage, fileFilter});
+let upload = multer({ storage: multerS3({
+    s3: s3,
+    bucket: process.env.AWS_BUCKET_NAME,
+    metadata: function (req, file, cb) {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key: function (req, file, cb) {
+      cb(null, req.user.id)
+    }
+}), fileFilter});
 
 router.route('/get').get(isUser, (req,res) => {
     var formattedGGSlug = undefined;
@@ -86,17 +95,25 @@ router.route('/updateprofile').post(isUser, upload.single('profile-pic'), (req, 
     }
 });
 
-const profilePicPath = path.join(__dirname + '/../profiles/');
+const defaultImagePath = path.join(__dirname + '/../images/default.png');
 router.route('/:id/picture').get((req,res) => {
     User.findById(req.params.id)
         .then(() => {
-            const picPath = profilePicPath + req.params.id + '.png';
-            if (fs.existsSync(picPath)) {
-                res.sendFile(picPath);
-            }
-            else {
-                res.sendFile(profilePicPath + 'default.png');
-            }
+            const params = { Bucket:process.env.AWS_BUCKET_NAME, Key: req.params.id };
+
+            s3.getObject(params, (err, data) => {
+                if(err) {
+                    res.sendFile(defaultImagePath);
+                    return;
+                }
+                var b64 = Buffer.from(data.Body).toString('base64');
+                var base64Data = b64.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+                var img = Buffer.from(base64Data, 'base64');
+                res.writeHead(200, {
+                    'Content-Length': b64.length
+                });
+                res.end(img);
+            })
         })
         .catch((err) => {
             res.status(404).send();
