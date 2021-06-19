@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
     name: { type: String, required: true},
-    discordId: { type: String, required: true},
+    discordId: { type: String, required: true, index:true, unique:true, sparse:true},
     balance: { type: Number, required: true},
     admin: {type: Boolean, required: true},
     ggSlug: {type: String, requred: false}
