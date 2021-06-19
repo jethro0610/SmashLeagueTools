@@ -120,7 +120,7 @@ router.route('/:id/picture').get((req,res) => {
 });
 
 router.route('/defaultprofilepicture').get((req,res) => {
-    res.sendFile(profilePicPath + 'default.png');
+    res.sendFile(defaultImagePath);
 });
 
 module.exports = router;
