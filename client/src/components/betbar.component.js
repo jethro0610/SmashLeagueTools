@@ -1,7 +1,23 @@
 import React from 'react';
 import './css/betbar.css'
-
 import { connect } from 'react-redux';
+import styled from 'styled-components';
+import { backgroundColor, textColor, darkColor, betBarBorderColor } from '../themeStyles';
+
+const StyledBetBar = styled.div`
+    border: 2px solid ${betBarBorderColor}
+`
+
+const LeftBar = styled.div`
+    background-color: ${backgroundColor};
+    color: ${textColor};
+`
+
+const RightBar = styled.div`
+    background-color: ${darkColor};
+    color: #f8f9fa;
+`
+
 const mapStateToProps = state => {
     return { selectedMatch: state.selectedMatch.match };
 };
@@ -29,17 +45,17 @@ const ConnectedBetBar = ({selectedMatch}) =>  {
         progress2 = 100.0 - progress1;
     }
 
-    const barClass1 = 'progress-bar bg-light text-dark text-start overflow-hidden';
-    const barClass2 = 'progress-bar bg-dark text-light text-end overflow-hidden';
+    const barClass1 = 'progress-bar text-start overflow-hidden';
+    const barClass2 = 'progress-bar text-end overflow-hidden';
     const barElement1 = 
-    <div className={barClass1} style={{width: progress1 + '%'}} aria-valuenow={progress1} aria-valuemin={0} aria-valuemax={100}>
+    <LeftBar className={barClass1} style={{width: progress1 + '%'}} aria-valuenow={progress1} aria-valuemin={0} aria-valuemax={100}>
         <div className='px-2'> ${amount1} </div>
-    </div>;
+    </LeftBar>;
 
     const barElement2 = 
-    <div className={barClass2} style={{width: progress2 + '%'}} aria-valuenow={progress2} aria-valuemin={0} aria-valuemax={100}>
+    <RightBar className={barClass2} style={{width: progress2 + '%'}} aria-valuenow={progress2} aria-valuemin={0} aria-valuemax={100}>
         <div className='px-2'> ${amount2} </div>
-    </div>;
+    </RightBar>;
 
     return(
         <div className={visibility}>
@@ -50,10 +66,10 @@ const ConnectedBetBar = ({selectedMatch}) =>  {
             </div>
             <div className={'row'}>
                 <div className='col'>
-                    <div className='betbar shadow-sm border border-2 rounded-pill text-light progress overflow-hidden'>
+                    <StyledBetBar className='betbar shadow-sm rounded-pill text-light overflow-hidden'>
                         {barElement1}
                         {barElement2}
-                    </div>
+                    </StyledBetBar>
                 </div>
             </div>
         </div>

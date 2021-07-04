@@ -4,8 +4,16 @@ import { addNotification } from '../redux/reducers/notifications';
 import axios from 'axios';
 import CirclePicture from './circlePicture.component';
 import './css/profileUpdater.css'
-
 import { connect } from 'react-redux';
+import styled from 'styled-components';
+import { textColor, pureThemeColor, inputBorderColor } from '../themeStyles';
+
+const SlugInput = styled.input`
+  background-color: ${pureThemeColor};
+  border: 1px solid ${inputBorderColor};
+  color: ${textColor};
+`
+
 const mapStateToProps = state => {
     return { 
         name: state.userInfo.name,
@@ -68,8 +76,8 @@ const ConnectedProfileUpdater = ({name, id, userggSlug}) => {
 
             <div className='row nameandslug'>
             <div className='col profile-name bg-dark text-light shadow'>{name}</div>
-            <input 
-                className='col form-control text-center ggsluginput shadow'
+            <SlugInput 
+                className='col text-center ggsluginput shadow'
                 type="text"
                 name="smashggslug"
                 defaultValue={userggSlug}

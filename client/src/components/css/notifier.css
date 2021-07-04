@@ -9,7 +9,6 @@
 .notifier {
     z-index: 2;
     font-family: 'Montserrat', sans-serif;
-    border: 5px solid white;
     max-width: 90vw;
     text-align: center;
     font-size: 24px;
