@@ -4,7 +4,7 @@ import {setSelectedMatch} from '../redux/reducers/selectedMatch';
 import circle from './../images/circle.png'
 import './css/selector.css'
 import styled from 'styled-components';
-import { selectorBackgroundColor, textColor, pureWhiteSemiDark} from '../themeStyles';
+import { textColor, pureWhiteSemiDark} from '../themeStyles';
 
 const StyledSelector = styled.button`
     background-color: ${pureWhiteSemiDark};

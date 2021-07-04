@@ -5,11 +5,20 @@ import smashball from './../images/smashball.png'
 import BetBar from './betbar.component.js'
 import Timer from './timer.component';
 import './css/visualizer.css'
-
 import { setBetPredictionNumber } from '../redux/reducers/betInfo';
 import store from '../redux/store/store';
-
 import { connect } from 'react-redux';
+import styled from 'styled-components';
+import { textColor, visualizerCenterOpacity} from '../themeStyles';
+
+const StyledTitle = styled.div`
+    color: ${textColor};
+    border-bottom: 1px solid ${textColor};
+`
+const StyledCenter = styled.img`
+    opacity: ${visualizerCenterOpacity}
+`
+
 const mapStateToProps = state => {
     return { selectedMatch: state.selectedMatch.match };
 };
@@ -45,7 +54,7 @@ const ConnectedVisualizer = ({selectedMatch}) => {
     return(
         <div className='col overflow-visible text-center align-middle position-relative'>
             <div className={'row' + visibility}>
-                <div className='col border-bottom title'>Jippi Week 9</div>
+                <StyledTitle className='col title'>Jippi Week 9</StyledTitle>
             </div>
 
             <div className={'row' + visibility}>
@@ -59,7 +68,7 @@ const ConnectedVisualizer = ({selectedMatch}) => {
             </div>
 
             <div className='row'>
-                <img alt='' src={smashball} className='smashball'/>
+                <StyledCenter alt='' src={smashball} className='smashball'/>
                 <div className={'col' + visibility}>
                     <CirclePicture 
                     onClick={() => onClickPlayer(1)} 

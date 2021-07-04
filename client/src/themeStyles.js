@@ -39,3 +39,8 @@ export const darkColor = theme('theme', {
     light: '#212529',
     dark: '#000000'
 });
+
+export const visualizerCenterOpacity = theme('theme', {
+    light: '0.05',
+    dark: '0.25'
+});
