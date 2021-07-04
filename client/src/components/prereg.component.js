@@ -1,6 +1,13 @@
 import './css/prereg.css'
 import { connect } from 'react-redux';
 
+import styled from 'styled-components';
+import { textColor } from '../themeStyles';
+
+const TitleCard = styled.div`
+  color: ${textColor};
+`
+
 const mapStateToProps = state => {
     return { 
         titleCard: state.tournamentInfo.titleCard,
@@ -9,7 +16,6 @@ const mapStateToProps = state => {
     };
 };
   
-
 const ConnectPreReg = ({titleCard, subtitleCard, hasRegistration}) => {
     var endElemements = undefined;
     if (hasRegistration) {
@@ -25,10 +31,10 @@ const ConnectPreReg = ({titleCard, subtitleCard, hasRegistration}) => {
     return (
         <div className='container-fluid prereg'>
             <div className ='row align-items-center h-100'>
-                <div className ='col text-center text-dark'>
+                <TitleCard className ='col text-center'>
                     {titleCard}<br/>
                     {endElemements}
-                </div>
+                </TitleCard>
             </div>
         </div>
     )

@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Route} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './components/css/globals.css'
+import styled, { ThemeProvider } from 'styled-components';
+import {mainBackgroundColor, textColor} from './themeStyles';
+
 import Navbar from './components/navbar.component'
 import Better from './components/better.component'
 import BetPopUp from './components/betPopUp.component';
@@ -19,13 +22,19 @@ import axios from 'axios';
 store.dispatch(refreshUser);
 store.dispatch(refreshTournament);
 
+const AppContainer = styled.div`
+  background-color: ${mainBackgroundColor};
+  color: ${textColor};
+`
+
 const mapStateToProps = state => {
   return { 
-      tournamentStarted: state.tournamentInfo.started
+      tournamentStarted: state.tournamentInfo.started,
+      darkMode: state.userInfo.darkMode
   };
 };
 
-const ConnectApp = ({tournamentStarted}) => {
+const ConnectApp = ({tournamentStarted, darkMode}) => {
   var indexDiv;
   if(tournamentStarted === true) {
     indexDiv = <Route exact path='/'><BetPopUp/><Better/></Route>
@@ -34,15 +43,17 @@ const ConnectApp = ({tournamentStarted}) => {
     indexDiv = <Route exact path='/'><PreReg/></Route>
   }
   return (
+    <ThemeProvider theme={{ theme: 'dark'}}>
     <Router>
-      <div className='d-flex flex-column vh-100'>
+      <AppContainer className='d-flex flex-column vh-100'>
         <Navbar/>
         <Notifier/>
         {indexDiv}
         <Route path='/admin'><AdminConsole/></Route>
         <Route path='/profile'><ProfileUpdater/></Route> 
-      </div>
+      </AppContainer>
     </Router>
+    </ThemeProvider>
   );
 }
 const App = connect(mapStateToProps)(ConnectApp);

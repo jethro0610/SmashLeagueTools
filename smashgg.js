@@ -75,6 +75,8 @@ const setTitleCard = (titleCard, subtitleCard, hasRegistration, callback) => {
 const startTournament = () => {
     if(!tournamentInfo.phaseGroupId) return;
     Tournament.findOneAndUpdate({}, {started: true}, {new: true}, (err, tournament) => {
+        if(err)
+            console.log(err);
         tournamentInfo = tournament;
         queryTournamentId = tournamentInfo.phaseGroupId;
         console.log('Starting tournament ' + tournamentInfo.name);
@@ -84,6 +86,8 @@ const startTournament = () => {
 
 const endTournament = () => {
     Tournament.findOneAndUpdate({}, {started: false}, {new: true}, (err, tournament) => {
+        if(err)
+            console.log(err);
         tournamentInfo = tournament;
         queryTournamentId = undefined;
         clearMatches();

@@ -10,13 +10,13 @@
     text-decoration: none;
     margin: auto;
     background-color: #212529;
-    color: #FBFBFB;
+    color: #f8f9fa;
 
     transition: background-color 250ms, color 250ms;
 }
 
 .register:hover {
     border: 2px solid gray;
-    background-color: #FBFBFB;
+    background-color: #f8f9fa;
     color: #212529;
 }
