@@ -15,6 +15,11 @@ export const pureThemeColor = theme('theme', {
     dark: '#000000'
 });
 
+export const pictureBorderColor = theme('theme', {
+    light: '#ffffff',
+    dark: '#212529'
+}); 
+
 export const backgroundColor = theme('theme', {
     light: '#f8f9fa',
     dark: '#212529'
