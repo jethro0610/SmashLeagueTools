@@ -1,10 +1,10 @@
 import './css/circlePicture.css'
 
 import styled from 'styled-components';
-import { pictureBorderColor } from '../themeStyles';
+import { pureWhiteSemiDark } from '../themeStyles';
 
 const OuterBorder = styled.div`
-  background-color: ${pictureBorderColor};
+  background-color: ${pureWhiteSemiDark};
 `
 
 const CirclePicture = (props) => {

@@ -13,7 +13,7 @@
 }
 
 .selector:hover {
-    transform: translateX(-2%);
+    transform: scale(98%);
 }
 
 .circle {

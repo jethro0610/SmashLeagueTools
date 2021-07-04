@@ -5,9 +5,14 @@ export const mainBackgroundColor = theme('theme', {
     dark: '#121416'
 });
 
-export const inputBorderColor= theme('theme', {
-    light: '#e3e3e3',
-    dark: '#000000'
+export const backgroundColor = theme('theme', {
+    light: '#f8f9fa',
+    dark: '#212529'
+});
+
+export const pureWhiteSemiDark  = theme('theme', {
+    light: '#ffffff',
+    dark: '#212529'
 });
 
 export const pureThemeColor = theme('theme', {
@@ -15,18 +20,13 @@ export const pureThemeColor = theme('theme', {
     dark: '#000000'
 });
 
-export const pictureBorderColor = theme('theme', {
-    light: '#ffffff',
-    dark: '#212529'
-}); 
-
-export const backgroundColor = theme('theme', {
-    light: '#f8f9fa',
-    dark: '#212529'
+export const textColor = theme('theme', {
+    light: '#212529',
+    dark: '#bfbfbf'
 });
 
-export const darkColor = theme('theme', {
-    light: '#212529',
+export const inputBorderColor= theme('theme', {
+    light: '#e3e3e3',
     dark: '#000000'
 });
 
@@ -35,7 +35,7 @@ export const betBarBorderColor = theme('theme', {
     dark: '#212529'
 })
 
-export const textColor = theme('theme', {
+export const darkColor = theme('theme', {
     light: '#212529',
-    dark: '#f8f9fa'
+    dark: '#000000'
 });
