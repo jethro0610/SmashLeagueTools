@@ -4,6 +4,18 @@ import store from '../redux/store/store';
 import { connect } from 'react-redux';
 import {socket} from '../socketmanager'
 import './css/betpopup.css'
+import styled from 'styled-components';
+import { textColor, mainBackgroundColor, backgroundColor} from '../themeStyles';
+
+const StyledPopUp = styled.div`
+    background-color: ${mainBackgroundColor};
+    color: ${textColor};
+`
+
+const StyledBalance = styled.div`
+    background-color: ${backgroundColor};
+    color: ${textColor};
+`
 
 const mapStateToProps = state => {
     return { 
@@ -47,9 +59,9 @@ const ConnectBetPopUp = ({betInfo, selectedMatch, balance}) => {
         <div className='col'>
 
             {/* The popup*/}
-            <div className='bg-light text-dark text-center shadow-lg popup d-flex flex-column'> 
+            <StyledPopUp className='text-center shadow-lg popup d-flex flex-column'> 
                 {/* The title bar*/}
-                <div className='titleBar bg-dark text-light overflow-hidden'>Place your bets </div>
+                <div className='titleBar bg-dark overflow-hidden'>Place your bets </div>
 
                 {/* Content area*/}
                 <div className='row align-items-center h-100'>
@@ -71,8 +83,8 @@ const ConnectBetPopUp = ({betInfo, selectedMatch, balance}) => {
                 </div>
 
                 {/* Bottom area*/}
-                <div className='balance'>Your Balance: ${balance}</div>
-            </div>
+                <StyledBalance className='balance'>Your Balance: ${balance}</StyledBalance>
+            </StyledPopUp>
 
         </div>
         </div>
