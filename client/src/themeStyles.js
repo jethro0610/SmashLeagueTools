@@ -22,7 +22,7 @@ export const pureThemeColor = theme('theme', {
 
 export const textColor = theme('theme', {
     light: '#212529',
-    dark: '#bfbfbf'
+    dark: '#f8f9fa'
 });
 
 export const inputBorderColor= theme('theme', {

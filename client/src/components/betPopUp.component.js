@@ -61,7 +61,7 @@ const ConnectBetPopUp = ({betInfo, selectedMatch, balance}) => {
             {/* The popup*/}
             <StyledPopUp className='text-center shadow-lg popup d-flex flex-column'> 
                 {/* The title bar*/}
-                <div className='titleBar bg-dark overflow-hidden'>Place your bets </div>
+                <div className='titleBar bg-dark text-light overflow-hidden'>Place your bets </div>
 
                 {/* Content area*/}
                 <div className='row align-items-center h-100'>
