@@ -17,7 +17,7 @@ const ConnectDarkModeToggle = ({darkMode}) => {
 
     return (
         <div className="form-check form-switch dark-toggle-outer">
-            <input className="form-check-input dark-toggle-inner" type="checkbox" id="flexSwitchCheckDefault" onChange={handleToggle}/>
+            <input className="form-check-input dark-toggle-inner" type="checkbox" id="flexSwitchCheckDefault" checked={darkMode} onChange={handleToggle}/>
         </div>
     );
 }
