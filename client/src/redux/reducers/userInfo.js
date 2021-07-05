@@ -7,7 +7,6 @@ const initialState = {
     balance: 0,
     ggSlug: undefined,
     admin:false,
-    darkMode: true
 };
 
 export const refreshUser = async (dispatch, getState) => {
@@ -40,8 +39,7 @@ export const userInfoReducer = (state = initialState, action) => {
                 name: action.payload.name,
                 ggSlug: action.payload.ggSlug,
                 balance: action.payload.balance,
-                admin: action.payload.admin,
-                darkMode: state.darkMode
+                admin: action.payload.admin
             }
         
         case 'SET_NAME': 
@@ -50,8 +48,7 @@ export const userInfoReducer = (state = initialState, action) => {
                 name: action.payload.name,
                 ggSlug: state.ggSlug,
                 balance: state.balance,
-                admin: state.admin,
-                darkMode: state.darkMode
+                admin: state.admin
             }
 
         case 'SET_BALANCE':
@@ -60,8 +57,7 @@ export const userInfoReducer = (state = initialState, action) => {
                 name: state.name,
                 ggSlug: state.ggSlug,
                 balance: action.payload.balance,
-                admin: state.admin,
-                darkMode: state.darkMode
+                admin: state.admin
             }
 
         default:

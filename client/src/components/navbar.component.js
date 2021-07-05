@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import NavbarProfile from './navbarProfile.component';
+import DarkModeToggle from './darkModeToggle.component';
 import './css/navbar.css'
 
 import { connect } from 'react-redux';
@@ -21,7 +22,6 @@ const ConnectNavbar = ({admin}) => {
     return (
         <nav className='navbar navbar-expand-lg navbar-dark bg-dark shadow'>
             <div className='container-fluid'>
-
                 <Link to='/' className='navbar-brand'>
                     Jippi League
                 </Link>
@@ -34,8 +34,11 @@ const ConnectNavbar = ({admin}) => {
                         {adminSelector}
                     </ul>
                 </div>
-
-                <NavbarProfile/>
+                
+                <div className='navbar-nav ms-auto text-light d-flex flex-row align-items-center'>
+                    <DarkModeToggle/>
+                    <NavbarProfile/>
+                </div>
             </div>
         </nav>
     );

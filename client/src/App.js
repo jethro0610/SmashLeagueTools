@@ -30,7 +30,7 @@ const AppContainer = styled.div`
 const mapStateToProps = state => {
   return { 
       tournamentStarted: state.tournamentInfo.started,
-      darkMode: state.userInfo.darkMode
+      darkMode: state.darkMode
   };
 };
 
@@ -42,8 +42,15 @@ const ConnectApp = ({tournamentStarted, darkMode}) => {
   else if(tournamentStarted === false) {
     indexDiv = <Route exact path='/'><PreReg/></Route>
   }
+
+  var themeName = ''
+  if(darkMode)
+    themeName = 'dark'
+  else
+    themeName = 'light';
+
   return (
-    <ThemeProvider theme={{ theme: 'dark'}}>
+    <ThemeProvider theme={{ theme: themeName}}>
     <Router>
       <AppContainer className='d-flex flex-column vh-100'>
         <Navbar/>
