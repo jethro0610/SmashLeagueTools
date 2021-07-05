@@ -7,26 +7,27 @@ import { backgroundColor, textColor, darkColor, betBarBorderColor } from '../the
 const StyledBetBar = styled.div`
     border: 2px solid ${betBarBorderColor}
 `
-
 const LeftBar = styled.div`
     background-color: ${backgroundColor};
     color: ${textColor};
 `
-
 const RightBar = styled.div`
     background-color: ${darkColor};
     color: #f8f9fa;
 `
 
+// 
 const mapStateToProps = state => {
     return { selectedMatch: state.selectedMatch.match };
 };
 
 const ConnectedBetBar = ({selectedMatch}) =>  {
+    // Set the default variables when there's no match
     var visibility = 'hide';
     var amount1 = 0;
     var amount2 = 0;
 
+    // Update the variables it there's a match
     if(selectedMatch !== undefined) {
         visibility = '';
         amount1 = selectedMatch.amount1;
@@ -45,13 +46,14 @@ const ConnectedBetBar = ({selectedMatch}) =>  {
         progress2 = 100.0 - progress1;
     }
 
+    // Create the progress bar classes based on the amounts
     const barClass1 = 'progress-bar text-start overflow-hidden';
-    const barClass2 = 'progress-bar text-end overflow-hidden';
     const barElement1 = 
     <LeftBar className={barClass1} style={{width: progress1 + '%'}} aria-valuenow={progress1} aria-valuemin={0} aria-valuemax={100}>
         <div className='px-2'> ${amount1} </div>
     </LeftBar>;
 
+    const barClass2 = 'progress-bar text-end overflow-hidden';
     const barElement2 = 
     <RightBar className={barClass2} style={{width: progress2 + '%'}} aria-valuenow={progress2} aria-valuemin={0} aria-valuemax={100}>
         <div className='px-2'> ${amount2} </div>

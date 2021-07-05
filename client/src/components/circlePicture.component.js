@@ -8,6 +8,7 @@ const OuterBorder = styled.div`
 `
 
 const CirclePicture = (props) => {
+    // Send the picture if there's a valid image
     var imageElement;
     if (props.src === undefined || props.src === '')
         imageElement = <div/>

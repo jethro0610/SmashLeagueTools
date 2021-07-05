@@ -12,10 +12,12 @@ export const socket = io.connect(process.env.REACT_APP_BACKEND_ORIGIN, {
     withCredentials: true
 });
 
+// Clear the selected match state on connection
 socket.on('connect', () => {
     store.dispatch(clearSelectedMatch());
 });
 
+// Call the server to create a bet from admin client
 function adminBet(key, predictionNumber, amount) {
     socket.emit('admin-bet', { key, predictionNumber, amount });
 }
@@ -33,12 +35,10 @@ socket.on('all-matches', (msg) => {
     store.dispatch(allMatches(msg));
 });
 
-// Event when client recieves a newly created match
 socket.on('match-created', (msg) => {
     store.dispatch(createMatch(msg.key, msg.player1, msg.player2, msg.startTime));
 });
 
-// Event when client recieves a newly created match
 socket.on('match-updated', (msg) => {
     store.dispatch(updateMatch(msg.key, msg.amount1, msg.amount2));
     if(!store.getState().selectedMatch.match) return;
@@ -46,7 +46,6 @@ socket.on('match-updated', (msg) => {
         store.dispatch(updateSelectedMatch());
 });
 
-// Event when client recieves a newly created match
 socket.on('match-deleted', (msg) => {
     store.dispatch(deleteMatch(msg.key));
     if(!store.getState().selectedMatch.match) return;

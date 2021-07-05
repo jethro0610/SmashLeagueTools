@@ -11,13 +11,14 @@ const mapStateToProps = state => {
 }
 
 const ConnectedNavbarProfile = ({id, balance}) => {
+    // Return a login button if the users isn't logged in
     if (id ===  undefined)
         return (
             <div className='navbar-nav'><a className='nav-link' href={process.env.REACT_APP_BACKEND_ORIGIN+'/auth'}>Login</a></div>
         )
     
-
-    const profilePicPath = process.env.REACT_APP_BACKEND_ORIGIN + '/users/' + id + '/picture';
+    // Return the profile picture and balance if the user is logged in
+    const profilePicPath = process.env.REACT_APP_BACKEND_ORIGIN + '/users/' + id + '/picture'; // Get the users profile picture
     return(
         <div className='navbar-nav ms-auto text-light d-flex flex-row align-items-center'>
             <div className='navbar-balance text-dark bg-light rounded-pill'>Balance: ${balance}</div>

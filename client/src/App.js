@@ -35,6 +35,7 @@ const mapStateToProps = state => {
 };
 
 const ConnectApp = ({tournamentStarted, darkMode}) => {
+  // Returns betting if there's a tournament, and registration if there isn't
   var indexDiv;
   if(tournamentStarted === true) {
     indexDiv = <Route exact path='/'><BetPopUp/><Better/></Route>
@@ -43,6 +44,7 @@ const ConnectApp = ({tournamentStarted, darkMode}) => {
     indexDiv = <Route exact path='/'><PreReg/></Route>
   }
 
+  // Set the theme
   var themeName = ''
   if(darkMode)
     themeName = 'dark'

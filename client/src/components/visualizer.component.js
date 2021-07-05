@@ -24,10 +24,12 @@ const mapStateToProps = state => {
 };
 
 const ConnectedVisualizer = ({selectedMatch}) => {
+    // Open the bet pop up when a player is clicked
     function onClickPlayer(playerNumber) {
         store.dispatch(setBetPredictionNumber(playerNumber));
     }
 
+    // Set the default variables when there's no match
     var visibility = ' hide';
     var player1Name = '.';
     var player2Name = '.';
@@ -36,6 +38,8 @@ const ConnectedVisualizer = ({selectedMatch}) => {
     var amount1 = 0;
     var amount2 = 0;
     var startTime = 0;
+
+    // Assign the variables when there's a match
     if (selectedMatch !== undefined) {
         visibility = '';
         player1Name = selectedMatch.player1.name;
@@ -90,6 +94,6 @@ const ConnectedVisualizer = ({selectedMatch}) => {
         </div>
     )
 }
-//<img alt='' src={portrait} className={'col portrait shadow' + visibility}/>
+
 const SelectorList = connect(mapStateToProps)(ConnectedVisualizer);
 export default SelectorList;

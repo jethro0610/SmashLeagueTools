@@ -19,6 +19,7 @@ export const clearSelectedMatch = () => {
 export const selectedMatchReducer = (state = initialState, action) => {
     switch(action.type) {
         case 'SET_SELECTED_MATCH':
+            // Copy the match to a new object and update the state
             const setMatch = new Match();
             Object.assign(setMatch, matches.get(action.payload.key));
             return {
@@ -26,6 +27,7 @@ export const selectedMatchReducer = (state = initialState, action) => {
             }
 
         case 'UPDATE_SELECTED_MATCH':
+            // Copy the match to a new object and update the state
             const updateMatch = new Match();
             Object.assign(updateMatch, matches.get(state.match.key));
             return {

@@ -17,6 +17,7 @@ const mapStateToProps = state => {
 };
   
 const ConnectPreReg = ({titleCard, subtitleCard, hasRegistration}) => {
+    // Return registration if the title card isn't the end card
     var endElemements = undefined;
     if (hasRegistration) {
         endElemements =    

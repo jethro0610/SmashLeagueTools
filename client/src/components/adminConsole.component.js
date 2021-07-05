@@ -3,8 +3,8 @@ import store from '../redux/store/store'
 import { addNotification } from '../redux/reducers/notifications';
 import axios from 'axios';
 import './css/profileUpdater.css'
-
 import { connect } from 'react-redux';
+
 const mapStateToProps = state => {
     return { 
         titleCard: state.tournamentInfo.titleCard,
@@ -31,10 +31,11 @@ const ConnectAdminConsole = ({titleCard, subtitleCard, phaseGroupId}) => {
     }
 
     const titleCardSubmit = () => {
-        const submitTitle = (inTitleCard === undefined ? titleCard : inTitleCard);
-        const submitDate = (inSubtitleCard === undefined ? subtitleCard : inSubtitleCard);
+        const submitTitle = (inTitleCard === undefined ? titleCard : inTitleCard); // Set submit title to its default if it's undefined
+        const submitSubtitle = (inSubtitleCard === undefined ? subtitleCard : inSubtitleCard); // Set submit subtitle to its default if it's undefined
 
-        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/settitlecard', {titleCard: submitTitle, subtitleCard: submitDate, hasRegistration: true}, {withCredentials : true})
+        // Update the title card on the backend
+        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/settitlecard', {titleCard: submitTitle, subtitleCard: submitSubtitle, hasRegistration: true}, {withCredentials : true})
             .then(res => {
                 store.dispatch(addNotification('Updated pre-registration'));
             })
@@ -44,10 +45,11 @@ const ConnectAdminConsole = ({titleCard, subtitleCard, phaseGroupId}) => {
     }
 
     const titleCardSubmitEnd = () => {
-        const submitTitle = (inTitleCard === undefined ? titleCard : inTitleCard);
-        const submitDate = (inSubtitleCard === undefined ? subtitleCard : inSubtitleCard);
+        const submitTitle = (inTitleCard === undefined ? titleCard : inTitleCard); // Set submit title to its default if it's undefined
+        const submitSubtitle = (inSubtitleCard === undefined ? subtitleCard : inSubtitleCard); // Set submit subtitle to its default if it's undefined
 
-        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/settitlecardend', {titleCard: submitTitle, subtitleCard: submitDate, hasRegistration: false}, {withCredentials : true})
+        // Update the end card on the backend
+        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/settitlecardend', {titleCard: submitTitle, subtitleCard: submitSubtitle, hasRegistration: false}, {withCredentials : true})
             .then(res => {
                 store.dispatch(addNotification('Updated pre-registration'));
             })
@@ -57,11 +59,7 @@ const ConnectAdminConsole = ({titleCard, subtitleCard, phaseGroupId}) => {
     }
 
     const setTournament = () => {
-        if (inPhaseGroupId === undefined || inPhaseGroupId === phaseGroupId) {
-            //store.dispatch(addNotification('Tournament already set'));
-            //return;
-        }
-        
+        // Update the tournament on the backend
         axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/set', {phaseGroupId: inPhaseGroupId}, {withCredentials : true})
             .then(res => {
                 store.dispatch(addNotification('Tournament set to ' + res.data.name));
@@ -72,6 +70,7 @@ const ConnectAdminConsole = ({titleCard, subtitleCard, phaseGroupId}) => {
     }
 
     const startTournament = () => {
+        // Start the tournament on the backend
         axios.get(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/start', {withCredentials : true})
             .then(res => {
                 
@@ -82,6 +81,7 @@ const ConnectAdminConsole = ({titleCard, subtitleCard, phaseGroupId}) => {
     }
 
     const endTournament = () => {
+        // End the tournament on the backend
         axios.get(process.env.REACT_APP_BACKEND_ORIGIN + '/tournament/end', {withCredentials : true})
             .then(res => {
                 

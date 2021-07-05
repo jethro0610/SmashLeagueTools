@@ -11,7 +11,6 @@ const StyledPopUp = styled.div`
     background-color: ${mainBackgroundColor};
     color: ${textColor};
 `
-
 const StyledBalance = styled.div`
     background-color: ${backgroundColor};
     color: ${textColor};
@@ -26,11 +25,13 @@ const mapStateToProps = state => {
 };
 
 const ConnectBetPopUp = ({betInfo, selectedMatch, balance}) => {
+    // Return no pop up if there's no bet to place
     if (betInfo.predictionNumber === 0 || selectedMatch === undefined)
         return (
             <div/>
         );
-
+    
+    // Set the bet variables
     var playerName = '';
     var playerAmount = 0;
     if (betInfo.predictionNumber === 1) {
@@ -41,6 +42,8 @@ const ConnectBetPopUp = ({betInfo, selectedMatch, balance}) => {
         playerName = selectedMatch.player2.name
         playerAmount = selectedMatch.amount2;
     }
+
+    // Calcualte the total and percent of bets on the given player
     const total = selectedMatch.amount1 + selectedMatch.amount2;
     var percent = (playerAmount / total) * 100.0;
     percent = (isNaN(percent) ? 0 : percent);

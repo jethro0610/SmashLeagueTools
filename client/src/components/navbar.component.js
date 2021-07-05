@@ -12,6 +12,7 @@ const mapStateToProps = state => {
 }
 
 const ConnectNavbar = ({admin}) => {
+    // Add the admin console link if the user is an admin
     var adminSelector = <div/>;
     if(admin) {
         adminSelector =
@@ -19,6 +20,7 @@ const ConnectNavbar = ({admin}) => {
             <Link to='/admin' className="nav-link">Admin</Link>
         </li>
     }
+    
     return (
         <nav className='navbar navbar-expand-lg navbar-dark bg-dark shadow'>
             <div className='container-fluid'>
