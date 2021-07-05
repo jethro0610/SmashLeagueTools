@@ -8,7 +8,7 @@ const clearMatches = require('./matches').clearMatches;
 const endMatch = require('./matches').endMatch;
 const matches = require('./matches').matches;
 
-const endedMatches = new Set();
+const endedMatches = new Set(); // Stores all the matches that have been completed
 const ggEvents = new EventEmitter();
 
 const endpoint = 'https://api.smash.gg/gql/alpha';
@@ -18,7 +18,8 @@ const options = {
     }
 }
 
-var queryTournamentId = undefined;
+// Information about the tournament
+var queryTournamentId = undefined; // ID for querying smash.gg
 var tournamentInfo = {
     phaseGroupId: undefined,
     name: undefined,
@@ -30,9 +31,11 @@ var tournamentInfo = {
     registerUrl: undefined,
 }
 
+// Return exports
 const getTournamentInfo = () => { return tournamentInfo };
 const isTournamentStarted = () => { return (queryTournamentId !== undefined)};
 
+// Initialize the tournament info from the MongoDB database
 const initFromMongo = () => {
     Tournament.findOne({}).then(tournament => {
         tournamentInfo = tournament;
@@ -41,6 +44,7 @@ const initFromMongo = () => {
 
 const setTournament = (phaseGroupId, callback) => {
     tournamentDataFromId(phaseGroupId, tournamentData => {
+        // Data to set in the database
         const updateData = {
             phaseGroupId,
             started: false,
@@ -48,6 +52,8 @@ const setTournament = (phaseGroupId, callback) => {
             registerUrl: tournamentData.registerUrl,
             name: tournamentData.name
         }
+
+        // Update the tournament info in the database
         Tournament.findOneAndUpdate({}, updateData, {new: true}, (err, tournament) => {
             if (err)
                 console.log(err);
@@ -60,11 +66,14 @@ const setTournament = (phaseGroupId, callback) => {
 }
 
 const setTitleCard = (titleCard, subtitleCard, hasRegistration, callback) => {
+    // Info to update the title card
     const updateData = {
         titleCard,
         subtitleCard,
         hasRegistration
     }
+
+     // Update the title card info in the database
     Tournament.findOneAndUpdate({}, updateData, {new: true}, (err, tournament) => {
         tournamentInfo = tournament;
         if(callback)
@@ -73,10 +82,14 @@ const setTitleCard = (titleCard, subtitleCard, hasRegistration, callback) => {
 }
 
 const startTournament = () => {
-    if(!tournamentInfo.phaseGroupId) return;
+    if(!tournamentInfo.phaseGroupId) return; // Ensure there's an ID assigned
+
+    // Get the information from MongoDB and flag it as started
     Tournament.findOneAndUpdate({}, {started: true}, {new: true}, (err, tournament) => {
         if(err)
             console.log(err);
+
+        // Set the information to start the tournament
         tournamentInfo = tournament;
         queryTournamentId = tournamentInfo.phaseGroupId;
         console.log('Starting tournament ' + tournamentInfo.name);
@@ -85,6 +98,7 @@ const startTournament = () => {
 }
 
 const endTournament = () => {
+    // Get the tournament from MongoDB and flag it as ended
     Tournament.findOneAndUpdate({}, {started: false}, {new: true}, (err, tournament) => {
         if(err)
             console.log(err);
@@ -97,6 +111,7 @@ const endTournament = () => {
     });
 }
 
+// Query the tournament in SmashGG
 const queryTournament = (phaseGroupId, callback) => {
     const query = 
     `{
@@ -122,6 +137,7 @@ const queryTournament = (phaseGroupId, callback) => {
     })
 }
 
+// Query tournament from SmashGG and send back the data
 const tournamentDataFromId = (phaseGroupId, callback) => { 
     queryTournament(phaseGroupId, (tournamentQuery) => {
         const eventSlug = tournamentQuery.phaseGroup.phase.event.slug;
@@ -136,6 +152,7 @@ const tournamentDataFromId = (phaseGroupId, callback) => {
     });
 }
 
+// Query the ongoing tournament matches in smash.gg
 const queryMatches = (phaseGroupId, callback) => {
     const query = 
     `{
@@ -171,6 +188,7 @@ const queryMatches = (phaseGroupId, callback) => {
     })
 }
 
+// Poll the matches every interval and update accordingly
 const pollMatches = () => {
     queryMatches(queryTournamentId, async ggMatches => {
         for(const ggMatch of ggMatches) {
@@ -179,20 +197,21 @@ const pollMatches = () => {
 
                 if (!ggMatch.winnerId) {
                     if (matches.has(ggMatch.id)) continue; // Skip match if it's already active
-                    const player1User = await User.findOne({ggSlug: ggMatch.slots[0].entrant.participants[0].player.user.slug}).exec();
 
+                    // Find a MongoDB user linked to the ggSlug, and create a player
+                    const player1User = await User.findOne({ggSlug: ggMatch.slots[0].entrant.participants[0].player.user.slug}).exec();
                     const player1 = constructGGPlayer(
                         ggMatch.slots[0].entrant.id, 
                         ggMatch.slots[0].entrant.participants[0].player.gamerTag,
                         player1User === null ? undefined : player1User.id
                     );
-                    
                     const player2User = await User.findOne({ggSlug: ggMatch.slots[1].entrant.participants[0].player.user.slug}).exec();
                     const player2 = constructGGPlayer(
                         ggMatch.slots[1].entrant.id, 
                         ggMatch.slots[1].entrant.participants[0].player.gamerTag,
                         player2User === null ? undefined : player2User.id
                     );
+
                     createMatch(ggMatch.id, player1, player2);
                 }
                 else { // End a match
@@ -217,6 +236,7 @@ const pollMatches = () => {
     });
 }
 
+// Poll the tournament matches
 setInterval(() => {
     if (!queryTournamentId)
         return;

@@ -68,8 +68,8 @@ connection.once('open', () => {
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Wrapper for passport and SocketIO
 const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
-
 io.use(wrap(sessionMiddleware));
 io.use(wrap(passport.initialize()));
 io.use(wrap(passport.session()));
@@ -80,6 +80,7 @@ app.use('/auth', authRouter);
 app.use('/tournament', tournamentRouter);
 app.use('/favicon.ico', express.static('./images/favicon.ico'));
 
+// Route the fronted end when in non-development enviornment
 if (process.env.NODE_ENV !== 'development') {
     app.use(express.static('client/build'));
     app.get('/*', function(req,res) {

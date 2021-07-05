@@ -42,6 +42,7 @@ let upload = multer({ storage: multerS3({
 }), fileFilter});
 
 router.route('/get').get(isUser, (req,res) => {
+    // Remove the 'user/' section of the smash.gg slug
     var formattedGGSlug = undefined;
     if (req.user.ggSlug)
         formattedGGSlug = req.user.ggSlug.substring(5);
@@ -55,13 +56,16 @@ router.route('/get').get(isUser, (req,res) => {
 });
 
 router.route('/updateprofile').post(isUser, upload.single('profile-pic'), (req, res) => {
-    if (req.body.ggSlug) {
+    if (req.body.ggSlug) { // Ensure a smash.gg slug was sent
         req.body.ggSlug = 'user/' + req.body.ggSlug;
+
+        // Ignore already set smash.gg slugs
         if(req.body.ggSlug === req.user.ggSlug) {
             res.status(400).send('Already have that SmashGG ID');
             return;
         }
 
+        // Query for the user on smash.gg
         const query = `{
             user(slug: "${req.body.ggSlug}") {
                 player {
@@ -70,7 +74,9 @@ router.route('/updateprofile').post(isUser, upload.single('profile-pic'), (req, 
             }
         }`
 
+        // Get the user from smash.gg
         axios.post(endpoint, {query}, options).then(ggRes => {
+            // Ignore invalid users
             if (!ggRes.data.data.user) {
                 res.status(400).send('Invalid SmashGG ID');
                 return;
@@ -81,6 +87,7 @@ router.route('/updateprofile').post(isUser, upload.single('profile-pic'), (req, 
                 ggSlug: req.body.ggSlug
             }
 
+            // Update the MongoDB users smash.gg slug and name
             User.findByIdAndUpdate(req.user.id, updateData, {new: true}, (err, user) => {
                 res.send('Succesfully updated');
             });
@@ -94,17 +101,21 @@ router.route('/updateprofile').post(isUser, upload.single('profile-pic'), (req, 
     }
 });
 
-const defaultImagePath = path.join(__dirname + '/../images/default.png');
+const defaultImagePath = path.join(__dirname + '/../images/default.png'); // Path for the default profile picture
 router.route('/:id/picture').get((req,res) => {
-    User.findById(req.params.id)
+    User.findById(req.params.id) // Ensure the user is valid
         .then(() => {
             const params = { Bucket:process.env.AWS_BUCKET_NAME, Key: req.params.id };
 
+            // Get the image from AWS S3
             s3.getObject(params, (err, data) => {
+                // Return the default image if the user has no profile picture
                 if(err) {
                     res.sendFile(defaultImagePath);
                     return;
                 }
+
+                // Send back the image from S3 as a viewable image
                 var b64 = Buffer.from(data.Body, 'base64');
                 res.writeHead(200, {
                     'Content-Length': b64.length,

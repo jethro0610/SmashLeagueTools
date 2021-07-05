@@ -23,12 +23,16 @@ router.route('/set').post(isAdmin, (req, res) => {
             }
         }`
         console.log(req.body.phaseGroupId);
+
+        // Get the tournament information from smash.gg
         axios.post(endpoint, {query}, options).then(ggRes => {
+            // Send back invalid if the tournament doesn't exist
             if (!ggRes.data.data.phaseGroup) {
                 res.status(400).send('Invalid ID');
                 return;
             }
             
+            // Set the tournament if it's valid
             setTournament(req.body.phaseGroupId, (tournament) => {
                 res.send(tournament);
             });
