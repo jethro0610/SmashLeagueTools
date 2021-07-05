@@ -9,8 +9,8 @@ const socketIO = require('socket.io');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
-const SocketManager = require('./socketmanager');
-const initFromMongo = require('./smashgg').initFromMongo
+const SocketManager = require('./socketprocesses/socketmanager');
+const initFromMongo = require('./socketprocesses/smashgg').initFromMongo
 require('./config/passport')(passport);
 
 // Set CORS options
@@ -61,7 +61,7 @@ mongoose.connect(uri, {
 const connection = mongoose.connection;
 connection.once('open', () => {
     console.log('Connected to MongoDB database');
-    initFromMongo();
+    initFromMongo(); // Initalize the smash.gg manager upon connection
 });
 
 // Setup passport

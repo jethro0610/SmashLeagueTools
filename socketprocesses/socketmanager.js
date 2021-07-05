@@ -5,7 +5,7 @@ const createMatchFromNames = require('./matches').createMatchFromNames;
 const addBet = require('./matches').addBet;
 const addUserlessBet = require('./matches').addUserlessBet;
 const endMatch = require('./matches').endMatch;
-const User = require('./models/user.model');
+const User = require('../models/user.model');
 
 // Constructs player from socket data
 const playerSocketInfo = (player) => {

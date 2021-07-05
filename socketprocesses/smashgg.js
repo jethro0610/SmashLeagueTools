@@ -1,5 +1,5 @@
-const User = require('./models/user.model');
-const Tournament = require('./models/tournament.model');
+const User = require('../models/user.model');
+const Tournament = require('../models/tournament.model');
 const EventEmitter = require('events');
 const axios = require('axios');
 const constructGGPlayer = require('./matches').constructGGPlayer;

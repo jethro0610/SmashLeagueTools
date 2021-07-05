@@ -1,12 +1,12 @@
 const router = require('express').Router();
 const axios = require('axios');
 const isAdmin= require('../middleware/isAdmin');
-const setTournament = require('../smashgg').setTournament;
-const startTournament = require('../smashgg').startTournament;
-const endTournament = require('../smashgg').endTournament;
-const setTitleCard = require('../smashgg').setTitleCard;
-const getTournamentInfo = require('../smashgg').getTournamentInfo;
-const isTournamentStarted = require('../smashgg').isTournamentStarted;
+const setTournament = require('../socketprocesses/smashgg').setTournament;
+const startTournament = require('../socketprocesses/smashgg').startTournament;
+const endTournament = require('../socketprocesses/smashgg').endTournament;
+const setTitleCard = require('../socketprocesses/smashgg').setTitleCard;
+const getTournamentInfo = require('../socketprocesses/smashgg').getTournamentInfo;
+const isTournamentStarted = require('../socketprocesses/smashgg').isTournamentStarted;
 
 const endpoint = 'https://api.smash.gg/gql/alpha';
 const options = {
