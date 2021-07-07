@@ -1,6 +1,6 @@
 import React from 'react';
+import Poly from 'react-svg-polygon';
 import CirclePicture from './circlePicture.component';
-import triangle from './../images/triangle.png'
 import BetBar from './betbar.component.js'
 import Timer from './timer.component';
 import './css/visualizer.css'
@@ -69,8 +69,8 @@ const ConnectedVisualizer = ({selectedMatch, tournamentName}) => {
             </div>
 
             <div className={'row' + visibility}>
-                <div className='col'><img alt='' src={triangle} className='triangle'/></div>
-                <div className='col'><img alt='' src={triangle} className='triangle'/></div>
+                <div className='col'><Poly cy={10} sides={3} r={20} fill={'#bd1111'} stroke={"none"} /></div>
+                <div className='col'><Poly cy={10} sides={3} r={20} fill={"#2053ab"} stroke={"none"} /></div>
             </div>
 
             <div className='row'>

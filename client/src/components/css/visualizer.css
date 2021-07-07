@@ -55,12 +55,6 @@
     }
 }
 
-.triangle {
-    width: 3vh;
-    height: auto;
-    margin-bottom: 2%;
-}
-
 .title {
     margin-left: 24vw;
     margin-right: 24vw;
@@ -70,7 +64,7 @@
 }
 
 .name {
-    font-size: 3vh;
+    font-size: 28px;
     font-family: 'Quicksand', sans-serif;
 }
 
