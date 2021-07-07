@@ -39,6 +39,8 @@ const isTournamentStarted = () => { return (queryTournamentId !== undefined)};
 const initFromMongo = () => {
     Tournament.findOne({}).then(tournament => {
         tournamentInfo = tournament;
+        if (tournamentInfo.started)
+            startTournament();
     })
 }
 
