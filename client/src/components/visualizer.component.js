@@ -19,10 +19,13 @@ const StyledCenter = styled.img`
 `
 
 const mapStateToProps = state => {
-    return { selectedMatch: state.selectedMatch.match };
+    return { 
+        selectedMatch: state.selectedMatch.match,  
+        tournamentName: state.tournamentInfo.name
+    };
 };
 
-const ConnectedVisualizer = ({selectedMatch}) => {
+const ConnectedVisualizer = ({selectedMatch, tournamentName}) => {
     // Open the bet pop up when a player is clicked
     function onClickPlayer(playerNumber) {
         store.dispatch(setBetPredictionNumber(playerNumber));
@@ -57,7 +60,7 @@ const ConnectedVisualizer = ({selectedMatch}) => {
     return(
         <div className='col overflow-visible text-center align-middle position-relative'>
             <div className={'row' + visibility}>
-                <StyledTitle className='col title'>Jippi Week 9</StyledTitle>
+                <StyledTitle className='col title'>{tournamentName}</StyledTitle>
             </div>
 
             <div className={'row' + visibility}>

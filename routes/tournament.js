@@ -61,13 +61,14 @@ router.route('/settitlecardend').post(isAdmin, (req, res) => {
 router.route('/getinfo').get((req, res) => {
     const tournamentInfo = getTournamentInfo();
     res.send({
+        name: tournamentInfo.name,
         phaseGroupId: tournamentInfo.phaseGroupId,
         started: tournamentInfo.started,
         titleCard: tournamentInfo.titleCard,
         subtitleCard: tournamentInfo.subtitleCard,
         hasRegistration: tournamentInfo.hasRegistration,
         bracketUrl: tournamentInfo.bracketUrl,
-        registerUrl: tournamentInfo.registerUrl
+        registerUrl: tournamentInfo.registerUrl,
     })
 })
 
