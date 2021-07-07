@@ -1,7 +1,6 @@
 import React from 'react';
 import CirclePicture from './circlePicture.component';
 import triangle from './../images/triangle.png'
-import smashball from './../images/smashball.png'
 import BetBar from './betbar.component.js'
 import Timer from './timer.component';
 import './css/visualizer.css'
@@ -34,7 +33,7 @@ const ConnectedVisualizer = ({selectedMatch}) => {
     var player1Name = '.';
     var player2Name = '.';
     var player1Img, player2Img; 
-    player1Img = player2Img = process.env.REACT_APP_BACKEND_ORIGIN + '/users/defaultprofilepicture';
+    player1Img = player2Img = process.env.REACT_APP_BACKEND_ORIGIN + '/images/logo';
     var amount1 = 0;
     var amount2 = 0;
     var startTime = 0;
@@ -72,7 +71,7 @@ const ConnectedVisualizer = ({selectedMatch}) => {
             </div>
 
             <div className='row'>
-                <StyledCenter alt='' src={smashball} className='smashball'/>
+                <StyledCenter alt='' src={process.env.REACT_APP_BACKEND_ORIGIN + '/images/logo'} className='smashball'/>
                 <div className={'col' + visibility}>
                     <CirclePicture 
                     onClick={() => onClickPlayer(1)} 

@@ -23,6 +23,7 @@ const corsOptions = {
 const usersRouter = require('./routes/users.js');
 const authRouter = require('./routes/auth.js');
 const tournamentRouter = require('./routes/tournament');
+const imagesRouter = require('./routes/images');
 
 // Setup the express app
 const app = express();
@@ -78,6 +79,7 @@ io.use(wrap(passport.session()));
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/tournament', tournamentRouter);
+app.use('/images', imagesRouter);
 app.use('/favicon.ico', express.static('./images/favicon.ico'));
 
 // Route the fronted end when in non-development enviornment

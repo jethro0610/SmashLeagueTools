@@ -2,9 +2,7 @@ const router = require('express').Router();
 const multer = require('multer');
 const isUser = require('../middleware/isUser');
 const axios = require('axios');
-const path = require('path');
-const fs = require('fs');
-const aws = require('aws-sdk');
+const s3 = require('./s3');
 const multerS3 = require('multer-s3');
 let User = require('../models/user.model');
 
@@ -14,12 +12,6 @@ const options = {
         'Authorization' : 'Bearer ' + process.env.SMASHGG_KEY
     }
 }
-
-const s3 = new aws.S3({
-    region: process.env.AWS_BUCKET_REGION,
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_KEY
-})
 
 const fileFilter = (req, file, cb) => {
     const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -101,7 +93,7 @@ router.route('/updateprofile').post(isUser, upload.single('profile-pic'), (req, 
     }
 });
 
-const defaultImagePath = path.join(__dirname + '/../images/default.png'); // Path for the default profile picture
+
 router.route('/:id/picture').get((req,res) => {
     User.findById(req.params.id) // Ensure the user is valid
         .then(() => {
@@ -111,7 +103,7 @@ router.route('/:id/picture').get((req,res) => {
             s3.getObject(params, (err, data) => {
                 // Return the default image if the user has no profile picture
                 if(err) {
-                    res.sendFile(defaultImagePath);
+                    res.redirect('/images/logo')
                     return;
                 }
 
@@ -128,10 +120,6 @@ router.route('/:id/picture').get((req,res) => {
         .catch((err) => {
             res.status(404).send();
         })
-});
-
-router.route('/defaultprofilepicture').get((req,res) => {
-    res.sendFile(defaultImagePath);
 });
 
 module.exports = router;
