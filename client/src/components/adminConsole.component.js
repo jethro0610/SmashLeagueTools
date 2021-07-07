@@ -14,6 +14,7 @@ const mapStateToProps = state => {
 }
 
 const ConnectAdminConsole = ({titleCard, subtitleCard, phaseGroupId}) => {
+    const [logo, setLogo] = useState(undefined);
     const [inTitleCard, setInTitleCard] = useState(titleCard);
     const [inSubtitleCard, setInSubtitleCard] = useState(subtitleCard);
     const [inPhaseGroupId, setInPhaseGroupId] = useState(phaseGroupId);
@@ -91,6 +92,28 @@ const ConnectAdminConsole = ({titleCard, subtitleCard, phaseGroupId}) => {
             })
     }
 
+    const logoChange = (e) => {
+        e.preventDefault();
+        setLogo(e.target.files[0]);
+    }
+
+    const logoSubmit = (e) => {
+        e.preventDefault();
+        if (logo === undefined) return;
+
+        const formData = new FormData();
+        formData.append('logo', logo);
+
+        // Send the information to update the profile
+        axios.post(process.env.REACT_APP_BACKEND_ORIGIN + '/images/setlogo', formData, {withCredentials : true})
+            .then(res => {
+                window.location.reload(); // Reload the page to update cached image
+            })
+            .catch(err => {
+                store.dispatch(addNotification(err.response.data));
+            })
+    }
+
     return(
         <div className='container-fluid h-100 text-center'>
         <div className='row align-items-center h-100'>
@@ -103,7 +126,21 @@ const ConnectAdminConsole = ({titleCard, subtitleCard, phaseGroupId}) => {
             <button type='button' className='btn btn-dark' onClick={setTournament}>Set Tournament</button>
             <button type='button' className='btn btn-dark' onClick={startTournament}>Start Tournament</button>
             <button type='button' className='btn btn-dark' onClick={endTournament}>End Tournament</button>
+            <form encType='multipart/form-data' onSubmit={logoSubmit}>
+                <div class="form-group">
+                <button type="submit" class="btn btn-dark">Update Logo</button>
+                <label for="exampleFormControlFile1"></label>
+                <input 
+                    type="file" 
+                    accept=".png, .jpg, .jpeg"
+                    name='logo'
+                    id='logo'
+                    onChange={logoChange}
+                />
+                </div>
+            </form>
         </div>
+
         </div>
         </div>
     )

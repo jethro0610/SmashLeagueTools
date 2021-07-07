@@ -1,8 +1,9 @@
 const router = require('express').Router();
-const multer = require('multer');
 const isUser = require('../middleware/isUser');
 const axios = require('axios');
-const s3 = require('./s3');
+const s3 = require('./s3').s3;
+const imageFilter = require('./s3').imageFilter;
+const multer = require('multer');
 const multerS3 = require('multer-s3');
 let User = require('../models/user.model');
 
@@ -13,25 +14,16 @@ const options = {
     }
 }
 
-const fileFilter = (req, file, cb) => {
-    const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-    if(allowedFileTypes.includes(file.mimetype)) {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
-}
-
-let upload = multer({ storage: multerS3({
+const uploadProfilePic = multer({ storage: multerS3({
     s3: s3,
     bucket: process.env.AWS_BUCKET_NAME,
     metadata: function (req, file, cb) {
-      cb(null, {fieldName: file.fieldname});
+        cb(null, {fieldName: file.fieldname});
     },
     key: function (req, file, cb) {
-      cb(null, req.user.id)
+        cb(null, req.user.id)
     }
-}), fileFilter});
+}), imageFilter});
 
 router.route('/get').get(isUser, (req,res) => {
     // Remove the 'user/' section of the smash.gg slug
@@ -47,7 +39,7 @@ router.route('/get').get(isUser, (req,res) => {
     });
 });
 
-router.route('/updateprofile').post(isUser, upload.single('profile-pic'), (req, res) => {
+router.route('/updateprofile').post(isUser, uploadProfilePic.single('profile-pic'), (req, res) => {
     if (req.body.ggSlug) { // Ensure a smash.gg slug was sent
         req.body.ggSlug = 'user/' + req.body.ggSlug;
 

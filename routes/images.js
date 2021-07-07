@@ -1,6 +1,20 @@
 const router = require('express').Router();
 const isAdmin = require('../middleware/isAdmin');
-const s3 = require('./s3')
+const s3 = require('./s3').s3;
+const imageFilter = require('./s3').imageFilter;
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+
+const uploadLogo = multer({ storage: multerS3({
+    s3: s3,
+    bucket: process.env.AWS_BUCKET_NAME,
+    metadata: function (req, file, cb) {
+        cb(null, {fieldName: file.fieldname});
+    },
+    key: function (req, file, cb) {
+        cb(null, 'default');
+    }
+}), imageFilter});
 
 // Get the logo from S3
 var logoBuffer;
@@ -19,7 +33,7 @@ router.route('/logo').get((req,res) => {
     return;
 });
 
-router.route('/reloadlogo').get(isAdmin, (req,res) => {
+router.route('/setlogo').post(isAdmin, uploadLogo.single('logo'), (req, res) => {
     s3.getObject(logoParams, (err, data) => {
         logoBuffer = Buffer.from(data.Body, 'base64');
         res.sendStatus(200);

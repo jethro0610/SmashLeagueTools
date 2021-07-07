@@ -6,4 +6,14 @@ const s3 = new aws.S3({
     secretAccessKey: process.env.AWS_SECRET_KEY
 });
 
-module.exports = s3;
+const imageFilter = (req, file, cb) => {
+    const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if(allowedFileTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+}
+
+
+module.exports = {s3, imageFilter};
