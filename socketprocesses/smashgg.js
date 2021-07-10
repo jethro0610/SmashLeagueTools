@@ -201,13 +201,16 @@ const pollMatches = () => {
                     if (matches.has(ggMatch.id)) continue; // Skip match if it's already active
 
                     // Find a MongoDB user linked to the ggSlug, and create a player
-                    const player1User = await User.findOne({ggSlug: ggMatch.slots[0].entrant.participants[0].player.user.slug}).exec();
+                    const player1Slug = ggMatch.slots[0].entrant.participants[0].player.user != null ? ggMatch.slots[0].entrant.participants[0].player.user.slug : '';
+                    const player1User = await User.findOne({ggSlug: player1Slug}).exec();
                     const player1 = constructGGPlayer(
                         ggMatch.slots[0].entrant.id, 
                         ggMatch.slots[0].entrant.participants[0].player.gamerTag,
                         player1User === null ? undefined : player1User.id
                     );
-                    const player2User = await User.findOne({ggSlug: ggMatch.slots[1].entrant.participants[0].player.user.slug}).exec();
+
+                    const player2Slug = ggMatch.slots[1].entrant.participants[0].player.user != null ? ggMatch.slots[1].entrant.participants[0].player.user.slug : '';
+                    const player2User = await User.findOne({ggSlug: player2Slug}).exec();
                     const player2 = constructGGPlayer(
                         ggMatch.slots[1].entrant.id, 
                         ggMatch.slots[1].entrant.participants[0].player.gamerTag,
