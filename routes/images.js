@@ -26,8 +26,7 @@ s3.getObject(logoParams, (err, data) => {
 router.route('/logo').get((req,res) => {
     res.writeHead(200, {
         'Content-Length': logoBuffer.length,
-        "Cache-Control": "public, max-age=86400000",
-        "Expires": new Date(Date.now() + 86400000).toUTCString()
+        'Cache-Control': 'no-cache',
     });
     res.end(logoBuffer);
     return;

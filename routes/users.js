@@ -103,8 +103,7 @@ router.route('/:id/picture').get((req,res) => {
                 var b64 = Buffer.from(data.Body, 'base64');
                 res.writeHead(200, {
                     'Content-Length': b64.length,
-                    "Cache-Control": "public, max-age=86400000",
-                    "Expires": new Date(Date.now() + 86400000).toUTCString()
+                    'Cache-Control': 'no-cache'
                 });
                 res.end(b64);
             })
