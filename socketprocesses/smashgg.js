@@ -20,15 +20,15 @@ const options = {
 
 // Information about the tournament
 var queryTournamentId = undefined; // ID for querying smash.gg
-var tournamentInfo = {
-    phaseGroupId: undefined,
-    name: undefined,
-    started: undefined,
-    titleCard: undefined,
-    subtitleCard: undefined,
-    hasRegistration:undefined,
-    bracketUrl: undefined,
-    registerUrl: undefined,
+let tournamentInfo = {
+    phaseGroupId: "",
+    name: "",
+    started: false,
+    titleCard: "",
+    subtitleCard: "",
+    hasRegistration: false,
+    bracketUrl: "",
+    registerUrl: "",
 }
 
 // Return exports
@@ -36,12 +36,13 @@ const getTournamentInfo = () => { return tournamentInfo };
 const isTournamentStarted = () => { return (queryTournamentId !== undefined)};
 
 // Initialize the tournament info from the MongoDB database
-const initFromMongo = () => {
-    Tournament.findOne({}).then(tournament => {
-        tournamentInfo = tournament;
-        if (tournamentInfo.started)
-            startTournament();
-    })
+const initFromMongo = async () => {
+    let tournament = await Tournament.findOne();
+    if (tournament == null) {
+        tournament = tournamentInfo;
+        tournament = new Tournament(tournamentInfo);
+        tournament.save();
+    }
 }
 
 const setTournament = (phaseGroupId, callback) => {

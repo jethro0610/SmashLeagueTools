@@ -5,8 +5,8 @@ const tournamentSchema = new Schema({
     phaseGroupId: { type: String, required: false},
     name: {type: String, required: false},
     started: { type: Boolean, required: true},
-    titleCard: { type: String, required: true},
-    subtitleCard: {type: String, required: true},
+    titleCard: { type: String, required: false},
+    subtitleCard: {type: String, required: false},
     hasRegistration: {type: Boolean, required: true},
     bracketUrl: {type: String, required: false},
     registerUrl: {type: String, required: false}
